@@ -16,27 +16,27 @@ const events = [
     description: "Annual cultural fest",
     date: "20th Feb",
     img: "vyro.jpg",
-    link:"aurora"
+    link:"vyro"
   },
   {
     name: "Innovate",
     description: "Innovation summit",
     date: "2023-11-05",
-    link:"aurora"
+    link:"innovate"
   },
   {
     name: "EcoFair",
     description: "Environmental awareness event",
     date: "2023-12-01",
-    link:"aurora"
+    link:"eco-flair"
   },
 ]
 
 export default function Events() {
-  const  {state}=useSidebar();
+  // const  {state}=useSidebar();
   return (
-    <div className={`${state==='expanded'?'sm:ml-64':'ml-96'} relative w-full  `}>
-      <HolographicBackground />
+    <div className={` relative w-full  `}>
+      {/* <HolographicBackground /> */}
       <div className="container mx-auto  py-2 px-4 md:px-10 relative top-16 w-full">
         <h1 className="text-xl sm:text-4xl font-bold mb-3 nabla text-center flex gap-4 justify-center items-center">
         <GiAcousticMegaphone size={50} color="red" className="-rotate-[30deg] animate-pulse"/>

@@ -14,8 +14,10 @@ import {
 import { CalendarCog, ChevronUp, Home, Newspaper, User2 } from "lucide-react"
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
+import { useNavigate } from "react-router-dom"
   
   export function AppSidebar() {
+    const navigate=useNavigate();
     const items = [
         {
           title: "Home",
@@ -33,6 +35,34 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
           icon: CalendarCog,
         },
       ]
+      const events = [
+        {
+          title: "Aurora",
+          url: "aurora",
+          icon: Home,
+          subevents:[
+            {
+             name:"Cricket"
+            },
+            {
+             name:"Football"
+            },
+            {
+             name:"Volleyball"
+            }
+          ]
+        },
+        {
+          title: "Vyro",
+          url: "vyro",
+          icon: Newspaper,
+        },
+        {
+          title: "EcoFlair",
+          url: "eco-flair",
+          icon: CalendarCog,
+        },
+      ]
     return (
         <Sidebar className="backdrop-blur-xl md:backdrop-blur-sm">
         <SidebarContent className="">
@@ -46,6 +76,16 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
                         <item.icon />
                         <span>{item.title}</span>
                       </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+                {events.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild >
+                      <button onClick={()=>navigate(`/events/${item.url}`)} className="pl-10  text-xl ">
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </button>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
