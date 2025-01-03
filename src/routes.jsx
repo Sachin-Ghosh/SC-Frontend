@@ -9,6 +9,8 @@ import SportsEvent from './pages/SportsEvent';
 import CulturalEvent from './pages/CulturalEvents';
 import Details from './pages/events/Details';
 import EventDetails from './pages/Details';
+import Grievance from './pages/Grieviances';
+import Profile from './pages/Profile';
 
 // import Registration from './pages/Registration';
 // import Events from './pages/Events';
@@ -21,6 +23,8 @@ const AppRoutes = () => (
     <Route path="/events/cultural" element={<CulturalEvent />} />
     <Route path="/:event/registration" element={<Registration />} />
     <Route path="/:event/details" element={<EventDetails />} />
+    <Route path="/grievances" element={<Grievance />} />
+    <Route path="/profile" element={<Profile />} />
   </Routes>
 );
 

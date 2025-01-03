@@ -33,6 +33,24 @@ h1, h2, h3, h4, h5, h6 {
   font-style: normal;
 }
 
+.typewriter-text {
+  border-right: 2px solid #4a3728;
+  white-space: nowrap;
+  overflow: hidden;
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: #4a3728; }
+}
+
+
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 ::-webkit-scrollbar {

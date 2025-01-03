@@ -2,6 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './components/Navbar';
 import AppRoutes from './routes';
+import { Toaster } from 'sonner';
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
       <main className="flex-grow">
         
         <Outlet />
+        <Toaster />
       </main>
       </div>
       <AppRoutes/>

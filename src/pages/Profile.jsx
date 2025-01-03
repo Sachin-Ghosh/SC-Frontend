@@ -1,9 +1,34 @@
-import React from 'react'
+import UserProfile from '@/components/UserProfile';
+import React from 'react';
+
 
 const Profile = () => {
-  return (
-    <div>Profile</div>
-  )
-}
+  const user = {
+    name: "Sir Souvik Mondal",
+    title: "Rookie",
+    
+    about: "A noble knight known for his purity and bravery. ",
+    skills: [
+      "Jousting",
+      "Swordsmanship",
+      "Chivalry",
+      "Horsemanship",
+      "Medieval Lore"
+    ],
+    achievements: [
+      "Victor of the Grand Tournament of Camelot",
+      "Recovered the Holy Grail",
+      "Slayer of the Dragon of Northumbria"
+    ],
+    email: "sm6984767@gmail.com",
+    department: 'Information Technology',
+    phone: '9890780219',
+    
+    // location: "Nallasop"
+  };
 
-export default Profile
+  return <UserProfile user={user} />;
+};
+
+export default Profile;
+
