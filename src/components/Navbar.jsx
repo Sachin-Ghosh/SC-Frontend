@@ -96,11 +96,11 @@ const Header = () => {
         </div>
 
         <div className=''>
-          <div className="dropdown dropdown-end">
-            <div tabIndex={0} role="button" className="btn rounded-full p-0 px-1">
+          <div className="dropdown dropdown-end ">
+            <div tabIndex={0} role="button" className="btn rounded-full p-0 px-1 bg-transparent border-none hover:bg-amber-200">
              
                 <div className="w-10 rounded-full">
-                 <GiBlackKnightHelm  size={40} className='text-amber-950'/>
+                 <UserCircle2  size={40} className='text-amber-950'/>
                 </div>
 
             </div>
