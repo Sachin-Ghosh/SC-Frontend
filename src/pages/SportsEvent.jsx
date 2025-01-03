@@ -114,10 +114,10 @@ const SportsEvent = () => {
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full' alt="Event background" />
       <div className="relative z-20 top-32 lg:top-10 px-10 flex flex-col justify-center items-center min-h-screen">
         <img src='/banner-1.png' alt='banner' className='fixed -z-10 bottom-0 left-0' />
-        <img src='/angel-2.png' alt='banner' className='fixed -z-10 top-0 right-0' />
+        <img src='/angel-2.png' alt='banner' className='sm:block hidden fixed -z-10 top-0 right-0' />
 
         <motion.div 
-          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-amber-200 sm:text-[#966742] relative"
+          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8  text-[#966742] relative"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}

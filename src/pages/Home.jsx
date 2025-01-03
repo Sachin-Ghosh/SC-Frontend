@@ -106,9 +106,9 @@ const Home = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{once:  true}}
           transition={{ duration: 1 }}
-          className="mt-12 container   bg-center bg-contain mx-auto w-[45rem] h-[50rem] sm:h-[33rem] bg-white  bg-no-repeat  bg-opacity-80 p-8 rounded-lg shadow-xl max-w-3xl relative z-10 top-96 mb-20"
+          className="mt-12 container  w-[26rem] bg-center bg-contain mx-auto sm:w-[45rem] h-[50rem] sm:h-[33rem] bg-white  bg-no-repeat  bg-opacity-80 p-8 rounded-lg shadow-xl max-w-3xl relative z-10 top-96 mb-20"
     >
-      <img src='/about.png' className='absolute z-0 sm:left-48 sm:top-28 h-96 w-96 sm:h-80 sm:w- opacity-40 object-center'/>
+      <img src='/about.png' className='absolute z-0 top-48 sm:left-48 sm:top-28 h-96 w-96 sm:h-80 sm:w- opacity-40 object-center'/>
           <div className='z-10 relative'>
 
          

@@ -20,26 +20,26 @@ const Header = () => {
   return (
     <div className="drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-side absolute z-50">
+      <div className="drawer-side fixed z-50">
         <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label>
         <div className="menu bg-base-200 min-h-full w-80 p-10 bg-[url('/sidebar.jpg')] bg-contain space-y-10">
           <div className='text-3xl text-[#8b4513]'>
             AURORA 2025
           </div>
           <div className='flex flex-col text-xl gap-12 text-[#4a3728]'>
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion type="single" collapsible className="w-full" asChild>
               <AccordionItem value="events">
                 <AccordionTrigger>Events</AccordionTrigger>
                 <AccordionContent>
                   <div className="flex flex-col space-y-4 pl-4">
-                    <Link to='/events/sports' className="hover:text-[#8b4513] transition-colors">Sports Events</Link>
-                    <Link to='/events/cultural' className="hover:text-[#8b4513] transition-colors">Cultural Events</Link>
+                    <Link to='/events/sports' className="hover:text-[#8b4513] transition-colors"onClick={() => {document.getElementById('my-drawer-3').click()}}>Sports Events</Link>
+                    <Link to='/events/cultural' className="hover:text-[#8b4513] transition-colors" onClick={() => {document.getElementById('my-drawer-3').click()}}>Cultural Events</Link>
                   </div>
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-            <Link to='/grievances'><a>Report</a></Link>
-            <Link to='/profile'><a>Profile</a></Link>
+            <Link to='/grievances' onClick={() => {document.getElementById('my-drawer-3').click()}}><a>Report</a></Link>
+            <Link to='/profile' onClick={() => {document.getElementById('my-drawer-3').click()}}><a>Profile</a></Link>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@ const Header = () => {
             <ul
               tabIndex={0}
               className="menu dropdown-content backdrop-blur-sm border text-[#4a3728] border-[#8b4513] rounded-box z-[1] mt-4 w-52 p-2 shadow">
-              <li><Link to='/profile' className=''>Profile</Link></li>
+              <li><Link to='/profile' className='' onClick={()=>{}}>Profile</Link></li>
               <li><a>Logout</a></li>
             </ul>
           </div>

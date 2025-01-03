@@ -68,7 +68,7 @@ const Registration = () => {
   return (
     <>
       <img src='/registration-back.jpg' className='fixed object-cover h-full w-full' alt="Background" />
-      <div className="flex flex-col min-h-screen items-center justify-center px-4 py-8 relative z-20">
+      <div className="flex flex-col min-h-screen items-center justify-center px-4 py-8 relative z-20 top-10">
         <motion.h2 
           className="text-4xl md:text-5xl font-serif text-center text-[#4a3728] cinzel uppercase"
           initial={{ opacity: 0, y: -50 }}
@@ -77,10 +77,10 @@ const Registration = () => {
         >
           {params.event} Registration
         </motion.h2>
-        <div className='relative'>
+        <div className='relative '>
           <motion.form 
             onSubmit={handleSubmit}
-            className="mx-auto sm:px-10 pt-3 rounded relative z-20 bg-center grid grid-cols-1 lg:grid-cols-2 gap-10"
+            className="mx-auto sm:px-10 pt-3 rounded relative z-20 bg-center flex flex-col sm:flex-row flex-wrap max-w-4xl lg:gap-10"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.5 }}
@@ -94,7 +94,7 @@ const Registration = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
+                className=" px-3 w-96 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
               />
             </div>
             <div className="">
@@ -106,7 +106,7 @@ const Registration = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
+                className="w-96 px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
               />
             </div>
             <div className="">
@@ -118,13 +118,13 @@ const Registration = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="w-full px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
+                className="w-96 px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
               />
             </div>
             <div className="mb-6">
               <label htmlFor="department" className="block text-[#4a3728] ">Department</label>
               <Select onValueChange={(value) => handleSelectChange('department', value)}>
-                <SelectTrigger className="w-full border-b">
+                <SelectTrigger className="w-96 border-b">
                   <SelectValue placeholder="Select Department" />
                 </SelectTrigger>
                 <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
@@ -163,17 +163,21 @@ const Registration = () => {
                 </SelectContent>
               </Select>
             </div>
-            <div className="col-span-2 mb-6 ">
+            <div className="col-span-2 mb-6 flex flex-col gap-2">
               <label className="block text-[#4a3728] ">Team Members</label>
               {formData.teamMembers.map((member, index) => (
-                <div key={member.id} className="flex items-center ">
-                  <Input
-                    type="text"
-                    value={member.name}
-                    onChange={(e) => handleTeamMemberChange(member.id, e.target.value)}
-                    placeholder={`Team Member ${index + 1}`}
-                    className="flex-grow mr-2 px-3 mb-2 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
-                  />
+                <div key={member.id} className="flex items-center">
+                 <Select onValueChange={(value) => handleSelectChange('division', value)}>
+                <SelectTrigger className="sm:w-96 w-full border-b">
+                  <SelectValue placeholder="Select Division" />
+                </SelectTrigger>
+                <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
+                  <SelectItem value="a">A</SelectItem>
+                  <SelectItem value="b">B</SelectItem>
+                  <SelectItem value="c">C</SelectItem>
+                  <SelectItem value="d">D</SelectItem>
+                </SelectContent>
+              </Select>
                   <Button
                     type="button"
                     onClick={() => removeTeamMember(member.id)}
@@ -189,9 +193,9 @@ const Registration = () => {
                 type="button"
                 onClick={addTeamMember}
                 variant="outline"
-                className="mt-2 text-[#8b4513] border-[#8b4513] hover:bg-[#8b4513] hover:text-white"
+                className="mt-2 text-[#8b4513] w-fit border-[#8b4513] hover:bg-[#8b4513] hover:text-white"
               >
-                Add Team Member
+                Add Subordinates
               </Button>
             </div>
             <motion.button
