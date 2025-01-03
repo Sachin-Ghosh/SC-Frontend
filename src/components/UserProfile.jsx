@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FaScroll } from 'react-icons/fa';
 import { User } from 'lucide-react';
 import { TypeAnimation } from 'react-type-animation';
+import { GiBlackKnightHelm } from 'react-icons/gi';
 
 const UserProfile = ({ user }) => {
   return (
@@ -17,13 +18,13 @@ const UserProfile = ({ user }) => {
         >
           <div className="bg-[url('/renaissance-banner.jpg')] h-60 bg-cover bg-center"></div>
           <div className="relative px-4 pt-16 pb-8 sm:px-6 lg:px-8">
-            <div className={`absolute ${user.avatar ? ' -top-32':'-top-10'} left-1/2 transform -translate-x-1/2  bg-center bg-cover flex w-full items-center justify-center`}>
+            <div className={`absolute ${user.avatar ? ' -top-32':'-top-16'} left-1/2 transform -translate-x-1/2  bg-center bg-cover flex w-full items-center justify-center`}>
               <img src='/profile-frame.png' className='absolute z-0 w-64 h-64' alt="Profile Frame"/>
               <div className='relative z-10'>
                 {user.avatar ? (
                   <img className="relative z-10 rounded-full border-4 w-40 h-40 shadow-lg" src={user.avatar} alt={user.name} />
                 ) : (
-                  <User className='w-12 h-12'/>
+                    <GiBlackKnightHelm  size={70} className='text-amber-950'/>
                 )}
               </div>
             </div>

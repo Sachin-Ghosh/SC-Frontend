@@ -1,4 +1,5 @@
 import tailwindcssAnimate from "tailwindcss-animate";
+import tailwindcssMotion from "tailwindcss-motion";
 import daisyui from "daisyui";
 
 /** @type {import('tailwindcss').Config} */
@@ -80,7 +81,7 @@ export default {
       },
     },
   },
-  plugins: [tailwindcssAnimate, daisyui],
+  plugins: [tailwindcssAnimate, daisyui, tailwindcssMotion],
   daisyui: {
     themes: [
       {

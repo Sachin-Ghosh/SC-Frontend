@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useAsyncValue, useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -17,7 +17,7 @@ const Login = () => {
     // Here you would typically handle the login logic
     console.log('Login attempted with:', formData);
   };
-
+const navigate = useNavigate();
   return (
     <>
     <img src='/login.jpg' className='fixed z-0'/>
@@ -34,7 +34,7 @@ const Login = () => {
         <h3 className="text-2xl font-semibold mb-6 text-center text-[#442914]">Athlete's Portal</h3>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-[#4a3728] mb-1">Username</label>
+            <label htmlFor="username" className="block text-sm font-medium text-white mb-1">Username</label>
             <input
               type="text"
               id="username"
@@ -47,7 +47,7 @@ const Login = () => {
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-[#4a3728] mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm font-medium text-white mb-1">Password</label>
             <input
               type="password"
               id="password"
@@ -65,18 +65,19 @@ const Login = () => {
             type="submit"
             className="w-full bg-[#8b4513] text-white py-2 px-4 rounded-md hover:bg-[#a0522d] transition-colors duration-300 font-semibold text-lg"
           >
-            Sign In
+            Log In
           </motion.button>
         </form>
         <div className="mt-6 text-center">
           <Link to="/forgot-password" className="text-[#120a05] hover:underline">Forgot password?</Link>
         </div>
         <div className="mt-8 border-t border-[#d2b48c] pt-6">
-          <p className="text-center text-[#4a3728]">New to Renaissance Sports?</p>
+          <p className="text-center text-white">New to Renaissance Sports?</p>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="mt-2 w-full bg-[#4a3728] text-white py-2 px-4 rounded-md hover:bg-[#5a4738] transition-colors duration-300 font-semibold"
+            onClick={()=>{navigate('/auth/register')}}
           >
             Create an Account
           </motion.button>

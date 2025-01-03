@@ -13,6 +13,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { UserCircle2 } from 'lucide-react'
+import { GiBlackKnightHelm } from "react-icons/gi";
 
 const Header = () => {
   const navigate = useNavigate()
@@ -60,9 +62,9 @@ const Header = () => {
               </svg>
             </label>
           </div>
-          <div className="flex-1">
+          <Link to={'/'} className="flex-1">
             <img src='/ucoe.png' alt="UCOE Logo" className='h-16 w-[3.5rem] relative z-20' />
-          </div>
+          </Link>
         </div>
 
         <div className='hidden sm:flex gap-12 justify-between items-center'>
@@ -90,16 +92,17 @@ const Header = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           <Link to='/grievances' className='text-foreground hover:text-[#8b4513]'>Report</Link>
+          <Link to='/about' className='text-foreground hover:text-[#8b4513]'>About</Link>
         </div>
 
         <div className=''>
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn rounded-full p-0 px-1">
-              <div className="avatar online">
+             
                 <div className="w-10 rounded-full">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" alt="User Avatar" />
+                 <GiBlackKnightHelm  size={40} className='text-amber-950'/>
                 </div>
-              </div> 
+
             </div>
             <ul
               tabIndex={0}
