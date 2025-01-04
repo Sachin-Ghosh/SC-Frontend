@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Check if the authentication token exists in the cookie
-    const storedToken = getCookie("token");
+    const storedToken = localStorage.getItem("token");
     const storedAuthUser = getCookie("authUser");
 
     if (storedToken && storedAuthUser) {

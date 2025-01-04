@@ -1,28 +1,22 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { Toaster } from 'sonner';
 import Header from './components/Navbar';
 import AppRoutes from './routes';
-import { Toaster } from 'sonner';
-
 
 const App = () => {
   return (
-    <>
     <div className="flex flex-col min-h-screen bg-[#f3e5d8]">
-    
       <div className='relative z-40'>
-
-      <Header />
-      <main className="flex-grow">
-        
-        <Outlet />
-        <Toaster />
-      </main>
+        <Header />
+        <main className="flex-grow">
+          <Outlet />
+          <Toaster position="top-right" richColors />
+        </main>
       </div>
-      <AppRoutes/>
+      <AppRoutes />
       {/* <Footer /> */}
     </div>
-    </>
   );
 };
 

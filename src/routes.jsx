@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
-import Authpage from './pages/Auth';
+import Authpage from './pages/Login';
 // import Event from './pages/SportsEvent';
 import Registration from './pages/Registration';
 import SportsEvent from './pages/SportsEvent';

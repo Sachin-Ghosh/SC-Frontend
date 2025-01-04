@@ -20,7 +20,7 @@ const Home = () => {
         className="fixed inset-0 w-full h-full object-cover z-0"
       />
       <div className='fixed inset-0 bg-amber-900 opacity-40 z-10'></div>
-      <div className="relative z-20 flex flex-col justify-center items-center min-h-screen top-[20rem] sm:top-40">
+      <div className="relative z-20 flex flex-col justify-center items-center min-h-screen top-[10rem] sm:top-40">
         <div className='flex flex-col items-center'>
           <motion.img 
             initial={{ opacity: 0, y: -50 }}

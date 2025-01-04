@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -47,6 +47,30 @@ const events = [
 
 const CulturalEvent = () => {
   const navigate = useNavigate();
+  const [subevents, setSubevents]=useState([]);
+  const accessToken=localStorage.getItem('access-token')
+
+  const fetchCulturalEvents = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/?category=CULTURAL`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      console.log(data);
+      setSubevents(data);
+      console.log(subevents)
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
+  useEffect(() => {
+    fetchCulturalEvents();
+  }, []);
+
+  // console.log(subevents[20].name);
 
   return (
     <>
@@ -55,7 +79,7 @@ const CulturalEvent = () => {
         <img src='/angel.png' alt='Cultural banner' className='fixed -z-10  bottom-0 -right-32 sm:-left-10' />
         <img src='/tunes.png' alt='Cultural decor' className='fixed sm:block hidden -z-10 bottom-0 right-0' />
         <motion.div 
-          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] relative top-20"
+          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] fixed z-20 top-36"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -63,8 +87,8 @@ const CulturalEvent = () => {
           <img src='/frame.png' className='absolute -top-[4.5rem] sm:-top-24 -z-10 w-full '/>
           <h1 className='ysabeau-sc relative z-40'>Cultural Events</h1>
         </motion.div>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8  sm:px-32 relative top-36">
-          {events.map((event, index) => (
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 w-full sm:px-28 gap-8 relative">
+          {subevents.map((event, index) => (
             <motion.div 
               key={event.id}
               className="rounded shadow-lg overflow-hidden relative text-white"
@@ -83,7 +107,7 @@ const CulturalEvent = () => {
                     className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate(`/${event.link}/details`)}
+                    onClick={() => navigate(`/${event.slug}/details`)}
                   >
                     Learn More
                   </motion.button>
@@ -91,7 +115,7 @@ const CulturalEvent = () => {
                     className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate(`/${event.link}/registration`)}
+                    onClick={() => navigate(`/${event.slug}/registration`)}
                   >
                     Register
                   </motion.button>
