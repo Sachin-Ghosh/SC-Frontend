@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Users, Clock, Award, UserPlus, DollarSign } from 'lucide-react';
 import { Button } from "@/components/ui/button"
+import { FaFootballBall } from 'react-icons/fa';
 
 const eventDetails = {
   cricket: {
@@ -94,7 +95,7 @@ const EventDetails = () => {
   }, [event, accessToken]);
 
   if (!eventDetail) {
-    return <div>Loading...</div>;
+    return <div className='min-h-screen flex justify-center items-center gap-5'><FaFootballBall/>Loading...</div>;
   }
 
   return (
