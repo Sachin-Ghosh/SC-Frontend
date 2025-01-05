@@ -20,8 +20,11 @@ const Registration = () => {
   const eventName = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(false);
+  const user=localStorage.getItem('user');
+  const storedUser=JSON.parse(user);
+  // console.log('storedUser',storedUser)
   const [formData, setFormData] = useState({
-    team_leader: '',
+    team_leader: storedUser,
     team_name: '',
     department: '',
     year: '',
@@ -162,8 +165,9 @@ const Registration = () => {
                 type="text"
                 id="team_leader"
                 name="team_leader"
-                value={formData.team_leader}
+                value={formData.team_leader.username}
                 onChange={handleChange}
+                readOnly
                 required
                 className=" px-3 w-96 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
               />

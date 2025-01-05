@@ -15,6 +15,7 @@ import About from './pages/About';
 import SignUp from './pages/SignUp';
 import Registration from './pages/Registration';
 import RegisteredEvents from './pages/RegisteredEvents';
+import RegistrationDetails from './pages/RegistrationDetails';
 
 // import Registration from './pages/Registration';
 // import Events from './pages/Events';
@@ -30,6 +31,7 @@ const AppRoutes = () => (
     <Route path="/:event/details" element={<EventDetails />} />
     <Route path="/grievances" element={<Grievance />} />
     <Route path="/registered-events" element={<RegisteredEvents />} />
+    <Route path="/registered-events/:event" element={<RegistrationDetails />} />
     <Route path="/profile" element={<Profile />} />
     <Route path="/about" element={<About />} />
   </Routes>

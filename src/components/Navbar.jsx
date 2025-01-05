@@ -80,6 +80,7 @@ const Header = () => {
             </Accordion>
             <Link to='/grievances' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Report</a></Link>
             <Link to='/profile' onClick={() => {document.getElementById('my-drawer-3').click()}}><a>Profile</a></Link>
+            <Link to='/registered-events' onClick={() => {document.getElementById('my-drawer-3').click()}}><a>Registered Events</a></Link>
           </div>
         </div>
       </div>
@@ -135,6 +136,7 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
         <Link to='/grievances' className='text-foreground hover:text-[#8b4513]'>Report</Link>
+        <Link to='/registered-events' className='text-foreground hover:text-[#8b4513]'>Registered Events</Link>
         </>
       )}
       
