@@ -26,8 +26,8 @@ import {
 import { toast, Toaster } from 'sonner';
 
 const formSchema = z.object({
-  email: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  email: z.string().email({
+    message: "Please enter a valid email address.",
   }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
@@ -39,7 +39,7 @@ const formSchema = z.object({
 
 const Login = () => {
   const navigate = useNavigate();
-  const[token, setToken]=useState('')
+  const [token, setToken] = useState('')
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -50,14 +50,14 @@ const Login = () => {
   })
 
   function onSubmit(values) {
-    console.log('Login attempted with:',{email:values.email, password: values.password});
+    console.log('Login attempted with:', { email: values.email, password: values.password });
     toast.promise(
       fetch('https://student-council-backend.onrender.com/api/users/login/', {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({email: values.email, password: values.password})
+        body: JSON.stringify({ email: values.email, password: values.password })
       }).then(async (response) => {
         if (!response.ok) {
           const errorData = await response.json()
@@ -70,20 +70,27 @@ const Login = () => {
         loading: 'Loading...',
         success: (data) => {
           console.log('Login successful:', data)
-          console.log(data.tokens.access);
-          console.log(data.tokens.refresh);
-          console.log(JSON.stringify(data.users));
           setToken(data.tokens);
-          const accesstoken=localStorage.setItem('access-token',data.tokens.access);
-          const refreshtoken=localStorage.setItem('refresh-token', data.tokens.refresh);
-          const user=localStorage.setItem('user', data.users);
-          if(values.user_type='student'){
-            navigate('/events/sports');
-          }else if (values.user_type='faculty') {
-            navigate('/');
-          }else{
-            navigate('/');
+          localStorage.setItem('access-token', data.tokens.access);
+          localStorage.setItem('refresh-token', data.tokens.refresh);
+          localStorage.setItem('user', JSON.stringify(data.user));
+          
+          // Navigate based on the user type from the API response
+          switch (data.user.user_type) {
+            case 'STUDENT':
+              navigate('/events/sports');
+              break;
+            case 'FACULTY':
+              navigate('/events/cultural');
+              break;
+            case 'COUNCIL':
+              navigate('/');
+              break;
+            default:
+              navigate('/');
           }
+
+          
           return `${data.message}`
         },
         error: (err) => {
@@ -93,10 +100,6 @@ const Login = () => {
       }
     )
   }
-
-  
-
-  
 
   return (
     <>
@@ -120,7 +123,7 @@ const Login = () => {
                     <FormItem>
                       <FormLabel className="text-white">Email</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your username" {...field} className="border-[#d2b48c] focus:ring-2 focus:ring-[#8b4513]" />
+                        <Input placeholder="Enter your email" {...field} className="border-[#d2b48c] focus:ring-2 focus:ring-[#8b4513]" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

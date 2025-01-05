@@ -1,7 +1,9 @@
 'use client'
 
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -9,8 +11,33 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from 'sonner'
 
-export function RegistrationForm({ userType, onSuccess }) {
+const formSchema = z.object({
+  first_name: z.string().min(2, { message: "First name must be at least 2 characters." }),
+  last_name: z.string().min(2, { message: "Last name must be at least 2 characters." }),
+  email: z.string().email({ message: "Invalid email address." }),
+  phone: z.string().min(10, { message: "Phone number must be at least 10 digits." }),
+  password: z.string().min(8, { message: "Password must be at least 8 characters." }),
+  department: z.string().min(1, { message: "Please select a department." }),
+  gender: z.string().min(1, { message: "Please select a gender." }),
+  bio: z.string().optional(),
+  id_card_document: z.string().min(1, { message: "Please upload a photo ID." }),
+  profile_picture: z.string(File).min(1, { message: "Please upload a profile picture." }),
+  year_of_study: z.string().optional(),
+  division: z.string().optional(),
+  roll_number: z.string().optional(),
+  designation: z.string().optional(),
+  subjects: z.string().optional(),
+  position: z.string().optional(),
+  term_start: z.string().optional(),
+  term_end: z.string().optional(),
+})
+
+export default function RegistrationForm({ userType, onSuccess }) {
+  const [photoIdFile, setPhotoIdFile] = useState(null);
+  const [profilePicFile, setProfilePicFile] = useState(null);
+
   const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       first_name: "",
       last_name: "",
@@ -20,6 +47,8 @@ export function RegistrationForm({ userType, onSuccess }) {
       department: "",
       gender: "",
       bio: "",
+      id_card_document: "",
+      profile_picture: "",
       ...(userType === 'student' && {
         year_of_study: "",
         division: "",
@@ -38,43 +67,53 @@ export function RegistrationForm({ userType, onSuccess }) {
   })
 
   const onSubmit = async (data) => {
+    const formData = new FormData();
+    Object.keys(data).forEach(key => {
+      if (key !== 'id_card_document' && key !== 'profile_picture') {
+        formData.append(key, data[key]);
+      }
+    });
+    formData.append('user_type', userType);
+    if (photoIdFile) formData.append('id_card_document', photoIdFile);
+    if (profilePicFile) formData.append('profile_picture', profilePicFile);
     const payload = {
       ...data,
       user_type: userType,
-    }
-    console.log(payload);
+      id_card_document: photoIdFile,
+      profile_picture: profilePicFile,
+    };
+  
     toast.promise(
       fetch('https://student-council-backend.onrender.com/api/users/register/', {
         method: 'POST',
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
+        body: formData
       }).then(async (response) => {
         if (!response.ok) {
-          const errorData = await response.json()
-          throw new Error(errorData.message || 'Registration failed')
+          const errorData = await response.json();
+          console.log(errorData);
+          throw new Error(errorData.error || 'Registration failed');
         }
-        return response.json()
+        return response.json();
       }),
       {
         loading: 'Registering...',
         success: (data) => {
-          console.log('Registration successful:', data)
-          onSuccess(payload.email)
-          return `${data.message}`
+          console.log('Registration successful:', data);
+          onSuccess(data.email, payload);
+          return `${data.message}`;
         },
         error: (err) => {
-          console.error('Registration error:', err)
-          return `Registration failed: ${err.message}`
+          console.error('Registration error:', err);
+          return `Registration failed: ${err.message}`;
         }
       }
-    )
-  }
+    );
+  };
+  
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 ">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="flex gap-4">
           <FormField
             control={form.control}
@@ -83,7 +122,7 @@ export function RegistrationForm({ userType, onSuccess }) {
               <FormItem className="flex-1">
                 <FormLabel>First Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="First Name" className="" {...field} />
+                  <Input placeholder="First Name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -334,6 +373,48 @@ export function RegistrationForm({ userType, onSuccess }) {
               <FormControl>
                 <Textarea placeholder="Tell us about yourself" {...field} />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="id_card_document"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Photo ID</FormLabel>
+              <FormControl>
+                <Input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={(e) => {
+                    field.onChange(e.target.files[0].name);
+                    setPhotoIdFile(e.target.files[0]);
+                  }}
+                />
+              </FormControl>
+              <FormDescription>Upload a photo of your ID card</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="profile_picture"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Profile Picture</FormLabel>
+              <FormControl>
+                <Input 
+                  type="file" 
+                  accept="image/*"
+                  onChange={(e) => {
+                    field.onChange(e.target.files[0].name);
+                    setProfilePicFile(e.target.files[0]);
+                  }}
+                />
+              </FormControl>
+              <FormDescription>Upload a profile picture</FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -114,7 +114,7 @@ const SportsEvent = () => {
                 className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(`/${event.link}/details`)}
+                onClick={() => navigate(`/${event.slug}/details`)}
               >
                 Learn More
               </motion.button>
@@ -122,7 +122,7 @@ const SportsEvent = () => {
                 className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(`/${event.link}/registration`)}
+                onClick={() => navigate(`/${event.slug}/registration`)}
               >
                 Register
               </motion.button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import {
@@ -12,8 +12,13 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Trash2 } from 'lucide-react'
 import { useParams } from 'react-router-dom';
+import { toast, Toaster } from 'sonner';
 
 const Registration = () => {
+  const params = useParams();
+  const [eventId, setEventId]=useState('');
+  const [event, setEvent]=useState('');
+  console.log(params);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -21,8 +26,12 @@ const Registration = () => {
     department: '',
     year: '',
     division: '',
-    teamMembers: [],
+      ...(event.participation_type==='GROUP' &&{
+        teamMembers: [],
+      })
+    
   });
+  const accessToken = localStorage.getItem('access-token');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -34,9 +43,11 @@ const Registration = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
+    
     console.log('Form submitted:', formData);
-    alert('Registration submitted successfully!');
+
+
+    toast('Registration submitted successfully!');
   };
 
   const addTeamMember = () => {
@@ -62,8 +73,32 @@ const Registration = () => {
     });
   };
 
-  const params = useParams();
-  console.log(params);
+
+  useEffect(() => {
+    const getDetails = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/${params.event}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+        const data = await response.json();
+        console.log(data)
+        console.log(data.id);
+        setEvent(data)
+
+        setEventId(data.id);
+      } catch (error) {
+        console.error('Error fetching event details:', error);
+      }
+    };
+
+    getDetails();
+  }, [params, accessToken]);
+  
+
+
 
   return (
     <>
@@ -163,41 +198,45 @@ const Registration = () => {
                 </SelectContent>
               </Select>
             </div>
+
+            {event.participation_type==='GROUP' && 
             <div className="col-span-2 mb-6 flex flex-col gap-2">
-              <label className="block text-[#4a3728] ">Team Members</label>
-              {formData.teamMembers.map((member, index) => (
-                <div key={member.id} className="flex items-center">
-                 <Select onValueChange={(value) => handleSelectChange('division', value)}>
-                <SelectTrigger className="sm:w-96 w-full border-b">
-                  <SelectValue placeholder="Select Division" />
-                </SelectTrigger>
-                <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
-                  <SelectItem value="a">A</SelectItem>
-                  <SelectItem value="b">B</SelectItem>
-                  <SelectItem value="c">C</SelectItem>
-                  <SelectItem value="d">D</SelectItem>
-                </SelectContent>
-              </Select>
-                  <Button
-                    type="button"
-                    onClick={() => removeTeamMember(member.id)}
-                    variant="ghost"
-                    size="icon"
-                    className="text-[#8b4513] hover:text-[#a0522d]"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-              <Button
-                type="button"
-                onClick={addTeamMember}
-                variant="outline"
-                className="mt-2 text-[#8b4513] w-fit border-[#8b4513] hover:bg-[#8b4513] hover:text-white"
-              >
-                Add Subordinates
-              </Button>
-            </div>
+            <label className="block text-[#4a3728] ">Team Members</label>
+            {event.participation_type==='GROUP' && formData.teamMembers.map((member, index) => (
+              <div key={member.id} className="flex items-center">
+               <Select onValueChange={(value) => handleSelectChange('division', value)}>
+              <SelectTrigger className="sm:w-96 w-full border-b">
+                <SelectValue placeholder="Select Division" />
+              </SelectTrigger>
+              <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
+                <SelectItem value="a">A</SelectItem>
+                <SelectItem value="b">B</SelectItem>
+                <SelectItem value="c">C</SelectItem>
+                <SelectItem value="d">D</SelectItem>
+              </SelectContent>
+            </Select>
+                <Button
+                  type="button"
+                  onClick={() => removeTeamMember(member.id)}
+                  variant="ghost"
+                  size="icon"
+                  className="text-[#8b4513] hover:text-[#a0522d]"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            ))}
+            <Button
+              type="button"
+              onClick={addTeamMember}
+              variant="outline"
+              className="mt-2 text-[#8b4513] w-fit border-[#8b4513] hover:bg-[#8b4513] hover:text-white"
+            >
+              Add Subordinates
+            </Button>
+          </div>
+            }
+            
             <motion.button
               type="submit"
               className="col-span-2 w-full bg-[#8b4513] text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
@@ -209,6 +248,7 @@ const Registration = () => {
           </motion.form>
         </div>
       </div>
+      <Toaster position='top-right'/>
     </>
   );
 };

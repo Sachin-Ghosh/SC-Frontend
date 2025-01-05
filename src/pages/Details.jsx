@@ -83,6 +83,7 @@ const EventDetails = () => {
           },
         });
         const data = await response.json();
+        console.log(data)
         setEventDetail(data);
       } catch (error) {
         console.error('Error fetching event details:', error);
@@ -117,7 +118,7 @@ const EventDetails = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <img src={eventDetail.images[0] || '/placeholder.svg?height=384&width=384'} alt={eventDetail.name} className="w-full h-96 relative z-20 rounded-lg shadow-lg object-cover" />
+              <img src={'/placeholder.svg?height=384&width=384'} alt={eventDetail.name} className="w-full h-96 relative z-20 rounded-lg shadow-lg object-cover" />
             </motion.div>
             
             <motion.div

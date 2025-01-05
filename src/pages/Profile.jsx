@@ -1,34 +1,50 @@
 import UserProfile from '@/components/UserProfile';
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
 
 const Profile = () => {
-  const user = {
-    name: "Sir Souvik Mondal",
-    title: "Rookie",
-    
-    about: "A noble knight known for his purity and bravery. ",
-    skills: [
-      "Jousting",
-      "Swordsmanship",
-      "Chivalry",
-      "Horsemanship",
-      "Medieval Lore"
-    ],
-    achievements: [
-      "Victor of the Grand Tournament of Camelot",
-      "Recovered the Holy Grail",
-      "Slayer of the Dragon of Northumbria"
-    ],
-    email: "sm6984767@gmail.com",
-    department: 'Information Technology',
-    phone: '9890780219',
-    
-    // location: "Nallasop"
+  const [profile, setProfile] = useState(null);
+  const accessToken = localStorage.getItem('access-token');
+
+  const getProfile = async () => {
+    if (!accessToken) {
+      console.error('No access token found');
+      return;
+    }
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/profile/`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch profile');
+      }
+
+      const data = await response.json();
+      console.log(data)
+      setProfile(data);
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+    }
   };
 
-  return <UserProfile user={user} />;
+  useEffect(() => {
+    getProfile();
+  }, []);
+
+  return (
+    <div>
+      {profile ? (
+        <UserProfile profile={profile} />
+        // <div></div>
+      ) : (
+        <p>Loading profile...</p>
+      )}
+    </div>
+  );
 };
 
 export default Profile;
-
