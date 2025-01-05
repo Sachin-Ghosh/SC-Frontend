@@ -1,4 +1,5 @@
 import UserProfile from '@/components/UserProfile';
+import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
 const Profile = () => {
@@ -41,7 +42,7 @@ const Profile = () => {
         <UserProfile profile={profile} />
         // <div></div>
       ) : (
-        <p>Loading profile...</p>
+        <p className='flex justify-center items-center min-h-screen gap-5 '><Loader className='animate-spin'/>Loading profile...</p>
       )}
     </div>
   );

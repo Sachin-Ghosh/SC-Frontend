@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FaFootballBall } from 'react-icons/fa';
 
 const events = {
   boys: [
@@ -70,9 +71,11 @@ const SportsEvent = () => {
   const [subevents, setSubevents]=useState([]);
   const accessToken=localStorage.getItem('access-token')
   const [selectedTab, setSelectedTab] = useState('boys');
+  const[loading, setLoading]=useState(false)
   const navigate = useNavigate();
 
   const fetchSportsEvents = async (gender) => {
+    setLoading(true)
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/?category=SPORTS&gender=${gender === 'boys' ? 'MALE' : 'FEMALE'}`, {
         method: 'GET',
@@ -82,7 +85,10 @@ const SportsEvent = () => {
       });
       const data = await response.json();
       console.log(data);
-      setSubevents(data);
+      if(response.ok){
+        setSubevents(data);
+        setLoading(false)
+      }
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -149,8 +155,17 @@ const SportsEvent = () => {
           <img src='/frame.png' className='absolute top-5 sm:top-0 -z-10 w-full '/>
           <h1 className='ysabeau-sc relative z-40 top-20'>Sports Events</h1>
         </motion.div>
-        
-        <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full sm:px-20 relative top-40 sm:top-28">
+        {subevents.length===0 ? (
+         <>
+         <div>
+         <span className='text-black flex justify-center items-center min-h-screen gap-5'>
+        <FaFootballBall className='animate-bounce' size={30}/>
+        <h1 className='relative z-50'>Loading....</h1>
+        </span>
+         </div>
+         </>
+        ):(
+        <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full sm:px-20 relative top-40 sm:top-52">
         <TabsList className="flex gap-2 items-center justify-center py-10">
           <TabsTrigger value="boys" className="text-lg ysabeau-sc data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Boys</TabsTrigger>
           <TabsTrigger value="girls" className="text-lg ysabeau-sc data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black ">Girls</TabsTrigger>
@@ -162,6 +177,9 @@ const SportsEvent = () => {
           {renderEvents(subevents)}
         </TabsContent>
       </Tabs>
+        )}
+        
+        
         {/* <div className='w-full sm:px-20 relative top-48'>
 
         {renderEvents(subevents)}

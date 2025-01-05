@@ -68,13 +68,13 @@ setData(profile.profile)
 const ProfileSection = ({ icon, title, children }) => {
   return (
     <motion.div 
-      className="relative rounded sm:p-10 bg-center bg-contain bg-no-repeat  w-[60rem] h-[25rem]"
+      className="relative rounded sm:p-10 bg-center bg-contain bg-no-repeat flex justify-center "
       initial={{ opacity: 0, y:100, scale: 0.9 }}
       animate={{ opacity: 1, y:0, scale: 1 }}
       transition={{ duration: 1 }}
     >
-      <img src='/profile-back.jpg' className='absolute z-0 sm:-top-[17rem] w-[60rem] h-[60rem] object-contain object-center' alt="Profile Background"/>
-      <div className='relative z-10 px-8 py-3 sm:py-0 sm:px-10 flex flex-col items-center justify-center w-full'>
+      {/* <img src='/event-background.jpg' className='absolute z-0  md:-top-[22rem] lg:-top-[17rem] sm:w-[60rem] sm:h-[60rem] object-cover sm:object-contain object-center' alt="Profile Background"/> */}
+      <div className='relative rounded-2xl z-10 px-7 py-10 bg-[url("/event-background.jpg")] bg-cover bg-center sm:py-10 sm:px-10 flex flex-col items-center justify-center w-fit'>
         <div className="flex items-center  mb-2">
           {icon}
           <h2 className="ml-2 text-xl font-semibold text-[#4a3728] font-serif">{title}</h2>
