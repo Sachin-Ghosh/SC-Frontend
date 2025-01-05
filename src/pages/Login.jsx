@@ -52,7 +52,7 @@ const Login = () => {
   function onSubmit(values) {
     console.log('Login attempted with:', { email: values.email, password: values.password });
     toast.promise(
-      fetch('https://student-council-backend.onrender.com/api/users/login/', {
+      fetch(`${import.meta.env.VITE_API_URL}/api/users/login/`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"

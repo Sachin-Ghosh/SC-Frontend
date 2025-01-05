@@ -15,10 +15,8 @@ import { useParams } from 'react-router-dom';
 import { toast, Toaster } from 'sonner';
 
 const Registration = () => {
-  const params = useParams();
-  const [eventId, setEventId]=useState('');
-  const [event, setEvent]=useState('');
-  console.log(params);
+  const { event: eventSlug } = useParams();
+  const [event, setEvent] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,12 +24,30 @@ const Registration = () => {
     department: '',
     year: '',
     division: '',
-      ...(event.participation_type==='GROUP' &&{
-        teamMembers: [],
-      })
-    
+    teamMembers: [],
   });
+
   const accessToken = localStorage.getItem('access-token');
+
+  useEffect(() => {
+    const getDetails = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/${eventSlug}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+        const data = await response.json();
+        setEvent(data);
+      } catch (error) {
+        console.error('Error fetching event details:', error);
+        toast.error('Failed to fetch event details');
+      }
+    };
+
+    getDetails();
+  }, [eventSlug, accessToken]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -43,62 +59,32 @@ const Registration = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
     console.log('Form submitted:', formData);
-
-
-    toast('Registration submitted successfully!');
+    toast.success('Registration submitted successfully!');
   };
 
   const addTeamMember = () => {
-    setFormData({
-      ...formData,
-      teamMembers: [...formData.teamMembers, { id: Date.now(), name: '' }],
-    });
+    setFormData(prev => ({
+      ...prev,
+      teamMembers: [...prev.teamMembers, { id: Date.now(), name: '' }],
+    }));
   };
 
   const removeTeamMember = (id) => {
-    setFormData({
-      ...formData,
-      teamMembers: formData.teamMembers.filter(member => member.id !== id),
-    });
+    setFormData(prev => ({
+      ...prev,
+      teamMembers: prev.teamMembers.filter(member => member.id !== id),
+    }));
   };
 
   const handleTeamMemberChange = (id, value) => {
-    setFormData({
-      ...formData,
-      teamMembers: formData.teamMembers.map(member =>
+    setFormData(prev => ({
+      ...prev,
+      teamMembers: prev.teamMembers.map(member =>
         member.id === id ? { ...member, name: value } : member
       ),
-    });
+    }));
   };
-
-
-  useEffect(() => {
-    const getDetails = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/${params.event}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-          },
-        });
-        const data = await response.json();
-        console.log(data)
-        console.log(data.id);
-        setEvent(data)
-
-        setEventId(data.id);
-      } catch (error) {
-        console.error('Error fetching event details:', error);
-      }
-    };
-
-    getDetails();
-  }, [params, accessToken]);
-  
-
-
 
   return (
     <>
