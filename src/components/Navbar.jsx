@@ -104,7 +104,7 @@ const Header = () => {
             </label>
           </div>
           )}
-          <Link to={'/'} className="flex-1 bg-white rounded-full">
+          <Link to={'/'} className="flex-1 bg-white bg-opacity-80 rounded-full">
             <img src='/sc_logo.png' alt="UCOE Logo" className='h-16 w-[4rem] relative z-20' />
           </Link>
         </div>

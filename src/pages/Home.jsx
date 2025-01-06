@@ -62,7 +62,7 @@ const Home = () => {
           <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
             <div className="flex flex-col">
               <span className="countdown font-mono text-5xl sm:text-7xl text-amber-950">
-                <span style={{"--value":15}}></span>
+                <span style={{"--value":11}}></span>
               </span>
               <span className="text-amber-950">days</span>
             </div>
