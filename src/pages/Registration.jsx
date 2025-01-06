@@ -11,7 +11,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Loader, Trash2 } from 'lucide-react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast, Toaster } from 'sonner';
 
 // import { setMaxListeners } from 'events';
@@ -22,6 +22,7 @@ const Registration = () => {
   const [loading, setLoading] = useState(false);
   const user=localStorage.getItem('user');
   const storedUser=JSON.parse(user);
+  const navigate=useNavigate();
   // console.log('storedUser',storedUser)
   const [formData, setFormData] = useState({
     team_leader: storedUser,
@@ -102,6 +103,8 @@ const Registration = () => {
       console.log(data);
       if(response.ok){
         toast.success('Registration submitted successfully!');
+        navigate('/registered-events')
+        
       }else{
         toast.error(`${data.error}`)
       }

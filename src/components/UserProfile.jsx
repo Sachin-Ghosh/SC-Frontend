@@ -3,9 +3,11 @@ import { motion } from 'framer-motion';
 import { FaScroll } from 'react-icons/fa';
 import { GiBlackKnightHelm, GiKnightBanner } from 'react-icons/gi';
 import { TypeAnimation } from 'react-type-animation';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfile = ({ profile }) => {
-  const [data, setData]=useState()
+  const [data, setData]=useState();
+  const navigate=useNavigate();
   useEffect(()=>{
 setData(profile.profile)
   },[profile])
@@ -42,6 +44,9 @@ setData(profile.profile)
                 {profile.profile.username}
               </motion.h1>
               <p className="text-sm text-[#8b4513] mt-1">{profile.profile.user_type}</p>
+              <div className="flex items-center justify-center ">
+                <button className='btn bg-amber-950 text-white hover:bg-amber-900' onClick={()=>{navigate('/profile/update')}}>Edit Profile</button>
+              </div>
             </div>
             <div className="mt-6 flex items-center justify-center">
               <ProfileSection icon={<FaScroll className="text-[#8b4513]" />} title="About">

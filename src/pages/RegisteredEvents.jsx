@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { FaFootballBall } from 'react-icons/fa'
 import { Link, useNavigate } from 'react-router-dom'
+import { useMediaQuery } from 'react-responsive'
 import {
   Table,
   TableBody,
@@ -12,12 +13,14 @@ import {
 } from "@/components/ui/table"
 import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
+import EventCard from '@/components/EventCard'
 
 const RegisteredEvents = () => {
   const [events, setEvents] = useState([])
   const [subEventDetails, setSubEventDetails] = useState({})
   const accessToken = localStorage.getItem('access-token');
-  const navigate=useNavigate()
+  const navigate = useNavigate()
+  const isDesktop = useMediaQuery({ minWidth: 768 })
 
   const getRegisteredEvents = async () => {
     try {
@@ -88,7 +91,7 @@ const RegisteredEvents = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <img src='/frame.png' className='absolute top-5 sm:top-0 -z-10 w-full' />
+          <img src='/frame.png' className='absolute top-5 sm:top-0 -z-10 w-full' alt="Decorative frame" />
           <h1 className='ysabeau-sc relative z-40 top-[6.5rem]'>Registered Events</h1>
         </motion.div>
 
@@ -98,57 +101,70 @@ const RegisteredEvents = () => {
             <h1 className='relative z-50'>Loading....</h1>
           </div>
         ) : (
-          <div className='w-full max-w-7xl fixed top-56 sm:top-32 mt-40 max-h-96 sm:mt-48 mb-10 overflow-x-auto bg-white/80 rounded shadow-xl'>
-            <Table  className=" ">
-              <TableHeader className="sticky top-0 backdrop-blur-sm  bg-gray-400 bg-opacity-25">
-                <TableRow >
-                  <TableHead>Registration No.</TableHead>
-                  <TableHead>Event Name</TableHead>
-                  <TableHead>Team Name</TableHead>
-                  <TableHead>Registration Date</TableHead>
-                  <TableHead>Status</TableHead>
-                  {/* <TableHead>Payment Status</TableHead> */}
-                  <TableHead>Current Stage</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {events.map((event) => (
-                  <TableRow key={event.id}>
-                    <TableCell className="font-medium" onClick={()=>{navigate(`/registered-events/${event.id}`)}}>{event.registration_number}</TableCell>
-                    <TableCell>
-                      {subEventDetails[event.sub_event] ? (
-                        <Link 
-                          to={`/registered-events/${subEventDetails[event.sub_event].slug}`} 
-                          className="text-blue-600 hover:underline"
-                        >
-                          {subEventDetails[event.sub_event].name}
-                        </Link>
-                      ) : 'Loading...'}
-                    </TableCell>
-                    <TableCell>{event.team_name}</TableCell>
-                    <TableCell>
-                      {format(new Date(event.registration_date), 'dd MMM yyyy, hh:mm a')}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={`${getStatusColor(event.status)} text-white`}>
-                        {event.status}
-                      </Badge>
-                    </TableCell>
-                    {/* <TableCell>
-                      <Badge variant={event.payment_status ? "success" : "destructive"}>
-                        {event.payment_status ? 'Paid' : 'Pending'}
-                      </Badge>
-                    </TableCell> */}
-                    <TableCell>
-                      <Badge variant="outline">
-                        {event.current_stage}
-                      </Badge>
-                    </TableCell>
+          <div className='fixed top-56 sm:top-32'>
+            {isDesktop ? (
+          <div className='w-full max-w-7xl  mt-40 max-h-96 sm:mt-48 mb-10 overflow-y-auto bg-white/80 rounded shadow-xl'>
+              <Table>
+                <TableHeader className="sticky top-0 backdrop-blur-sm bg-gray-400 bg-opacity-25">
+                  <TableRow>
+                    <TableHead>Registration No.</TableHead>
+                    <TableHead>Event Name</TableHead>
+                    <TableHead>Team Name</TableHead>
+                    <TableHead>Registration Date</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>Current Stage</TableHead>
                   </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {events.map((event) => (
+                    <TableRow key={event.id}>
+                      <TableCell className="font-medium" onClick={() => { navigate(`/registered-events/${event.id}`) }}>{event.registration_number}</TableCell>
+                      <TableCell>
+                        {subEventDetails[event.sub_event] ? (
+                          <Link 
+                            to={`/registered-events/${subEventDetails[event.sub_event].slug}`} 
+                            className="text-blue-600 hover:underline"
+                          >
+                            {subEventDetails[event.sub_event].name}
+                          </Link>
+                        ) : 'Loading...'}
+                      </TableCell>
+                      <TableCell>{event.team_name}</TableCell>
+                      <TableCell>
+                        {format(new Date(event.registration_date), 'dd MMM yyyy, hh:mm a')}
+                      </TableCell>
+                      <TableCell>
+                        <Badge className={`${getStatusColor(event.status)} text-white`}>
+                          {event.status}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">
+                          {event.current_stage}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              </div>
+            ) : (
+              <div className=" fixed flex flex-col w-full left-0  justify-center items-center top-80 sm:top-32">
+                <div className='max-h-screen overflow-y-auto'>
+
+                {events.map((event) => (
+                  <EventCard 
+                    key={event.id} 
+                    event={event} 
+                    subEventDetails={subEventDetails} 
+                    getStatusColor={getStatusColor} 
+                  />
                 ))}
-              </TableBody>
-            </Table>
+                </div>
+              </div>
+            )}
           </div>
+        
         )}
       </div>
     </>

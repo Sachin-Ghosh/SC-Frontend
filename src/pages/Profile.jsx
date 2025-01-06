@@ -1,6 +1,7 @@
 import UserProfile from '@/components/UserProfile';
 import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
+import { FaFootballBall } from 'react-icons/fa';
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -42,7 +43,14 @@ const Profile = () => {
         <UserProfile profile={profile} />
         // <div></div>
       ) : (
-        <p className='flex justify-center items-center min-h-screen gap-5 '><Loader className='animate-spin'/>Loading profile...</p>
+        <>
+        <img src='/registration-back.jpg' className='fixed object-cover h-full w-full z-0' alt="Event background" />
+        <div className='min-h-screen flex justify-center relative z-20 items-center gap-5'>
+        {/* <img src='/detail-banner.png' className='fixed -bottom-72 -right-20 w-[40rem] h-[40rem]'/> */}
+          <FaFootballBall className="animate-bounce text-amber-600 text-4xl" />
+          <span className="text-amber-900 text-2xl">Loading Profile...</span>
+        </div>
+      </>
       )}
     </div>
   );

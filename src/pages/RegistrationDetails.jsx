@@ -22,6 +22,7 @@ const RegistrationDetails = () => {
           },
         });
         const data = await response.json();
+        console.log(data)
         setEventDetail(data);
         const response2 = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/${data.sub_event}`, {
           method: 'GET',

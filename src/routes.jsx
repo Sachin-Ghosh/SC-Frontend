@@ -14,8 +14,10 @@ import Profile from './pages/Profile';
 import About from './pages/About';
 import SignUp from './pages/SignUp';
 import Registration from './pages/Registration';
-import RegisteredEvents from './pages/RegisteredEvents';
+// import RegisteredEvents from './pages/RegisteredEvents';
 import RegistrationDetails from './pages/RegistrationDetails';
+import UpdateProfile from './pages/UpdateProfile';
+import RegisteredEvents from './pages/RegisteredEvents';
 
 // import Registration from './pages/Registration';
 // import Events from './pages/Events';
@@ -33,6 +35,7 @@ const AppRoutes = () => (
     <Route path="/registered-events" element={<RegisteredEvents />} />
     <Route path="/registered-events/:event" element={<RegistrationDetails />} />
     <Route path="/profile" element={<Profile />} />
+    <Route path="/profile/update" element={<UpdateProfile />} />
     <Route path="/about" element={<About />} />
   </Routes>
 );

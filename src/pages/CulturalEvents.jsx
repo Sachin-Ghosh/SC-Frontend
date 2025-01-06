@@ -106,7 +106,7 @@ const CulturalEvent = () => {
               whileHover={{ scale: 1.05 }}
               transition={{ delay: index * 0.3, duration: 0.5 }}
             >
-              <img src={event.image} alt={event.name} className="w-full h-full object-cover absolute z-20" />
+              <img src={event.images[0]?.image} alt={event.name} className="w-full h-full object-cover absolute z-20" />
               <div className="p-6 relative z-30 bg-amber-900 bg-opacity-50 hover:bg-opacity-60 transition-all duration-300">
                 <h3 className="text-2xl mb-2 text-amber-100">{event.name}</h3>
                 <p className="text-amber-100 ysabeau-sc">Date: {event.date}</p>
