@@ -24,6 +24,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { toast, Toaster } from 'sonner';
+import { Eye, EyeClosed } from 'lucide-react';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const formSchema = z.object({
   email: z.string().email({
@@ -39,7 +41,8 @@ const formSchema = z.object({
 
 const Login = () => {
   const navigate = useNavigate();
-  const [token, setToken] = useState('')
+  const [token, setToken] = useState('');
+  const [showPassword,  setShowPassword]=useState(false)
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -136,7 +139,10 @@ const Login = () => {
                     <FormItem>
                       <FormLabel className="text-white">Password</FormLabel>
                       <FormControl>
-                        <Input type="password" placeholder="Enter your password" {...field} className="border-[#d2b48c] focus:ring-2 focus:ring-[#8b4513]" />
+                        <div className='flex gap-2 border border-[#d2b48c] focus:ring-2 focus:ring-[#8b4513] '>
+                        <Input type={showPassword ? 'text':'password'} placeholder="Enter your password" {...field} className="border-none" />
+                        <button type='button' className='px-2' onClick={()=>{setShowPassword(!showPassword)}}>{showPassword ? <FaEyeSlash size={20}/>:<FaEye size={20}/>}</button>
+                        </div>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

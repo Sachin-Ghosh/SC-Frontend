@@ -95,7 +95,16 @@ const EventDetails = () => {
   }, [event, accessToken]);
 
   if (!eventDetail) {
-    return <div className='min-h-screen flex justify-center items-center gap-5'><FaFootballBall/>Loading...</div>;
+    return (
+      <>
+      <img src='/event-background.jpg' className='fixed object-cover h-full w-full z-0' alt="Event background" />
+      <div className='min-h-screen flex justify-center relative z-20 items-center gap-5'>
+      <img src='/detail-banner.png' className='fixed -bottom-72 -right-20 w-[40rem] h-[40rem]'/>
+        <FaFootballBall className="animate-bounce text-amber-600 text-4xl" />
+        <span className="text-amber-900 text-2xl">Loading...</span>
+      </div>
+    </>
+  );
   }
 
   return (
@@ -155,7 +164,7 @@ const EventDetails = () => {
               <p className="text-lg">{eventDetail.description}</p>
               <Button 
                 className="mt-4 bg-amber-900 text-white hover:bg-amber-800" 
-                onClick={() => navigate(`/${event}/registration`)}
+                onClick={() => navigate(`/${eventDetail.id}/registration`)}
               >
                 Register Now
               </Button>

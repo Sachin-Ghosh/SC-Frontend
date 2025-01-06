@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { toast, Toaster } from 'sonner'
 import { OTPForm } from '@/components/OTPform'
 import axios from 'axios'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
 
 const formSchema = z.object({
   first_name: z.string().min(2, { message: "First name must be at least 2 characters." }),
@@ -45,6 +46,7 @@ const SignUp = () => {
   const [otp, setOtp] = useState('');
   const [photoIdFile, setPhotoIdFile] = useState(null);
   const [profilePicFile, setProfilePicFile] = useState(null);
+  const [showPassword,  setShowPassword]=useState(false)
   const navigate = useNavigate()
 
   const form = useForm({
@@ -98,7 +100,7 @@ const SignUp = () => {
     };
 
     toast.promise(
-      fetch('https://student-council-backend.onrender.com/api/users/register/', {
+      fetch(`${import.meta.env.VITE_API_URL}/api/users/register/`, {
         method: 'POST',
         body: formData
       }).then(async (response) => {
@@ -174,7 +176,7 @@ const SignUp = () => {
     console.log('Sending verification id_card_document payload:', verificationPayload.id_card_document)
 
     toast.promise(
-      axios.post('https://STUDENT-COUNCIL-backend.onrender.com/api/users/register/verify/', verificationPayload, {
+      axios.post(`${import.meta.env.VITE_API_URL}/api/users/register/verify/`, verificationPayload, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -275,18 +277,21 @@ const SignUp = () => {
                       )}
                     />
                     <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <Input type="password" placeholder="Password" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="">Password</FormLabel>
+                      <FormControl>
+                        <div className='flex gap-2 border border-black focus:ring-2 focus:ring-[#8b4513] '>
+                        <Input type={showPassword ? 'text':'password'} placeholder="Enter your password" {...field} className="border-none" />
+                        <button type='button' className='px-2' onClick={()=>{setShowPassword(!showPassword)}}>{showPassword ? <FaEyeSlash size={20}/>:<FaEye size={20}/>}</button>
+                        </div>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                     <FormField
                       control={form.control}
                       name="department"

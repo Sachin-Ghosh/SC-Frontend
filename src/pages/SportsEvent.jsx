@@ -4,68 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FaFootballBall } from 'react-icons/fa';
 
-const events = {
-  boys: [
-    {
-      id: 1,
-      name: 'Cricket',
-      date: 'July 15, 2023',
-      description: 'Experience the thrill of cricket in our grand tournament.',
-      image: '/cricket.jpg',
-      link: 'cricket'
-    },
-    {
-      id: 2,
-      name: 'Football',
-      date: 'August 5, 2023',
-      description: 'Show your skills in our exciting football championship.',
-      image: '/football.jpg',
-      link: 'football'
-    },
-    {
-      id: 3,
-      name: 'Kabaddi',
-      date: 'September 2, 2023',
-      description: 'Engage in the traditional sport of kabaddi in our tournament.',
-      image: '/kabaddi.jpeg',
-      link: 'kabaddi'
-    },
-    {
-      id: 5,
-      name: 'Badminton',
-      date: 'October 1, 2023',
-      description: 'Show your skills in our exciting badminton championship.',
-      image: '/badminton.jpeg',
-      link: 'badminton'
-    },
-  ],
-  girls: [
-    {
-      id: 4,
-      name: 'Volleyball',
-      date: 'September 10, 2023',
-      description: 'Compete in our thrilling volleyball tournament.',
-      image: '/volleyball.jpg',
-      link: 'volleyball'
-    },
-    {
-      id: 5,
-      name: 'Badminton',
-      date: 'October 1, 2023',
-      description: 'Show your skills in our exciting badminton championship.',
-      image: '/badminton.jpeg',
-      link: 'badminton'
-    },
-    {
-      id: 6,
-      name: 'Box Cricket',
-      date: 'October 15, 2023',
-      description: 'Compete in our fast-paced table tennis tournament.',
-      image: '/box-cricket.jpg',
-      link: 'table-tennis'
-    },
-  ]
-};
+
 
 const SportsEvent = () => {
   const [subevents, setSubevents]=useState([]);
@@ -120,7 +59,7 @@ const SportsEvent = () => {
                 className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(`/${event.slug}/details`)}
+                onClick={() => navigate(`/${event.id}/details`)}
               >
                 Learn More
               </motion.button>
@@ -128,7 +67,7 @@ const SportsEvent = () => {
                 className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => navigate(`/${event.slug}/registration`)}
+                onClick={() => navigate(`/${event.id}/registration`)}
               >
                 Register
               </motion.button>
@@ -157,12 +96,10 @@ const SportsEvent = () => {
         </motion.div>
         {subevents.length===0 ? (
          <>
-         <div>
-         <span className='text-black flex justify-center items-center min-h-screen gap-5'>
-        <FaFootballBall className='animate-bounce' size={30}/>
-        <h1 className='relative z-50'>Loading....</h1>
-        </span>
-         </div>
+         <div className='min-h-screen flex justify-center relative z-20 items-center gap-5'>
+          <FaFootballBall className="animate-bounce text-amber-600 text-4xl" />
+          <span className="text-amber-900 text-2xl">Loading...</span>
+        </div>
          </>
         ):(
         <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full sm:px-20 relative top-40 sm:top-52">

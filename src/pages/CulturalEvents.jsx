@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { FaFootballBall } from 'react-icons/fa';
 
 const events = [
   {
@@ -87,7 +88,15 @@ const CulturalEvent = () => {
           <img src='/frame.png' className='absolute -top-[4.5rem] sm:-top-24 -z-10 w-full '/>
           <h1 className='ysabeau-sc relative z-40'>Cultural Events</h1>
         </motion.div>
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 w-full sm:px-28 gap-8 relative">
+        {subevents.length===0 ? (
+          <>
+          <div className='min-h-screen flex justify-center relative z-20 items-center gap-5'>
+          <FaFootballBall className="animate-bounce text-amber-600 text-4xl" />
+          <span className="text-amber-900 text-2xl">Loading...</span>
+        </div>
+          </>
+        ):(
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 w-full sm:px-28 gap-8 relative">
           {subevents.map((event, index) => (
             <motion.div 
               key={event.id}
@@ -107,7 +116,7 @@ const CulturalEvent = () => {
                     className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate(`/${event.slug}/details`)}
+                    onClick={() => navigate(`/${event.id}/details`)}
                   >
                     Learn More
                   </motion.button>
@@ -115,7 +124,7 @@ const CulturalEvent = () => {
                     className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={() => navigate(`/${event.slug}/registration`)}
+                    onClick={() => navigate(`/${event.id}/registration`)}
                   >
                     Register
                   </motion.button>
@@ -124,6 +133,8 @@ const CulturalEvent = () => {
             </motion.div>
           ))}
         </div>
+        )}
+       
       </div>
     </>
   );
