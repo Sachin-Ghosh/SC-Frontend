@@ -102,7 +102,7 @@ const SportsEvent = () => {
         </div>
          </>
         ):(
-        <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full sm:px-20 relative top-40 sm:top-52 min-h-screen">
+        <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full sm:px-20 relative top-40 sm:top-52">
         <TabsList className="flex gap-2 items-center justify-center py-10">
           <TabsTrigger value="boys" className="text-lg ysabeau-sc data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Boys</TabsTrigger>
           <TabsTrigger value="girls" className="text-lg ysabeau-sc data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black ">Girls</TabsTrigger>

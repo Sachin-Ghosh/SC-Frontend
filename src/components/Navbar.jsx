@@ -104,8 +104,8 @@ const Header = () => {
             </label>
           </div>
           )}
-          <Link to={'/'} className="flex-1">
-            <img src='/ucoe.png' alt="UCOE Logo" className='h-16 w-[3.5rem] relative z-20' />
+          <Link to={'/'} className="flex-1 bg-white rounded-full">
+            <img src='/sc_logo.png' alt="UCOE Logo" className='h-16 w-[4rem] relative z-20' />
           </Link>
         </div>
           {/* //mid nav */}
