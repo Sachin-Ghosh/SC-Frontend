@@ -37,7 +37,7 @@ export function SubeventCombobox({ subevents, onSelect, value }) {
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0 border border-black rounded">
-        <Command className="bg-[url('/event-background.jpg')] bg-center rounded w-full max-h-52 ">
+        <Command className="bg-[url('/event-background.jpg')] bg-center bg-cover rounded w-full max-h-52 ">
           <CommandInput placeholder="Search subevent..." className=""/>
           <CommandList >
           <CommandEmpty>No subevent found.</CommandEmpty>

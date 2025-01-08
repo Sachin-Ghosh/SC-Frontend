@@ -21,7 +21,7 @@ import OTPInput from 'react-otp-input'
 const formSchema = z.object({
   first_name: z.string().min(2, { message: "First name must be at least 2 characters." }),
   last_name: z.string().min(2, { message: "Last name must be at least 2 characters." }),
-  email: z.string().email({ message: "Invalid email address." }),
+  email: z.string().email({ message: "Invalid email address." }).regex(/@universal\.edu\.in$/, "Email must belong to universal.edu.in domain"),
   phone: z.string().min(10, { message: "Phone number must be at least 10 digits." }),
   password: z.string().min(8, { message: "Password must be at least 8 characters." }),
   department: z.string().min(1, { message: "Please select a department." }),
@@ -82,36 +82,39 @@ const SignUp = () => {
 
   const onSubmit = async (data) => {
     // First, verify the ID card
-    if (!photoIdFile) {
-      toast.error('Please upload a photo ID');
-      return;
-    }
+    // if (!photoIdFile) {
+    //   toast.error('Please upload a photo ID');
+    //   return;
+    // }
 
-    const idCardFormData = new FormData();
-    idCardFormData.append('id_card_document', photoIdFile);
+    // const idCardFormData = new FormData();
+    // idCardFormData.append('id_card_document', photoIdFile);
 
     try {
-      const verificationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/users/verify-id-card`, {
-        method: 'POST',
-        body: idCardFormData
-      });
+      // const verificationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/users/verify-id-card`, {
+      //   method: 'POST',
+      //   body: idCardFormData
+      // });
 
-      const verificationText = await verificationResponse.text();
-      console.log('Verification response:', verificationText);
+      // const verificationText = await verificationResponse.text();
+      // console.log('Verification response:', verificationText);
 
-      let verificationData;
-      try {
-        verificationData = JSON.parse(verificationText);
-      } catch (e) {
-        console.error('Error parsing verification response:', e);
-        throw new Error('Invalid response from server during ID verification');
-      }
+      // let verificationData;
+      // try {
+      //   verificationData = JSON.parse(verificationText);
+      // } catch (e) {
+      //   console.error('Error parsing verification response:', e);
+      //   throw new Error('Invalid response from server during ID verification');
+      // }
 
-      if (!verificationResponse.ok) {
-        throw new Error(verificationData.error || 'ID card verification failed');
-      }
+      // if (!verificationResponse.ok) {
+      //   throw new Error(verificationData.error || 'ID card verification failed');
+      // }
 
       // If ID card verification is successful, proceed with the main form submission
+      // if(data.email.includes('@universal.edu.in')){
+      //   toast.error
+      // }
       const formData = new FormData();
       Object.keys(data).forEach(key => {
         if (key !== 'id_card_document' && key !== 'profile_picture') {

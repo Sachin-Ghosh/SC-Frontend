@@ -23,22 +23,30 @@ const RegistrationDetails = () => {
         });
         const data = await response.json();
         console.log(data)
+        console.log(data.sub_event)
         setEventDetail(data);
-        const response2 = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/${data.sub_event}`, {
+        if(data)
+        {const response2 = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/${data.sub_event}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           },
         });
         const data2 = await response2.json();
-        setSubevent(data2.name);
+        setSubevent(data2.name);}
       } catch (error) {
         console.error('Error fetching event details:', error);
       }
     };
 
+
     getDetails();
+    if(!accessToken){
+      navigate('/')
+    }
   }, [event, accessToken]);
+
+ 
 
   if (!eventDetail || !subevent) {
     return (
@@ -69,11 +77,7 @@ const RegistrationDetails = () => {
     visible: { y: 0, opacity: 1 }
   };
 
-  useEffect(() => {
-    if(!accessToken){
-      navigate('/')
-    }
-  }, [accessToken])
+
 
   return (
     <>
@@ -108,7 +112,7 @@ const RegistrationDetails = () => {
             <h2 className="text-2xl font-semibold mb-4 flex items-center">
               <UserPlus className="mr-2" /> Team Members
             </h2>
-            <div className="grid grid-cols-2 gap-10">
+            <div className="grid sm:grid-cols-2 sm:gap-10">
 
             {eventDetail.team_members.map((member, index) => (
               <motion.div 
@@ -116,7 +120,7 @@ const RegistrationDetails = () => {
                 className="mb-4 p-4 bg-amber-100 rounded flex items-center space-x-4"
                 variants={itemVariants}
               >
-                <img src={member.profile_picture} alt={member.username} className="w-12 h-12 rounded-full object-cover" />
+                <img src={member.profile_picture} alt={member.username} className="w-12 h-12  rounded-full object-cover" />
                 <div>
                   <h3 className="font-semibold">{member.username}</h3>
                   <p>Department: {member.department}</p>

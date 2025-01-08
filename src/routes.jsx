@@ -21,6 +21,7 @@ import RegisteredEvents from './pages/RegisteredEvents';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import Score from './pages/Score';
+import MyGrievance from './pages/MyGrievance';
 
 // import Registration from './pages/Registration';
 // import Events from './pages/Events';
@@ -36,6 +37,7 @@ const AppRoutes = () => (
     <Route path="/:event/registration" element={<Registration />} />
     <Route path="/:event/details" element={<EventDetails />} />
     <Route path="/grievances" element={<Grievance />} />
+    <Route path="/my-grievances" element={<MyGrievance />} />
     <Route path="/registered-events" element={<RegisteredEvents />} />
     <Route path="/registered-events/:event" element={<RegistrationDetails />} />
     <Route path="/profile" element={<Profile />} />

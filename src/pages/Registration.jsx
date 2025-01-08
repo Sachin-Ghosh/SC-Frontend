@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-
 import {
   Select,
   SelectContent,
@@ -10,30 +9,42 @@ import {
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Loader, Trash2 } from 'lucide-react'
+import { Loader, Trash2, Check, ChevronsUpDown } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast, Toaster } from 'sonner';
-
-// import { setMaxListeners } from 'events';
+import { cn } from "@/lib/utils"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+// import { CommandList } from 'cmdk';
 
 const Registration = () => {
   const eventName = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(false);
-  const user=localStorage.getItem('user');
-  const storedUser=JSON.parse(user);
-  const navigate=useNavigate();
-  // console.log('storedUser',storedUser)
+  const user = localStorage.getItem('user');
+  const storedUser = JSON.parse(user);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    team_leader: storedUser,
+    // team_leader: storedUser,
     team_name: '',
     department: '',
     year: '',
     division: '',
-    teamMembers: [],
+    team_members: [], // This will store only the ids
   });
   const [teamMembers, setTeamMembers] = useState([]);
-  const [dropdownOpen, setDropdownOpen] = useState([]);
+  const [open, setOpen] = useState(false);
 
   const accessToken = localStorage.getItem('access-token');
 
@@ -83,244 +94,264 @@ const Registration = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+   
     console.log('Form submitted:', formData);
-    const payload={
+    const payload = {
       sub_event: event.id,
       ...formData
     }
+    console.log(payload);
+    if (event.participation_type === 'GROUP' && formData.team_members.length < event.participants_per_group - 1) {
+      console.log(`You need to add at least ${event.participants_per_group - 1} team members.`)
+      toast.error(`You need to add at least ${event.participants_per_group - 1} team members.`);
+      return;
+    }
     try {
-      const response= await fetch(`${import.meta.env.VITE_API_URL}/api/events/registrations/`,{
-        headers:{
-          'Authorization':`Bearer ${accessToken}`,
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/registrations/`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
           'Content-Type': 'application/json'
         },
         method: 'POST',
         body: JSON.stringify(payload)
       })
-      const data=await response.json()
+      const data = await response.json()
       console.log(data);
-      if(response.ok){
+      if (response.ok) {
         toast.success('Registration submitted successfully!');
         navigate('/registered-events')
-        
-      }else{
+      } else {
         toast.error(`${data.error}`)
       }
     } catch (error) {
       console.log(error)
-      
     }
-    
   };
 
-  const addTeamMember = () => {
+  const addTeamMember = (memberId) => {
+    if (formData.team_members.length < event.participants_per_group - 1) {
+      setFormData(prev => ({
+        ...prev,
+        team_members: [...prev.team_members, memberId],
+      }));
+      setOpen(false); // Close the Popover after selection
+    } else {
+      toast.error(`You can't add more than ${event.participants_per_group - 1} team members.`);
+    }
+  };
+
+  const removeTeamMember = (memberId) => {
     setFormData(prev => ({
       ...prev,
-      teamMembers: [...prev.teamMembers, ''],
+      teamMembers: prev.team_members.filter(id => id !== memberId),
     }));
-    setDropdownOpen(prev => [...prev, false]);
-  };
-
-  const removeTeamMember = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      teamMembers: prev.teamMembers.filter((_, i) => i !== index),
-    }));
-    setDropdownOpen(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const toggleDropdown = (index) => {
-    setDropdownOpen(prev => prev.map((item, i) => i === index ? !item : item));
   };
 
   useEffect(() => {
-    if(!accessToken){
+    if (!accessToken) {
       navigate('/')
     }
   }, [accessToken])
+
+  useEffect(() => {
+    if (formData.team_members.length === 0) {
+      setOpen(false);
+    }
+  }, [formData.team_members]);
+
   return (
     <>
       <img src='/registration-back.jpg' className='fixed object-cover h-full w-full' alt="Background" />
       {!event ? (
         <>
-        <span className='text-black flex justify-center items-center min-h-screen gap-5'>
-        <Loader className='animate-spin' size={30}/>
-        <h1 className='relative z-50'>Loading....</h1>
-        </span>
+          <span className='text-black flex justify-center items-center min-h-screen gap-5'>
+            <Loader className='animate-spin' size={30} />
+            <h1 className='relative z-50'>Loading....</h1>
+          </span>
         </>
-      ):(<>
-      <div className="flex flex-col min-h-screen items-center justify-center px-4 py-8 relative z-20 top-10">
-        <motion.h2 
-          className="text-4xl md:text-5xl font-serif text-center text-[#4a3728] cinzel uppercase"
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {event.name} Registration
-        </motion.h2>
-        <div className='relative '>
-          <motion.form 
-            onSubmit={handleSubmit}
-            className="mx-auto sm:px-10 pt-3 rounded relative z-20 bg-center flex flex-col lg:flex-row flex-wrap max-w-4xl lg:gap-10"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-          >
-            <div className="">
-              <label htmlFor="team_leader" className="block text-[#4a3728] ">Name</label>
-              <Input
-                type="text"
-                id="team_leader"
-                name="team_leader"
-                value={formData.team_leader.username}
-                onChange={handleChange}
-                readOnly
-                required
-                className=" px-3 w-96 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
-              />
-            </div>
-            {event && event.participation_type === 'GROUP'&&(
-
-            <div className="">
-              <label htmlFor="email" className="block text-[#4a3728] ">Team Name</label>
-              <Input
-                type="text"
-                id="team_name"
-                name="team_name"
-                value={formData.team_name}
-                onChange={handleChange}
-                required
-                className="w-96 px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
-              />
-            </div>
-            )}
-            
-            <div className="mb-6">
-              <label htmlFor="department" className="block text-[#4a3728] ">Department</label>
-              <Select onValueChange={(value) => handleSelectChange('department', value)}>
-                <SelectTrigger className="w-96 border-b">
-                  <SelectValue placeholder="Select Department" />
-                </SelectTrigger>
-                <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
-                  <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
-                  <SelectItem value="IT">IT</SelectItem>
-                  <SelectItem value="AIML">AI/ML</SelectItem>
-                  <SelectItem value="DATA">Data Engineering</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="mb-6">
-              <label htmlFor="year" className="block text-[#4a3728] ">Year</label>
-              <Select onValueChange={(value) => handleSelectChange('year', value)}>
-                <SelectTrigger className="w-96 border-b">
-                  <SelectValue placeholder="Select Year" />
-                </SelectTrigger>
-                <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
-                  <SelectItem value="FE">FE</SelectItem>
-                  <SelectItem value="SE">SE</SelectItem>
-                  <SelectItem value="TE">TE</SelectItem>
-                  <SelectItem value="BE">BE</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="mb-6">
-              <label htmlFor="division" className="block text-[#4a3728] ">Division</label>
-              <Select onValueChange={(value) => handleSelectChange('division', value)}>
-                <SelectTrigger className="w-96 border-b">
-                  <SelectValue placeholder="Select Division" />
-                </SelectTrigger>
-                <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
-                  <SelectItem value="A">A</SelectItem>
-                  <SelectItem value="B">B</SelectItem>
-                  <SelectItem value="C">C</SelectItem>
-                  <SelectItem value="D">D</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-           
-            {event && event.participation_type === 'GROUP' && (
-                <div className="col-span-2 mb-6 flex flex-col gap-2">
-                  <label className="block text-[#4a3728]">Team Members</label>
-                  {formData.teamMembers.map((member, index) => (
-                    <div key={index} className="flex items-center">
-                      <div className="relative w-full">
-                        <Input
-                          type="text"
-                          placeholder="Search team members"
-                          value={teamMembers.find(tm => tm.id === member)?.username || ''}
-                          onChange={(e) => {
-                            const newTeamMembers = [...formData.teamMembers];
-                            newTeamMembers[index] = '';
-                            setFormData(prev => ({ ...prev, teamMembers: newTeamMembers }));
-                            toggleDropdown(index);
-                          }}
-                          onFocus={() => toggleDropdown(index)}
-                          className="w-full border-b"
-                        />
-                        {dropdownOpen[index] && !member && (
-                          <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
-                            {teamMembers.filter(tm =>
-                              tm.username.toLowerCase().includes((teamMembers.find(t => t.id === member)?.username || '').toLowerCase()) ||
-                              tm.email.toLowerCase().includes((teamMembers.find(t => t.id === member)?.username || '').toLowerCase())
-                            ).map((teamMember) => (
-                              <div
-                                key={teamMember.id}
-                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                                onClick={() => {
-                                  const newTeamMembers = [...formData.teamMembers];
-                                  newTeamMembers[index] = teamMember.id;
-                                  setFormData(prev => ({ 
-                                    ...prev, 
-                                    teamMembers: newTeamMembers 
-                                  }));
-                                  toggleDropdown(index);
-                                }}
-                              >
-                                {teamMember.username} - {teamMember.email}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                      <Button
-                        type="button"
-                        onClick={() => removeTeamMember(index)}
-                        variant="ghost"
-                        size="icon"
-                        className="text-[#8b4513] hover:text-[#a0522d]"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                  <Button
-                    type="button"
-                    onClick={addTeamMember}
-                    variant="outline"
-                    className="mt-2 text-[#8b4513] w-fit border-[#8b4513] hover:bg-[#8b4513] hover:text-white"
-                  >
-                    Add Subordinates
-                  </Button>
-                </div>
-              )}
-            
-            <motion.button
-              type="submit"
-              className="col-span-2 w-full bg-[#8b4513] text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+      ) : (
+        <>
+          <div className="flex flex-col min-h-screen items-center justify-center px-4 py-8 relative z-20 top-10">
+            <motion.h2
+              className="text-4xl md:text-5xl font-serif text-center text-[#4a3728] cinzel uppercase"
+              initial={{ opacity: 0, y: -50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
             >
-              Register
-            </motion.button>
-          </motion.form>
-        </div>
-      </div>
-      </>)}
-      
-      <Toaster richColors position='top-right'/>
+              {event.name} Registration
+            </motion.h2>
+            <div className='relative '>
+              <motion.form
+                onSubmit={handleSubmit}
+                className="mx-auto sm:px-10 pt-3 rounded relative z-20 bg-center flex flex-col lg:flex-row flex-wrap max-w-4xl lg:gap-10"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              >
+                {/* <div className="">
+                  <label htmlFor="team_leader" className="block text-[#4a3728] ">Name</label>
+                  <Input
+                    type="text"
+                    id="team_leader"
+                    name="team_leader"
+                    value={formData.team_leader.first_name+" "+formData.team_leader.last_name}
+                    onChange={handleChange}
+                    readOnly
+                    required
+                    className=" px-3 w-96 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
+                  />
+                </div> */}
+                {event && event.participation_type === 'GROUP' && (
+                  <div className="">
+                    <label htmlFor="email" className="block text-[#4a3728] ">Team Name</label>
+                    <Input
+                      type="text"
+                      id="team_name"
+                      name="team_name"
+                      value={formData.team_name}
+                      onChange={handleChange}
+                      required
+                      className="w-96 px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
+                    />
+                  </div>
+                )}
+
+                <div className="mb-6">
+                  <label htmlFor="department" className="block text-[#4a3728] ">Department</label>
+                  <Select onValueChange={(value) => handleSelectChange('department', value)}>
+                    <SelectTrigger className="w-96 border-b">
+                      <SelectValue placeholder="Select Department" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
+                      <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
+                      <SelectItem value="IT">IT</SelectItem>
+                      <SelectItem value="AIML">AI/ML</SelectItem>
+                      <SelectItem value="DATA">Data Engineering</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="year" className="block text-[#4a3728] ">Year</label>
+                  <Select onValueChange={(value) => handleSelectChange('year', value)}>
+                    <SelectTrigger className="w-96 border-b">
+                      <SelectValue placeholder="Select Year" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
+                      <SelectItem value="FE">FE</SelectItem>
+                      <SelectItem value="SE">SE</SelectItem>
+                      <SelectItem value="TE">TE</SelectItem>
+                      <SelectItem value="BE">BE</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="division" className="block text-[#4a3728] ">Division</label>
+                  <Select onValueChange={(value) => handleSelectChange('division', value)}>
+                    <SelectTrigger className="w-96 border-b">
+                      <SelectValue placeholder="Select Division" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
+                      <SelectItem value="A">A</SelectItem>
+                      <SelectItem value="B">B</SelectItem>
+                      <SelectItem value="C">C</SelectItem>
+                      <SelectItem value="D">D</SelectItem>
+                      <SelectItem value="E">E</SelectItem>
+                      <SelectItem value="F">F</SelectItem>
+                      {/* <SelectItem value="D">D</SelectItem> */}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {event && event.participation_type === 'GROUP' && (
+                  <div className="col-span-2 mb-6 flex flex-col gap-2">
+                    <label className="block text-[#4a3728]">Team Members ({formData.team_members.length}/{event.participants_per_group - 1})</label>
+                    {formData.team_members.map((memberId) => {
+                      const member = teamMembers.find(tm => tm.id === memberId);
+                      return (
+                        <div key={memberId} className="flex items-center">
+                          <Input
+                            type="text"
+                            value={member ? member.full_name : ''}
+                            readOnly
+                            className="w-full border-b"
+                          />
+                          <Button
+                            type="button"
+                            onClick={() => removeTeamMember(memberId)}
+                            variant="ghost"
+                            size="icon"
+                            className="text-[#8b4513] hover:text-[#a0522d]"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      );
+                    })}
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          aria-expanded={open}
+                          className="w-full justify-between"
+                        >
+                          Select team member...
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-full p-0 ">
+                        <Command className="bg-[url('/event-background.jpg')] bg-center bg-cover rounded w-full max-h-32 ">
+                          <CommandInput placeholder="Search team member..." />
+                          <CommandList>
+                          <CommandEmpty>No team member found.</CommandEmpty>
+                          <CommandGroup>
+                            {teamMembers
+                              .filter(tm => 
+                                tm.id !== storedUser.id &&
+                                !formData.team_members.includes(tm.id)
+                              )
+                              .map((teamMember) => (
+                                <CommandItem
+                                  key={teamMember.id}
+                                  onSelect={() => {
+                                    addTeamMember(teamMember.id);
+                                    setOpen(false);
+                                  }}
+                                >
+                                  <Check
+                                    className={cn(
+                                      "mr-2 h-4 w-4",
+                                      formData.team_members.includes(teamMember.id) ? "opacity-100" : "opacity-0"
+                                    )}
+                                  />
+                                  {teamMember.full_name} - {teamMember.email}
+                                </CommandItem>
+                              ))}
+                          </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+                )}
+
+                <motion.button
+                  type="submit"
+                  className="col-span-2 w-full bg-[#8b4513] text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Register
+                </motion.button>
+              </motion.form>
+            </div>
+          </div>
+        </>
+      )}
+
+      <Toaster richColors position='top-right' />
     </>
   );
 };

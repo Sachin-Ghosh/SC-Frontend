@@ -1,18 +1,138 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { format } from "date-fns"
+import { Loader } from 'lucide-react'
 
 const MyGrievance = () => {
-    const fetchGrievance=async()=>{
-        const response=await fetch(`${import.meta.env.VITE_API_URL}/api/grievances/my-grievances/`);
-        const data=await response.json();
-        console.log(data);
-    }
+  const [grievances, setGrievances] = useState([])
+  const [loading, setLoading] = useState(true)
+  const accessToken = localStorage.getItem('access-token')
 
-    useEffect(()=>{
-        fetchGrievance();
-    },[])
+  const fetchGrievance = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/grievances/my-grievances/`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      })
+      const data = await response.json()
+      console.log(data)
+      setGrievances(data)
+    } catch (error) {
+      console.error('Error fetching grievances:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchGrievance()
+  }, [])
+
+  const getStatusBadge = (status) => {
+    const statusColors = {
+      PENDING: "bg-yellow-500",
+      RESOLVED: "bg-green-500",
+      REJECTED: "bg-red-500"
+    }
+    return (
+      <Badge className={`${statusColors[status]} text-white`}>
+        {status}
+      </Badge>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <Loader className="animate-spin" size={30} />
+      </div>
+    )
+  }
+
   return (
-    <div>MyGrievance</div>
+    <>
+      <img src='/vintage.jpg' className='fixed object-cover h-full w-full' alt="Event background" />
+      <div className="container mx-auto py-8 px-4 relative z-20 top-24">
+        <img src='/royal-seal.png' className='z-10 fixed h-80 w-80 sm:h-96 sm:w-96 top-80 lg:top-52 left-12 lg:left-[36rem]'/>
+        <h1 className="text-4xl sm:text-3xl font-bold mb-6 text-center cinzel-bold text-amber-700">My Grievances</h1>
+        
+        <div className="hidden md:block px-12 relative z-20 ">
+          <ScrollArea className="h-[calc(100vh-200px)] rounded-md border ">
+            <Table className="bg-amber-100/50 backdrop-blur-sm">
+              <TableHeader className="sticky top-0 bg-amber-50/50">
+                <TableRow>
+                  <TableHead className="sticky top-0 bg-background">ID</TableHead>
+                  <TableHead className="sticky top-0 bg-background">Title</TableHead>
+                  <TableHead className="sticky top-0 bg-background">Type</TableHead>
+                  <TableHead className="sticky top-0 bg-background">Description</TableHead>
+                  <TableHead className="sticky top-0 bg-background">Submission Date</TableHead>
+                  <TableHead className="sticky top-0 bg-background">Status</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {grievances.map((grievance) => (
+                  <TableRow key={grievance.id}>
+                    <TableCell>{grievance.id}</TableCell>
+                    <TableCell className="font-medium">{grievance.title}</TableCell>
+                    <TableCell>{grievance.grievance_type}</TableCell>
+                    <TableCell className="max-w-xs truncate">{grievance.description}</TableCell>
+                    <TableCell>
+                      {format(new Date(grievance.submission_date), 'PPp')}
+                    </TableCell>
+                    <TableCell>{getStatusBadge(grievance.status)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </ScrollArea>
+        </div>
+
+        <ScrollArea className="h-[calc(100vh-200px)] md:hidden">
+          <div className="grid grid-cols-1 gap-4 relative z-20">
+            {grievances.map((grievance) => (
+              <Card key={grievance.id} className="border-2 backdrop-blur-sm border-amber-800 bg-white bg-opacity-45 shadow rounded-xl">
+                <CardHeader className="pb-2">
+                  <div className="flex justify-between items-start">
+                    <CardTitle className="text-lg">#{grievance.id} {grievance.title}</CardTitle>
+                    {getStatusBadge(grievance.status)}
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    <div>
+                      <span className="font-semibold">Type:</span> {grievance.grievance_type}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Description:</span>
+                      <p className="text-sm text-muted-foreground">{grievance.description}</p>
+                    </div>
+                    <div>
+                      <span className="font-semibold">Submitted:</span>
+                      <p className="text-sm text-muted-foreground">
+                        {format(new Date(grievance.submission_date), 'PPp')}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </ScrollArea>
+      </div>
+    </>
   )
 }
 
 export default MyGrievance
+
