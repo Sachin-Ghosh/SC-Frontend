@@ -210,11 +210,11 @@ const EventDetails = () => {
             transition={{ duration: 0.5, delay: 0.8 }}
             className="mt-8 text-center"
           >
-            <Link to="/events">
+            {/* <Link to="/events/sports">
               <Button variant="outline" className="border-amber-900 text-amber-900 hover:bg-amber-100">
                 Back to Events
               </Button>
-            </Link>
+            </Link> */}
           </motion.div>
         </div>
       </div>
