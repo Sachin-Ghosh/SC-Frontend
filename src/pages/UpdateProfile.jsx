@@ -115,6 +115,12 @@ const navigate=useNavigate()
   useEffect(() => {
     getProfile();
   }, [])
+
+  useEffect(() => {
+    if(!accessToken){
+      navigate('/')
+    }
+  }, [accessToken])
   
 
   return (

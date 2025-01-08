@@ -69,6 +69,12 @@ const RegistrationDetails = () => {
     visible: { y: 0, opacity: 1 }
   };
 
+  useEffect(() => {
+    if(!accessToken){
+      navigate('/')
+    }
+  }, [accessToken])
+
   return (
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full z-0' alt="Event background" />

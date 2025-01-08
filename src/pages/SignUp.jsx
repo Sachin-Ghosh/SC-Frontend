@@ -16,6 +16,7 @@ import { toast, Toaster } from 'sonner'
 import { OTPForm } from '@/components/OTPform'
 import axios from 'axios'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import OTPInput from 'react-otp-input'
 
 const formSchema = z.object({
   first_name: z.string().min(2, { message: "First name must be at least 2 characters." }),
@@ -46,7 +47,7 @@ const SignUp = () => {
   const [otp, setOtp] = useState('');
   const [photoIdFile, setPhotoIdFile] = useState(null);
   const [profilePicFile, setProfilePicFile] = useState(null);
-  const [showPassword,  setShowPassword]=useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const navigate = useNavigate()
 
   const form = useForm({
@@ -80,57 +81,89 @@ const SignUp = () => {
   })
 
   const onSubmit = async (data) => {
-    const formData = new FormData();
-    Object.keys(data).forEach(key => {
-      if (key !== 'id_card_document' && key !== 'profile_picture') {
-        formData.append(key, data[key]);
+    // First, verify the ID card
+    if (!photoIdFile) {
+      toast.error('Please upload a photo ID');
+      return;
+    }
+
+    const idCardFormData = new FormData();
+    idCardFormData.append('id_card_document', photoIdFile);
+
+    try {
+      const verificationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/users/verify-id-card`, {
+        method: 'POST',
+        body: idCardFormData
+      });
+
+      const verificationText = await verificationResponse.text();
+      console.log('Verification response:', verificationText);
+
+      let verificationData;
+      try {
+        verificationData = JSON.parse(verificationText);
+      } catch (e) {
+        console.error('Error parsing verification response:', e);
+        throw new Error('Invalid response from server during ID verification');
       }
-    });
-    formData.append('user_type', activeTab);
-    if (photoIdFile) formData.append('id_card_document', photoIdFile);
-    if (profilePicFile) formData.append('profile_picture', profilePicFile);
 
-    // Store the complete form data
-    const registrationPayload = {
-      ...data,
-      user_type: activeTab,
-      // Convert File objects to null since they can't be serialized
-      id_card_document: photoIdFile,
-      profile_picture: profilePicFile,
-    };
+      if (!verificationResponse.ok) {
+        throw new Error(verificationData.error || 'ID card verification failed');
+      }
 
-    toast.promise(
-      fetch(`${import.meta.env.VITE_API_URL}/api/users/register/`, {
+      // If ID card verification is successful, proceed with the main form submission
+      const formData = new FormData();
+      Object.keys(data).forEach(key => {
+        if (key !== 'id_card_document' && key !== 'profile_picture') {
+          formData.append(key, data[key]);
+        }
+      });
+      formData.append('user_type', activeTab);
+      if (photoIdFile) formData.append('id_card_document', photoIdFile);
+      if (profilePicFile) formData.append('profile_picture', profilePicFile);
+
+      // Store the complete form data
+      const registrationPayload = {
+        ...data,
+        user_type: activeTab,
+        // Convert File objects to null since they can't be serialized
+        id_card_document: photoIdFile,
+        profile_picture: profilePicFile,
+      };
+
+      const registrationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/users/register/`, {
         method: 'POST',
         body: formData
-      }).then(async (response) => {
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.log(errorData);
-          throw new Error(errorData.error || 'Registration failed');
-        }
-        return response.json();
-      }),
-      {
-        loading: 'Registering...',
-        success: (data) => {
-          console.log('Registration successful:', data);
-          setEmail(data.email);
-          setRegistrationData(registrationPayload); // Store the complete payload
-          setShowOTP(true);
-          return `${data.message}`;
-        },
-        error: (err) => {
-          console.error('Registration error:', err);
-          return `Registration failed: ${err.message}`;
-        }
+      });
+
+      const registrationText = await registrationResponse.text();
+      console.log('Registration response:', registrationText);
+
+      let responseData;
+      try {
+        responseData = JSON.parse(registrationText);
+      } catch (e) {
+        console.error('Error parsing registration response:', e);
+        throw new Error('Invalid response from server during registration');
       }
-    );
+
+      if (!registrationResponse.ok) {
+        throw new Error(responseData.error || 'Registration failed');
+      }
+
+      console.log('Registration successful:', responseData);
+      setEmail(responseData.email);
+      setRegistrationData(registrationPayload);
+      setShowOTP(true);
+      toast.success(responseData.message);
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error(`Error: ${error.message}`);
+    }
   };
 
-
-  const handleOTPVerification = async (otp) => {
-    if (!otp || otp.length !== 6) {
+  const handleOTPVerification = async () => {
+    if (otp.length !== 6) {
       toast.error('Please enter a valid 6-digit OTP')
       return
     }
@@ -138,10 +171,9 @@ const SignUp = () => {
     // Ensure all required fields are included
     const verificationPayload = {
       otp,
-       // This now contains all the form fields
+      // This now contains all the form fields
       user_type: activeTab,
       email: registrationData.email,
-      // division: registrationData.division,
       bio: registrationData.bio,
       gender: registrationData.gender,
       id_card_document: photoIdFile,
@@ -170,31 +202,59 @@ const SignUp = () => {
       }),
     }
 
-    console.log('Sending verification division payload:', verificationPayload.division)
-    console.log('Sending verification year_of_study payload:', verificationPayload.year_of_study)
-    console.log('Sending verification profile_picture payload:', verificationPayload.profile_picture)
-    console.log('Sending verification id_card_document payload:', verificationPayload.id_card_document)
+    console.log('Sending verification payload:', verificationPayload)
 
-    toast.promise(
-      axios.post(`${import.meta.env.VITE_API_URL}/api/users/register/verify/`, verificationPayload, {
+    try {
+      const verificationResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/register/verify/`, verificationPayload, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      }).then((response) => {
-        console.log('OTP verification successful:', response.data)
-        navigate('/auth/login')
-        return response.data
-      }),
-      {
-        loading: 'Verifying OTP...',
-        success: (data) => `${data.message}`,
-        error: (err) => {
-          console.error('OTP verification error:', err)
-          return `OTP verification failed: ${err.response?.data?.message || err.message}`
-        }
+      });
+  
+      console.log('OTP verification successful:', verificationResponse.data);
+      toast.success(verificationResponse.data.message);
+  
+      // Proceed with automatic login
+      const loginResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/login/`, {
+        email: registrationData.email,
+        password: registrationData.password
+      });
+  
+      if (loginResponse.data) {
+        localStorage.setItem('access-token', loginResponse.data.tokens.access);
+        localStorage.setItem('refresh-token', loginResponse.data.tokens.refresh);
+        localStorage.setItem('user', JSON.stringify(loginResponse.data.user));
+        toast.success('Login successful');
+        navigate('/events/sports');
+      } else {
+        throw new Error('Login failed');
       }
-    )
+    } catch (error) {
+      console.error('OTP verification or login error:', error);
+      toast.error(`Error: ${error.response?.data?.message || error.message}`);
+    }
   }
+
+  const handleResendOtp=async()=>{
+    try {
+      const payload={
+        email: registrationData.email
+      }
+      const response=await axios.post(`${import.meta.env.VITE_API_URL}/api/users/resend-otp/`,payload);
+      const data=await response.data
+      console.log(await response.data);
+      toast.success(`${data.message}`)
+      // if(!response.ok){
+      // }else{
+      //   toast.error(`${data.message}`)
+      // }
+    } catch (error) {
+
+      console.log(error)
+      
+    }
+  }
+
 
 
   return (
@@ -304,7 +364,7 @@ const SignUp = () => {
                                 <SelectValue placeholder="Select Department" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
                               <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
                               <SelectItem value="IT">IT</SelectItem>
                               <SelectItem value="AIML">AI/ML</SelectItem>
@@ -327,7 +387,7 @@ const SignUp = () => {
                                 <SelectValue placeholder="Select Gender" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
                               <SelectItem value="MALE">Male</SelectItem>
                               <SelectItem value="FEMALE">Female</SelectItem>
                               <SelectItem value="OTHER">Other</SelectItem>
@@ -351,7 +411,7 @@ const SignUp = () => {
                                     <SelectValue placeholder="Select Year of Study" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
                                   <SelectItem value="FE">FE</SelectItem>
                                   <SelectItem value="SE">SE</SelectItem>
                                   <SelectItem value="TE">TE</SelectItem>
@@ -374,7 +434,7 @@ const SignUp = () => {
                                     <SelectValue placeholder="Select Division" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
                                   <SelectItem value="A">A</SelectItem>
                                   <SelectItem value="B">B</SelectItem>
                                   <SelectItem value="C">C</SelectItem>
@@ -535,9 +595,35 @@ const SignUp = () => {
                 </Form>
               </>
             ) : (
-              <div className='flex flex-col gap-2 items-center justify-center '>
-              <input type="text" value={otp} onChange={e => setOtp(e.target.value)} />
-              <Button className="w-fit bg-[#8b4513] text-white hover:bg-[#a0522d]"  onClick={() => handleOTPVerification(otp)}>Verify OTP</Button>
+              <div className='flex flex-col gap-4 items-center justify-center'>
+              <h4 className="text-xl font-semibold mb-2">Enter OTP</h4>
+              <OTPInput
+                value={otp}
+                onChange={setOtp}
+                numInputs={6}
+                renderSeparator={<span className="w-2"></span>}
+                renderInput={(props) => <input {...props} />}
+                inputStyle={{
+                  width: '40px',
+                  height: '40px',
+                  margin: '0 4px',
+                  fontSize: '1.5rem',
+                  borderRadius: '4px',
+                  border: '1px solid #8b4513',
+                }}
+                focusStyle={{
+                  border: '2px solid #a0522d',
+                  outline: 'none'
+                }}
+              />
+
+              <Button variant="link" onClick={()=>{handleResendOtp()}}>Resend Otp</Button>
+              <Button 
+                className="w-fit bg-[#8b4513] text-white hover:bg-[#a0522d] mt-4" 
+                onClick={handleOTPVerification}
+              >
+                Verify OTP
+              </Button>
             </div>
             )}
             <div className="mt-6 text-center">

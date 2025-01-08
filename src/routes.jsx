@@ -18,6 +18,9 @@ import Registration from './pages/Registration';
 import RegistrationDetails from './pages/RegistrationDetails';
 import UpdateProfile from './pages/UpdateProfile';
 import RegisteredEvents from './pages/RegisteredEvents';
+import Login from './pages/Login';
+import ForgotPassword from './pages/ForgotPassword';
+import Score from './pages/Score';
 
 // import Registration from './pages/Registration';
 // import Events from './pages/Events';
@@ -25,7 +28,8 @@ import RegisteredEvents from './pages/RegisteredEvents';
 const AppRoutes = () => (
   <Routes>
     <Route path="/" element={<Home />} />
-    <Route path="/auth/login" element={<Authpage />} />
+    <Route path="/auth/login" element={<Login />} />
+    <Route path="/auth/forgot-password" element={<ForgotPassword />} />
     <Route path="/auth/register" element={<SignUp/>} />
     <Route path="/events/sports" element={<SportsEvent />} />
     <Route path="/events/cultural" element={<CulturalEvent />} />
@@ -37,6 +41,7 @@ const AppRoutes = () => (
     <Route path="/profile" element={<Profile />} />
     <Route path="/profile/update" element={<UpdateProfile />} />
     <Route path="/about" element={<About />} />
+    <Route path="/score-board" element={<Score />} />
   </Routes>
 );
 

@@ -14,10 +14,14 @@ import {
 import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import EventCard from '@/components/EventCard'
+import { TbMoodEmpty } from 'react-icons/tb'
+// import { access } from 'fs'
 
 const RegisteredEvents = () => {
   const [events, setEvents] = useState([])
   const [subEventDetails, setSubEventDetails] = useState({})
+  const [loading, setLoading] = useState(true)
+  const [noData, setNoData] = useState(false)
   const accessToken = localStorage.getItem('access-token');
   const navigate = useNavigate()
   const isDesktop = useMediaQuery({ minWidth: 768 })
@@ -31,7 +35,8 @@ const RegisteredEvents = () => {
         },
       })
 
-      const data = await response.json()
+      const data = await response.json();
+      console.log(data)
       setEvents(data)
 
       // Fetch subevent details for each registration
@@ -40,6 +45,8 @@ const RegisteredEvents = () => {
       })
     } catch (error) {
       console.error('Error fetching registered events:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -51,7 +58,7 @@ const RegisteredEvents = () => {
           'Authorization': `Bearer ${accessToken}`,
         },
       })
-      const data = await response.json()
+      const data = await response.json();
       setSubEventDetails(prev => ({
         ...prev,
         [subEventId]: { name: data.name, slug: data.slug }
@@ -63,7 +70,24 @@ const RegisteredEvents = () => {
 
   useEffect(() => {
     getRegisteredEvents()
-  }, [])
+    const timer = setTimeout(() => {
+      if (loading) {
+        setLoading(false)
+        setNoData(true)
+      }
+    }, 60000)
+    
+    
+
+    return () => clearTimeout(timer)
+  }, [accessToken])
+
+  useEffect(() => {
+    if(!accessToken){
+      navigate('/')
+    }
+  }, [accessToken])
+  
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -75,6 +99,91 @@ const RegisteredEvents = () => {
         return 'bg-red-500'
       default:
         return 'bg-gray-500'
+    }
+  }
+
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className='flex justify-center items-center min-h-screen gap-5'>
+          <FaFootballBall className='animate-bounce' size={30}/>
+          <h1 className='relative z-50'>Loading....</h1>
+        </div>
+      )
+    }
+
+    if (noData || events.length === 0) {
+      return (
+        <div className='flex flex-col  justify-center items-center relative top-40 sm:top-80'>
+          <span  className='text-amber-900'><TbMoodEmpty size={100}/></span>
+          <h1 className='relative z-50 text-2xl text-amber-900'>No Registered Events Yet</h1>
+        </div>
+      )
+    }
+
+    if (isDesktop) {
+      return (
+        <div className='w-full max-w-7xl mt-40 max-h-96 sm:mt-48 mb-10 overflow-y-auto bg-white/80 rounded shadow-xl'>
+          <Table>
+            <TableHeader className="sticky top-0 backdrop-blur-sm bg-gray-400 bg-opacity-25">
+              <TableRow>
+                <TableHead>Registration No.</TableHead>
+                <TableHead>Event Name</TableHead>
+                <TableHead>Team Name</TableHead>
+                <TableHead>Registration Date</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Current Stage</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {events.map((event) => (
+                <TableRow key={event.id}>
+                  <TableCell className="font-medium" onClick={() => { navigate(`/registered-events/${event.id}`) }}>{event.registration_number}</TableCell>
+                  <TableCell>
+                    {subEventDetails[event.sub_event] ? (
+                      <Link 
+                        to={`/registered-events/${subEventDetails[event.sub_event].slug}`} 
+                        className="text-blue-600 hover:underline"
+                      >
+                        {subEventDetails[event.sub_event].name}
+                      </Link>
+                    ) : 'Loading...'}
+                  </TableCell>
+                  <TableCell>{event.team_name}</TableCell>
+                  <TableCell>
+                    {format(new Date(event.registration_date), 'dd MMM yyyy, hh:mm a')}
+                  </TableCell>
+                  <TableCell>
+                    <Badge className={`${getStatusColor(event.status)} text-white`}>
+                      {event.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="outline">
+                      {event.current_stage}
+                    </Badge>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      )
+    } else {
+      return (
+        <div className="fixed flex flex-col w-full left-0 justify-center items-center top-80 sm:top-32">
+          <div className='max-h-screen overflow-y-auto'>
+            {events.map((event) => (
+              <EventCard 
+                key={event.id} 
+                event={event} 
+                subEventDetails={subEventDetails} 
+                getStatusColor={getStatusColor} 
+              />
+            ))}
+          </div>
+        </div>
+      )
     }
   }
 
@@ -95,77 +204,9 @@ const RegisteredEvents = () => {
           <h1 className='ysabeau-sc relative z-40 top-[6.5rem]'>Registered Events</h1>
         </motion.div>
 
-        {events.length === 0 ? (
-          <div className='flex justify-center items-center min-h-screen gap-5'>
-            <FaFootballBall className='animate-bounce' size={30}/>
-            <h1 className='relative z-50'>Loading....</h1>
-          </div>
-        ) : (
-          <div className='fixed top-56 sm:top-32'>
-            {isDesktop ? (
-          <div className='w-full max-w-7xl  mt-40 max-h-96 sm:mt-48 mb-10 overflow-y-auto bg-white/80 rounded shadow-xl'>
-              <Table>
-                <TableHeader className="sticky top-0 backdrop-blur-sm bg-gray-400 bg-opacity-25">
-                  <TableRow>
-                    <TableHead>Registration No.</TableHead>
-                    <TableHead>Event Name</TableHead>
-                    <TableHead>Team Name</TableHead>
-                    <TableHead>Registration Date</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Current Stage</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {events.map((event) => (
-                    <TableRow key={event.id}>
-                      <TableCell className="font-medium" onClick={() => { navigate(`/registered-events/${event.id}`) }}>{event.registration_number}</TableCell>
-                      <TableCell>
-                        {subEventDetails[event.sub_event] ? (
-                          <Link 
-                            to={`/registered-events/${subEventDetails[event.sub_event].slug}`} 
-                            className="text-blue-600 hover:underline"
-                          >
-                            {subEventDetails[event.sub_event].name}
-                          </Link>
-                        ) : 'Loading...'}
-                      </TableCell>
-                      <TableCell>{event.team_name}</TableCell>
-                      <TableCell>
-                        {format(new Date(event.registration_date), 'dd MMM yyyy, hh:mm a')}
-                      </TableCell>
-                      <TableCell>
-                        <Badge className={`${getStatusColor(event.status)} text-white`}>
-                          {event.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant="outline">
-                          {event.current_stage}
-                        </Badge>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              </div>
-            ) : (
-              <div className=" fixed flex flex-col w-full left-0  justify-center items-center top-80 sm:top-32">
-                <div className='max-h-screen overflow-y-auto'>
-
-                {events.map((event) => (
-                  <EventCard 
-                    key={event.id} 
-                    event={event} 
-                    subEventDetails={subEventDetails} 
-                    getStatusColor={getStatusColor} 
-                  />
-                ))}
-                </div>
-              </div>
-            )}
-          </div>
-        
-        )}
+        <div className='fixed top-56 sm:top-32'>
+          {renderContent()}
+        </div>
       </div>
     </>
   )

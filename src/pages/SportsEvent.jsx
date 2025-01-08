@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FaFootballBall } from 'react-icons/fa';
+import { formatDateTime } from '@/utils/util';
+import { format } from 'date-fns';
 
 
 
@@ -36,6 +38,12 @@ const SportsEvent = () => {
     fetchSportsEvents(selectedTab);
   }, [selectedTab]);
 
+  useEffect(() => {
+    if(!accessToken){
+      navigate('/')
+    }
+  }, [accessToken])
+
   
 
   const renderEvents = (eventList) => (
@@ -52,7 +60,7 @@ const SportsEvent = () => {
           <img src={event.images[0]?.image} alt={event.name} className="w-full h-full object-cover absolute z-20" />
           <div className="p-6 relative z-30 bg-amber-900 bg-opacity-50 hover:bg-opacity-60 transition-all duration-300">
             <h3 className="text-2xl mb-2 text-amber-100">{event.name}</h3>
-            <p className="text-amber-100 ysabeau-sc">Date: {event.date}</p>
+            <p className="text-amber-100 ysabeau-sc">Date: {formatDateTime(event.schedule)}</p>
             <p className="text-amber-100 py-4">{event.description}</p>
             <div className="flex justify-between">
               <motion.button
@@ -82,8 +90,8 @@ const SportsEvent = () => {
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full' alt="Event background" />
       <div className="relative z-20 top-32 lg:top-10 px-10 flex flex-col justify-center items-center min-h-screen">
-        <img src='/banner-1.png' alt='banner' className='fixed -z-10 -bottom-5 h-[30rem] -left-10' />
-        <img src='/angel-2.png' alt='banner' className='sm:block hidden fixed -z-10 top-0 right-0' />
+        <img src='/elephant.png' alt='banner' className='fixed sm:block hidden -z-10 -bottom-5 h-[30rem] -left-10' />
+        <img src='/netaji.png' alt='banner' className=' fixed -z-10 bottom-0 -right-20 sm:-right-32' />
 
         <motion.div 
           className="text-4xl md:text-5xl ysabeau-sc text-center mb-8  text-[#966742] fixed z-30 top-16 sm:top-12"
@@ -94,11 +102,33 @@ const SportsEvent = () => {
           <img src='/frame.png' className='absolute top-5 sm:top-0 -z-10 w-full '/>
           <h1 className='ysabeau-sc relative z-40 top-20'>Sports Events</h1>
         </motion.div>
-        {subevents.length===0 ? (
+        {(subevents.length===0) ? (
          <>
-         <div className='min-h-screen flex justify-center relative z-20 items-center gap-5'>
+         {/* <div className='min-h-screen flex justify-center relative z-20 items-center gap-5'>
           <FaFootballBall className="animate-bounce text-amber-600 text-4xl" />
           <span className="text-amber-900 text-2xl">Loading...</span>
+        </div> */}
+        <div className='flex flex-col sm:flex-row gap-6 w-full justify-center max-w-6xl'>
+
+        
+        <div className="flex w-full flex-row gap-4 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
+          <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
+          <div className='flex flex-col gap-2 w-full justify-center'>
+          <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
+          <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
+          <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
+
+          </div>
+        </div>
+        <div className="flex w-full gap-4 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
+          <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
+          <div className='flex flex-col gap-2 w-full justify-center'>
+          <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
+          <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
+          <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
+
+          </div>
+        </div>
         </div>
          </>
         ):(

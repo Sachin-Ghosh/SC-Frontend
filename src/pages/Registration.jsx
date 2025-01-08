@@ -134,6 +134,12 @@ const Registration = () => {
   const toggleDropdown = (index) => {
     setDropdownOpen(prev => prev.map((item, i) => i === index ? !item : item));
   };
+
+  useEffect(() => {
+    if(!accessToken){
+      navigate('/')
+    }
+  }, [accessToken])
   return (
     <>
       <img src='/registration-back.jpg' className='fixed object-cover h-full w-full' alt="Background" />

@@ -17,6 +17,7 @@ import { UserCircle2 } from 'lucide-react'
 import { GiBlackKnightHelm, GiKnightBanner } from "react-icons/gi";
 import { useAuth } from '@/context/authContext'
 import { Separator } from './ui/separator'
+import { FaCalendarCheck } from 'react-icons/fa'
 
 const Header = () => {
   const navigate = useNavigate();
@@ -69,7 +70,7 @@ const Header = () => {
           <div className='flex flex-col text-xl gap-7 text-[#4a3728]'>
             <Accordion type="single" collapsible className="w-full border-b-amber-900" asChild>
               <AccordionItem value="events">
-                <AccordionTrigger>Events</AccordionTrigger>
+                <AccordionTrigger> Events</AccordionTrigger>
                 <AccordionContent>
                   <div className="flex flex-col space-y-4 pl-4">
                     <Link to='/events/sports' className="hover:text-[#8b4513] transition-colors"onClick={() => {document.getElementById('my-drawer-3').click()}}>Sports Events</Link>
@@ -79,8 +80,9 @@ const Header = () => {
               </AccordionItem>
             </Accordion>
             <Link to='/grievances' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Report</a></Link>
-            <Link to='/profile' onClick={() => {document.getElementById('my-drawer-3').click()}}><a>Profile</a></Link>
-            <Link to='/registered-events' onClick={() => {document.getElementById('my-drawer-3').click()}}><a>Registered Events</a></Link>
+            <Link to='/profile' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Profile</a></Link>
+            <Link to='/registered-events' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Registered Events</a></Link>
+            <Link to='/score-board' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>ScoreBoard</a></Link>
           </div>
         </div>
       </div>
@@ -109,7 +111,7 @@ const Header = () => {
           </Link>
         </div>
           {/* //mid nav */}
-          <div className='hidden sm:flex gap-12 justify-between items-center'>
+          <div className='hidden sm:flex gap-12  justify-between items-center'>
         {accessToken && (
           <>
         <DropdownMenu>
@@ -136,7 +138,7 @@ const Header = () => {
           </DropdownMenuContent>
         </DropdownMenu>
         <Link to='/grievances' className='text-foreground hover:text-[#8b4513]'>Report</Link>
-        <Link to='/registered-events' className='text-foreground hover:text-[#8b4513]'>Registered Events</Link>
+        <Link to='/registered-events' className='text-foreground hover:text-[#8b4513] '>Registered Events</Link>
         </>
       )}
       

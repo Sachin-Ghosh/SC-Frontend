@@ -176,7 +176,7 @@ const Login = () => {
               </form>
             </Form>
             <div className="mt-6 text-center">
-              <Link to="/forgot-password" className="text-[#120a05] hover:underline">Forgot password?</Link>
+              <Link to="/auth/forgot-password" className="text-[#120a05] hover:underline">Forgot password?</Link>
             </div>
             <div className="mt-8 border-t border-[#d2b48c] pt-6">
               <p className="text-center text-white">New to Renaissance Sports?</p>

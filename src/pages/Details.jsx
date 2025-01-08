@@ -94,6 +94,12 @@ const EventDetails = () => {
     getDetails();
   }, [event, accessToken]);
 
+  useEffect(() => {
+    if(!accessToken){
+      navigate('/')
+    }
+  }, [accessToken])
+
   if (!eventDetail) {
     return (
       <>

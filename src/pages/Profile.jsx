@@ -37,6 +37,12 @@ const Profile = () => {
     getProfile();
   }, []);
 
+  useEffect(() => {
+    if(!accessToken){
+      navigate('/')
+    }
+  }, [accessToken])
+
   return (
     <div>
       {profile ? (

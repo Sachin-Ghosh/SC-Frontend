@@ -24,14 +24,14 @@ setData(profile.profile)
         >
           <div className="bg-[url('/renaissance-banner.jpg')] h-60 bg-cover bg-center"></div>
           <div className="relative px-4 pt-16 pb-8 sm:px-6 lg:px-8">
-            <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 bg-center bg-cover flex w-full items-center justify-center">
+            <div className="absolute -top-32 left-1/2 transform -translate-x-1/2 bg-center bg-cover flex w-full items-center justify-center">
               <img src='/profile-frame.png' className='absolute z-0 w-64 h-64' alt="Profile Frame"/>
               <div className='relative z-10'>
-                {/* {profile.profile.profile_picture ? (
-                  <img className="relative z-10 rounded-full border-4 w-40 h-40 shadow-lg" src={profile.profile.profile_picture} alt={profile.profile.username} />
+                {profile.profile.profile_picture ? (
+                  <img className="relative z-10 rounded-full border-4 w-40 h-40 shadow-lg" src={`${import.meta.env.VITE_API_URL}${profile.profile.profile_picture}`} alt={profile.profile.username} />
                 ) : (
-                  )} */}
                   <GiKnightBanner size={70} className='text-amber-950'/>
+                  )}
               </div>
             </div>
             <div className="text-center">
@@ -41,7 +41,7 @@ setData(profile.profile)
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 1 }}
               >
-                {profile.profile.username}
+                {profile.profile.full_name}
               </motion.h1>
               <p className="text-sm text-[#8b4513] mt-1">{profile.profile.user_type}</p>
               <div className="flex items-center justify-center ">

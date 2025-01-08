@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaFootballBall } from 'react-icons/fa';
+import { formatDateTime } from '@/utils/util';
 
 const events = [
   {
@@ -70,7 +71,11 @@ const CulturalEvent = () => {
   useEffect(() => {
     fetchCulturalEvents();
   }, []);
-
+  useEffect(() => {
+    if(!accessToken){
+      navigate('/')
+    }
+  }, [accessToken])
   // console.log(subevents[20].name);
 
   return (
@@ -90,10 +95,26 @@ const CulturalEvent = () => {
         </motion.div>
         {subevents.length===0 ? (
           <>
-          <div className='min-h-screen flex justify-center relative z-20 items-center gap-5'>
-          <FaFootballBall className="animate-bounce text-amber-600 text-4xl" />
-          <span className="text-amber-900 text-2xl">Loading...</span>
-        </div>
+          <div className='flex flex-col sm:flex-row gap-6 w-full justify-center max-w-6xl'>
+            <div className="flex w-full flex-row gap-4 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
+              <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
+              <div className='flex flex-col gap-2 w-full justify-center'>
+              <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
+              <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
+              <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
+
+              </div>
+            </div>
+            <div className="flex w-full gap-4 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
+              <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
+              <div className='flex flex-col gap-2 w-full justify-center'>
+              <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
+              <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
+              <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
+
+              </div>
+            </div>
+            </div>
           </>
         ):(
           <div className="grid sm:grid-cols-1 md:grid-cols-2 w-full sm:px-28 gap-8 relative">
@@ -109,7 +130,7 @@ const CulturalEvent = () => {
               <img src={event.images[0]?.image} alt={event.name} className="w-full h-full object-cover absolute z-20" />
               <div className="p-6 relative z-30 bg-amber-900 bg-opacity-50 hover:bg-opacity-60 transition-all duration-300">
                 <h3 className="text-2xl mb-2 text-amber-100">{event.name}</h3>
-                <p className="text-amber-100 ysabeau-sc">Date: {event.date}</p>
+                <p className="text-amber-100 ysabeau-sc">Date: {formatDateTime(event.schedule)}</p>
                 <p className="text-amber-100 py-4">{event.description}</p>
                 <div className="flex justify-between">
                   <motion.button
