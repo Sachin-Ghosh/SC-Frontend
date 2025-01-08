@@ -70,16 +70,6 @@ const RegisteredEvents = () => {
 
   useEffect(() => {
     getRegisteredEvents()
-    const timer = setTimeout(() => {
-      if (loading) {
-        setLoading(false)
-        setNoData(true)
-      }
-    }, 60000)
-    
-    
-
-    return () => clearTimeout(timer)
   }, [accessToken])
 
   useEffect(() => {

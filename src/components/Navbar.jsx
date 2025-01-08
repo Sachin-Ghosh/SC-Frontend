@@ -82,7 +82,7 @@ const Header = () => {
             <Link to='/grievances' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Report</a></Link>
             <Link to='/profile' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Profile</a></Link>
             <Link to='/registered-events' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Registered Events</a></Link>
-            <Link to='/score-board' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>ScoreBoard</a></Link>
+            {/* <Link to='/score-board' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>ScoreBoard</a></Link> */}
             {/* <Link to='/score-board' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>ScoreBoard</a></Link> */}
           </div>
         </div>
@@ -140,7 +140,7 @@ const Header = () => {
         </DropdownMenu>
         <Link to='/grievances' className='text-foreground hover:text-[#8b4513]'>Report</Link>
         <Link to='/registered-events' className='text-foreground hover:text-[#8b4513] '>Registered Events</Link>
-        <Link to='/score-board' className=''><a>ScoreBoard</a></Link>
+        {/* <Link to='/score-board' className=''><a>ScoreBoard</a></Link> */}
         </>
       )}
       
