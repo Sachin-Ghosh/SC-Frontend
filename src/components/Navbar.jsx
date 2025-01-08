@@ -13,11 +13,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { UserCircle2 } from 'lucide-react'
+import { LogOut, UserCircle2 } from 'lucide-react'
 import { GiBlackKnightHelm, GiKnightBanner } from "react-icons/gi";
 import { useAuth } from '@/context/authContext'
 import { Separator } from './ui/separator'
 import { FaCalendarCheck } from 'react-icons/fa'
+import { TbReport } from 'react-icons/tb'
+import { MdErrorOutline } from "react-icons/md";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -138,9 +140,9 @@ const Header = () => {
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        <Link to='/grievances' className='text-foreground hover:text-[#8b4513]'>Report</Link>
+        
         <Link to='/registered-events' className='text-foreground hover:text-[#8b4513] '>Registered Events</Link>
-        {/* <Link to='/score-board' className=''><a>ScoreBoard</a></Link> */}
+        <Link to='/score-board' className='hidden sm:block'><a>ScoreBoard</a></Link>
         </>
       )}
       
@@ -160,11 +162,16 @@ const Header = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu dropdown-content backdrop-blur-sm border text-[#4a3728] border-[#8b4513] rounded-box z-[1] mt-4 w-52 p-2 shadow">
-              <li><Link to='/profile' className='' onClick={()=>{}}>Profile</Link></li>
-              <li onClick={()=>{
+              className="menu dropdown-content backdrop-blur-sm bg-[url('/vintage.jpg')] bg-cover bg-center bg-opacity-70 border text-[#4a3728] border-[#8b4513] rounded-box z-[1] mt-4 w-52 p-2 shadow">
+              <div className='px-2 py-2 '><Link to='/profile' className='flex gap-2 items-center w-full' onClick={()=>{}}><UserCircle2/>   Profile</Link></div>
+              <hr className='border-amber-900'/>
+              <div className='px-2 py-2'><Link to='/grievances' className='text-foreground flex gap-2 items-center w-full'><MdErrorOutline size={30}/> Report</Link></div>
+              <hr className='border-amber-900'/>
+              <div className='px-2 py-2'><Link to='/my-grievances' className='text-foreground flex gap-2 items-center w-full'><TbReport size={30}/>My Grievances</Link></div>
+              <hr className='border-amber-900'/>
+              <div className='px-2 py-2 ' onClick={()=>{
                 handleLogout();
-              }}><a >Logout</a></li>
+              }}><a className='flex items-center gap-2 px-2'><LogOut/>Logout</a></div>
             </ul>
           </div>
           ):(

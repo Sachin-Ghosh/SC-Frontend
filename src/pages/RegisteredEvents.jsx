@@ -113,7 +113,7 @@ const RegisteredEvents = () => {
 
     if (isDesktop) {
       return (
-        <div className='w-full max-w-7xl mt-40 max-h-96 sm:mt-48 mb-10 overflow-y-auto bg-white/80 rounded shadow-xl'>
+        <div className='w-full  mt-40 max-h-96 sm:mt-48 mb-10 overflow-y-auto bg-white/80 rounded shadow-xl'>
           <Table>
             <TableHeader className="sticky top-0 backdrop-blur-sm bg-gray-400 bg-opacity-25">
               <TableRow>

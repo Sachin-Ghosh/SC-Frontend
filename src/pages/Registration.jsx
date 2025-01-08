@@ -43,6 +43,14 @@ const Registration = () => {
     division: '',
     team_members: [], // This will store only the ids
   });
+
+  const [warning, setWarning]=useState({
+    team_name: '',
+    department: '',
+    year: '',
+    division: '',
+    team_members: '',
+  })
   const [teamMembers, setTeamMembers] = useState([]);
   const [open, setOpen] = useState(false);
 
@@ -96,40 +104,106 @@ const Registration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
-    console.log('Form submitted:', formData);
-    const payload = {
-      sub_event: event.id,
-      ...formData
+  
+    // Reset warnings
+    setWarning({
+      team_name: '',
+      department: '',
+      year: '',
+      division: '',
+      team_members: '',
+    });
+  
+    let hasError = false;
+  
+    // Validation checks
+    if (!formData.team_name && event.participation_type === 'GROUP') {
+      setWarning((prev) => ({
+        ...prev,
+        team_name: "Please enter a team name",
+      }));
+      hasError = true;
     }
-    console.log(payload);
+    if (!formData.department) {
+      setWarning((prev) => ({
+        ...prev,
+        department: "Please select a department",
+      }));
+      hasError = true;
+    }
+    if (!formData.division) {
+      setWarning((prev) => ({
+        ...prev,
+        division: "Please select your division",
+      }));
+      hasError = true;
+    }
+    if (!formData.year) {
+      setWarning((prev) => ({
+        ...prev,
+        year: "Please select your year of study",
+      }));
+      hasError = true;
+    }
+    if (
+      event.participation_type === 'GROUP' &&
+      formData.team_members.length < event.participants_per_group - 1
+    ) {
+      setWarning((prev) => ({
+        ...prev,
+        team_members: `You need to add at least ${
+          event.participants_per_group - 1
+        } team members.`,
+      }));
+      hasError = true;
+    }
+
     if (event.participation_type === 'GROUP' && formData.team_members.length < event.participants_per_group - 1) {
       console.log(`You need to add at least ${event.participants_per_group - 1} team members.`)
       toast.error(`You need to add at least ${event.participants_per_group - 1} team members.`);
       return;
     }
+  
+    // Stop submission if there are errors
+    if (hasError) {
+      toast.error('Please fix the errors before submitting.');
+      return;
+    }
+  
+    console.log('Form submitted:', formData);
+  
+    // Prepare payload
+    const payload = {
+      sub_event: event.id,
+      ...formData,
+    };
+  
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/registrations/`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`,
-          'Content-Type': 'application/json'
-        },
-        method: 'POST',
-        body: JSON.stringify(payload)
-      })
-      const data = await response.json()
-      console.log(data);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/events/registrations/`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          method: 'POST',
+          body: JSON.stringify(payload),
+        }
+      );
+      const data = await response.json();
+  
       if (response.ok) {
         toast.success('Registration submitted successfully!');
-        navigate('/registered-events')
+        navigate('/registered-events');
       } else {
-        toast.error(`${data.error}`)
+        toast.error(`${data.error}`);
       }
     } catch (error) {
-      console.log(error)
+      console.error(error);
+      toast.error('Something went wrong while submitting the form.');
     }
   };
-
+  
   const addTeamMember = (memberId) => {
     if (formData.team_members.length < event.participants_per_group - 1) {
       setFormData(prev => ({
@@ -212,9 +286,10 @@ const Registration = () => {
                       name="team_name"
                       value={formData.team_name}
                       onChange={handleChange}
-                      required
+                      
                       className="w-96 px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
                     />
+                    {!formData.team_name && event.participation_type === 'GROUP' && <span>{warning.team_name}</span>  }
                   </div>
                 )}
 
@@ -231,6 +306,7 @@ const Registration = () => {
                       <SelectItem value="DATA">Data Engineering</SelectItem>
                     </SelectContent>
                   </Select>
+                  {!formData.department&& <span>{warning.department}</span>  }
                 </div>
                 <div className="mb-6">
                   <label htmlFor="year" className="block text-[#4a3728] ">Year</label>
@@ -245,6 +321,7 @@ const Registration = () => {
                       <SelectItem value="BE">BE</SelectItem>
                     </SelectContent>
                   </Select>
+                  {!formData.year&& <span>{warning.year}</span>}
                 </div>
                 <div className="mb-6">
                   <label htmlFor="division" className="block text-[#4a3728] ">Division</label>
@@ -262,10 +339,11 @@ const Registration = () => {
                       {/* <SelectItem value="D">D</SelectItem> */}
                     </SelectContent>
                   </Select>
+                  {!formData.division&& <span>{warning.division}</span>}
                 </div>
 
                 {event && event.participation_type === 'GROUP' && (
-                  <div className="col-span-2 mb-6 flex flex-col gap-2">
+                  <div className="col-span-2 mb-6 flex flex-col gap-2 w-full">
                     <label className="block text-[#4a3728]">Team Members ({formData.team_members.length}/{event.participants_per_group - 1})</label>
                     {formData.team_members.map((memberId) => {
                       const member = teamMembers.find(tm => tm.id === memberId);
@@ -289,6 +367,7 @@ const Registration = () => {
                         </div>
                       );
                     })}
+                    {!(formData.team_members.length>0) && event.participation_type === 'GROUP' && <span>{warning.team_members}</span>}
                     <Popover open={open} onOpenChange={setOpen}>
                       <PopoverTrigger asChild>
                         <Button
@@ -336,6 +415,7 @@ const Registration = () => {
                     </Popover>
                   </div>
                 )}
+                
 
                 <motion.button
                   type="submit"

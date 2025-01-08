@@ -34,9 +34,9 @@ const formSchema = z.object({
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
-  user_type: z.enum(["student", "council", "faculty"], {
-    required_error: "Please select a user type.",
-  }),
+  // user_type: z.enum(["student", "council", "faculty"], {
+  //   required_error: "Please select a user type.",
+  // }),
 })
 
 const Login = () => {
@@ -48,7 +48,7 @@ const Login = () => {
     defaultValues: {
       email: "",
       password: "",
-      user_type: "",
+      // user_type: "",
     },
   })
 
@@ -148,7 +148,7 @@ const Login = () => {
                     </FormItem>
                   )}
                 />
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="user_type"
                   render={({ field }) => (
@@ -169,7 +169,7 @@ const Login = () => {
                       <FormMessage />
                     </FormItem>
                   )}
-                />
+                /> */}
                 <Button type="submit" className="w-full btn bg-[#8b4513] text-white py-2 px-4 rounded-md hover:bg-[#a0522d] transition-colors duration-300 font-semibold text-lg">
                   Log In
                 </Button>
