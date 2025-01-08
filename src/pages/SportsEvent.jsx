@@ -123,17 +123,17 @@ const SportsEvent = () => {
           </div>
         ) : (
           <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full sm:px-20 relative top-40 sm:top-52">
-            <TabsList className="flex sm:fixed top-72 w-full gap-2 items-center right-0 left-0 justify-center py-10 px-16 sm:px-0">
-              <TabsTrigger value="boys" className="text-lg ysabeau-sc data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Boys</TabsTrigger>
-              <TabsTrigger value="girls" className="text-lg ysabeau-sc data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Girls</TabsTrigger>
+            <TabsList className="flex sm:fixed top-60 w-full gap-2 items-center right-0 left-0 justify-center py-10 px-16 sm:px-0">
+              <TabsTrigger value="boys" className="text-lg ysabeau-sc data-[state=inactive]:border-2 data-[state=inactive]:border-amber-800  data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Boys</TabsTrigger>
+              <TabsTrigger value="girls" className="text-lg ysabeau-sc data-[state=inactive]:border-2 data-[state=inactive]:border-amber-800  data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Girls</TabsTrigger>
             </TabsList>
-            <TabsContent value="boys" className="[data-state]:active:bg-brown-900">
+            <TabsContent value="boys" className=" [data-state]:active:bg-brown-900">
               <ScrollArea className="h-[calc(100vh-300px)] w-full ">
                 {renderEvents(subevents)}
               </ScrollArea>
             </TabsContent>
             <TabsContent value="girls">
-              <ScrollArea className="h-[calc(100vh-300px)] w-full ">
+              <ScrollArea className="fixed h-[calc(100vh-300px)] w-full ">
                 {renderEvents(subevents)}
               </ScrollArea>
             </TabsContent>
