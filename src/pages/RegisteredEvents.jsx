@@ -102,7 +102,7 @@ const RegisteredEvents = () => {
       )
     }
 
-    if (noData || events.length === 0) {
+    if ( events.length === 0) {
       return (
         <div className='flex flex-col  justify-center items-center relative top-40 sm:top-80'>
           <span  className='text-amber-900'><TbMoodEmpty size={100}/></span>
