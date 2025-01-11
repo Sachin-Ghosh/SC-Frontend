@@ -63,8 +63,8 @@ const MyGrievance = () => {
   return (
     <>
       <img src='/vintage.jpg' className='fixed object-cover h-full w-full' alt="Event background" />
+        <img src='/royal-seal.png' className='z-10 fixed h-80 w-80 sm:h-96 sm:w-96 top-80 lg:top-52 lg:left-[36rem]'/>
       <div className="container mx-auto py-8 px-4 relative z-20 top-24">
-        <img src='/royal-seal.png' className='z-10 fixed h-80 w-80 sm:h-96 sm:w-96 top-80 lg:top-52 left-12 lg:left-[36rem]'/>
         <h1 className="text-4xl sm:text-3xl font-bold mb-6 text-center cinzel-bold text-amber-700">My Grievances</h1>
         
         <div className="hidden md:block px-12 relative z-20 ">

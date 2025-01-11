@@ -69,6 +69,7 @@ export default function Grievance() {
       });
       const data = await response.json();
       if(response.ok){
+        console.log(data)
         setSubevents(data);
       }
     } catch (error) {
@@ -143,7 +144,7 @@ export default function Grievance() {
       if (response.ok) {
         console.log('Grievance submitted successfully');
         toast.success('Grievance submitted successfully');
-        navigate('/dashboard');
+        navigate('/my-grievances');
       } else {
         console.error('Failed to submit grievance');
         toast.error('Failed to submit grievance');
