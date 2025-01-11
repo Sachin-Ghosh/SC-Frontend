@@ -47,7 +47,7 @@ const SportsEvent = () => {
   }, [accessToken])
 
   const renderEvents = (eventList) => (
-    <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8 px-3 sm:px-10">
+    <div className="grid sm:grid-cols-1 md:grid-cols-2 gap-8 px-0 sm:px-10">
       {eventList.map((event, index) => (
         <motion.div 
           key={event.id}
@@ -58,13 +58,13 @@ const SportsEvent = () => {
           transition={{ delay: index * 0.3, duration: 0.5 }}
         >
           <img src={event.images[0]?.image} alt={event.name} className="w-full h-full object-cover absolute z-20" />
-          <div className="p-6 relative z-30 bg-amber-900 bg-opacity-50 hover:bg-opacity-60 transition-all duration-300">
-            <h3 className="text-2xl mb-2 text-amber-100">{event.name}</h3>
-            <p className="text-amber-100 ysabeau-sc">Date: {formatDateTime(event.schedule)}</p>
+          <div className="p-2  relative z-30 bg-amber-900 bg-opacity-50 hover:bg-opacity-60 transition-all w-full duration-300">
+            <h3 className="text-lg sm:text-2xl mb-2 text-amber-100">{event.name}</h3>
+            <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Date: {formatDateTime(event.schedule)}</p>
             <p className="text-amber-100 py-4">{event.description}</p>
-            <div className="flex justify-between">
+            <div className="flex gap-10 justify-between">
               <motion.button
-                className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
+                className="bg-[#8b4513] ysabeau-sc text-xs sm:text-xl  text-white sm:py-2 px-2 sm:px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(`/${event.id}/details`)}
@@ -72,7 +72,7 @@ const SportsEvent = () => {
                 Learn More
               </motion.button>
               <motion.button
-                className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
+                className="bg-[#8b4513] ysabeau-sc text-xs sm:text-xl text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate(`/${event.id}/registration`)}
@@ -103,8 +103,8 @@ const SportsEvent = () => {
           <h1 className='ysabeau-sc relative z-40 top-20'>Sports Events</h1>
         </motion.div>
         {(subevents.length === 0) ? (
-          <div className='flex flex-col sm:flex-row gap-6 w-full justify-center max-w-6xl'>
-            <div className="flex w-full flex-row gap-4 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
+          <div className='flex flex-col sm:flex-row gap-6 w-full justify-center max-w-6xl relative top-20 sm:top-0'>
+            <div className="flex w-full flex-row gap-2 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
               <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
               <div className='flex flex-col gap-2 w-full justify-center'>
                 <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
@@ -112,7 +112,7 @@ const SportsEvent = () => {
                 <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
               </div>
             </div>
-            <div className="flex w-full gap-4 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
+            <div className="flex w-full gap-2 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
               <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
               <div className='flex flex-col gap-2 w-full justify-center'>
                 <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
@@ -122,8 +122,9 @@ const SportsEvent = () => {
             </div>
           </div>
         ) : (
-          <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full sm:px-20 relative top-40 sm:top-52">
-            <TabsList className="flex sm:fixed top-60 w-full gap-2 items-center right-0 left-0 justify-center py-10 px-16 sm:px-0">
+          <ScrollArea className="max-h-[40rem] w-full sticky top-40 sm:top-52">
+          <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full sm:px-20 relative">
+            <TabsList className="flex sm:fixed top-60 w-full gap-2 items-center right-0 left-0 justify-center py-10 px-1 sm:px-0">
               <TabsTrigger value="boys" className="text-lg ysabeau-sc data-[state=inactive]:border-2 data-[state=inactive]:border-amber-800  data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Boys</TabsTrigger>
               <TabsTrigger value="girls" className="text-lg ysabeau-sc data-[state=inactive]:border-2 data-[state=inactive]:border-amber-800  data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Girls</TabsTrigger>
             </TabsList>
@@ -138,6 +139,7 @@ const SportsEvent = () => {
               </ScrollArea>
             </TabsContent>
           </Tabs>
+          </ScrollArea>
         )}
       </div>
     </>

@@ -20,8 +20,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { SubeventCombobox } from '@/components/SubeventsComboBox'
 import { toast, Toaster } from 'sonner'
 import { useNavigate } from 'react-router-dom'
-import FileUploadForm from '@/components/FileUpload'
-// import FileUploadForm from './FileUploadForm'
+import { X } from 'lucide-react'
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
 
 const formSchema = z.object({
   grievance_type: z.string().min(1, { message: "Please select a type" }),
@@ -34,15 +36,27 @@ const formSchema = z.object({
   description: z.string().min(1, {
     message: "Description must be at least 1 character.",
   }),
+  evidence: z
+    .array(
+      z.object({
+        file: z
+          .any()
+          .refine((file) => file?.size <= MAX_FILE_SIZE, `Max file size is 5MB.`)
+          .refine(
+            (file) => ACCEPTED_FILE_TYPES.includes(file?.type),
+            "Only .jpg, .jpeg, .png, .webp and .pdf formats are supported."
+          ),
+      })
+    )
+    .optional(),
 })
 
 export default function Grievance() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [subevents, setSubevents] = useState([])
-  const [showFileUpload, setShowFileUpload] = useState(false)
-  const [grievanceId, setGrievanceId] = useState(null)
-  const accessToken = localStorage.getItem('access-token');
-  const user = JSON.parse(localStorage.getItem('user'));
+  const [previewUrls, setPreviewUrls] = useState([])
+  const accessToken = localStorage.getItem('access-token')
+  const user = JSON.parse(localStorage.getItem('user'))
   const navigate = useNavigate()
 
   const fetchSubEvents = async () => {
@@ -73,35 +87,63 @@ export default function Grievance() {
       title: "",
       event: undefined,
       description: "",
+      evidence: [],
     },
   })
 
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files || []);
+    const updatedEvidence = form.getValues('evidence') || [];
+    
+    files.forEach((file) => {
+      updatedEvidence.push({ file });
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setPreviewUrls((prev) => [...prev, e.target?.result]);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    form.setValue('evidence', updatedEvidence);
+  };
+
+  const removeFile = (index) => {
+    const updatedEvidence = form.getValues('evidence').filter((_, i) => i !== index);
+    form.setValue('evidence', updatedEvidence);
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+  };
+
   async function onSubmit(values) {
     setIsSubmitting(true)
-    const payload = {
-      ...values,
-      event: values.event,
-      submitted_by: user.id
-    }
+    const formData = new FormData()
+    
+    formData.append('grievance_type', values.grievance_type)
+    formData.append('title', values.title)
+    formData.append('event', values.event.toString())
+    formData.append('description', values.description)
+    formData.append('submitted_by', user.id.toString())
+    
+    values.evidence?.forEach((item, index) => {
+      formData.append(`evidence_files[${index}]`, item.file)
+    })
     
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/grievances/create/`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`,
         },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const data = await response.json();
-      console.log(data)
       
       if (response.ok) {
         console.log('Grievance submitted successfully');
         toast.success('Grievance submitted successfully');
-        setGrievanceId(values.event);
-        setShowFileUpload(true);
+        navigate('/dashboard');
       } else {
         console.error('Failed to submit grievance');
         toast.error('Failed to submit grievance');
@@ -120,97 +162,129 @@ export default function Grievance() {
       <div className='px-2 sm:px-72 py-10 flex flex-col relative min-h-screen z-20 top-12'>
         <h1 className="text-3xl font-bold mb-6 text-center ysabeau-sc text-amber-900">Submit a Grievance</h1>
 
-        {!showFileUpload ? (
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
-              {/* Existing form fields */}
-              <FormField
-                control={form.control}
-                name="grievance_type"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Grievance Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select Grievance Type" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
-                        <SelectItem value="CHEATING">Cheating</SelectItem>
-                        <SelectItem value="MISCONDUCT">Misconduct</SelectItem>
-                        <SelectItem value="RULES_VIOLATION">Rules Violation</SelectItem>
-                        <SelectItem value="OTHER">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subject</FormLabel>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+            <FormField
+              control={form.control}
+              name="grievance_type"
+              render={({ field }) => (
+                <FormItem className="flex-1">
+                  <FormLabel>Grievance Type</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
-                      <Input placeholder="Enter Your Subject" {...field} />
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Grievance Type" />
+                      </SelectTrigger>
                     </FormControl>
-                    <FormDescription>
-                      Please specify the subject of your grievance.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="event"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Subevent</FormLabel>
-                    <FormControl>
-                      <SubeventCombobox
-                        subevents={subevents}
-                        onSelect={(id) => field.onChange(id)}
-                        value={field.value}
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Select the subevent related to your grievance.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Grievance Details</FormLabel>
-                    <FormControl>
-                      <Textarea 
-                        placeholder="Please provide details about your grievance..." 
-                        className="h-32"
-                        {...field} 
-                      />
-                    </FormControl>
-                    <FormDescription>
-                      Provide as much detail as possible about your grievance.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" className="w-full bg-amber-900 text-white" disabled={isSubmitting}>
-                {isSubmitting ? "Submitting..." : "Submit Grievance"}
-              </Button>
-            </form>
-          </Form>
-        ) : (
-          <FileUploadForm grievanceId={grievanceId} />
-        )}
+                    <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
+                      <SelectItem value="CHEATING">Cheating</SelectItem>
+                      <SelectItem value="MISCONDUCT">Misconduct</SelectItem>
+                      <SelectItem value="RULES_VIOLATION">Rules Violation</SelectItem>
+                      <SelectItem value="OTHER">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subject</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter Your Subject" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Please specify the subject of your grievance.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="event"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subevent</FormLabel>
+                  <FormControl>
+                    <SubeventCombobox
+                      subevents={subevents}
+                      onSelect={(id) => field.onChange(id)}
+                      value={field.value}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Select the subevent related to your grievance.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Grievance Details</FormLabel>
+                  <FormControl>
+                    <Textarea 
+                      placeholder="Please provide details about your grievance..." 
+                      className="h-32"
+                      {...field} 
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Provide as much detail as possible about your grievance.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="evidence"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Proof</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      multiple
+                      onChange={handleFileChange}
+                      accept={ACCEPTED_FILE_TYPES.join(',')}
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    Upload one or more files as evidence for your grievance. Max file size: 5MB. Accepted formats: .jpg, .jpeg, .png, .webp, .pdf
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {previewUrls.length > 0 && (
+              <div className="grid grid-cols-3 gap-4 mt-4">
+                {previewUrls.map((url, index) => (
+                  <div key={index} className="relative">
+                    <img src={url} alt={`Preview ${index + 1}`} className="w-full h-32 object-cover rounded" />
+                    <button
+                      type="button"
+                      onClick={() => removeFile(index)}
+                      className="absolute top-0 right-0 bg-red-500 text-white p-1 rounded-full"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <Button type="submit" className="w-full bg-amber-900 text-white" disabled={isSubmitting}>
+              {isSubmitting ? "Submitting..." : "Submit Grievance"}
+            </Button>
+          </form>
+        </Form>
         <Toaster position='top-right'/>
       </div>
     </>

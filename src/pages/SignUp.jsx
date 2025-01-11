@@ -127,11 +127,34 @@ const SignUp = () => {
 
       // Store the complete form data
       const registrationPayload = {
-        ...data,
-        user_type: activeTab,
-        // Convert File objects to null since they can't be serialized
-        id_card_document: photoIdFile,
-        profile_picture: profilePicFile,
+      user_type: activeTab,
+      email: registrationData.email,
+      bio: registrationData.bio,
+      gender: registrationData.gender,
+      id_card_document: photoIdFile,
+      profile_picture: profilePicFile,
+      first_name: registrationData.first_name,
+      last_name: registrationData.last_name,
+      phone: registrationData.phone,
+      password: registrationData.password,
+      department: registrationData.department,
+      // Include specific fields that might be required for STUDENTs
+      ...(activeTab === 'STUDENT' && {
+        year_of_study: registrationData.year_of_study || '',
+        division: registrationData.division || '',
+        roll_number: registrationData.roll_number || '',
+      }),
+      // Include specific fields for FACULTY
+      ...(activeTab === 'FACULTY' && {
+        designation: registrationData.designation || '',
+        subjects: registrationData.subjects || '',
+      }),
+      // Include specific fields for COUNCIL
+      ...(activeTab === 'COUNCIL' && {
+        position: registrationData.position || '',
+        term_start: registrationData.term_start || '',
+        term_end: registrationData.term_end || '',
+      }),
       };
 
       const registrationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/users/register/`, {
@@ -269,23 +292,23 @@ const SignUp = () => {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="p-8 rounded w-full max-w-4xl relative top-20 backdrop-blur-md border-2 border-amber-900 mx-3 mb-2"
+          className="px-3 py-4 sm:p-8 rounded w-full max-w-4xl relative top-20 backdrop-blur-md border-2 border-amber-900 mx-3 mb-2"
         >
           <div className='relative z-20'>
-            <h2 className="text-4xl font-bold mb-6 text-center text-[#291b11] font-serif">Aurora 2025</h2>
-            <h3 className="text-2xl font-semibold mb-6 text-center text-[#442914]">Athlete's Registration</h3>
+            <h2 className="text-2xl sm:text-4xl font-bold mb-6 text-center text-[#291b11] font-serif">Aurora 2025</h2>
+            <h3 className="sm:text-2xl font-semibold mb-6 text-center text-[#442914]">Athlete's Registration</h3>
             {!showOTP ? (
               <>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-6">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="STUDENT" className="data-[state=active]:bg-amber-900 data-[state=active]:text-white">STUDENT</TabsTrigger>
-                    <TabsTrigger value="FACULTY" className="data-[state=active]:bg-amber-900 data-[state=active]:text-white">FACULTY</TabsTrigger>
-                    <TabsTrigger value="COUNCIL" className="data-[state=active]:bg-amber-900 data-[state=active]:text-white">COUNCIL</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-3 gap-2 bg-amber-600 bg-opacity-20 rounded">
+                    <TabsTrigger value="STUDENT" className="data-[state=active]:bg-amber-900 rounded data-[state=active]:text-white text-sm">Student</TabsTrigger>
+                    <TabsTrigger value="FACULTY" className="data-[state=active]:bg-amber-900 rounded data-[state=active]:text-white text-sm">Faculty</TabsTrigger>
+                    <TabsTrigger value="COUNCIL" className="data-[state=active]:bg-amber-900 rounded data-[state=active]:text-white text-sm">Council</TabsTrigger>
                   </TabsList>
                 </Tabs>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                    <div className="flex gap-4">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="sm:space-y-4">
+                    <div className="flex flex-col sm:flex-row  gap-4">
                       <FormField
                         control={form.control}
                         name="first_name"
@@ -598,13 +621,13 @@ const SignUp = () => {
                 </Form>
               </>
             ) : (
-              <div className='flex flex-col gap-4 items-center justify-center'>
-              <h4 className="text-xl font-semibold mb-2">Enter OTP</h4>
+              <div className='flex flex-col  sm:gap-4 items-center justify-center'>
+              <h4 className="text-xl font-semibold text-center mb-2">Enter OTP</h4>
               <OTPInput
                 value={otp}
                 onChange={setOtp}
                 numInputs={6}
-                renderSeparator={<span className="w-2"></span>}
+                renderSeparator={<span className=""></span>}
                 renderInput={(props) => <input {...props} />}
                 inputStyle={{
                   width: '40px',
@@ -622,16 +645,19 @@ const SignUp = () => {
 
               <Button variant="link" onClick={()=>{handleResendOtp()}}>Resend Otp</Button>
               <Button 
-                className="w-fit bg-[#8b4513] text-white hover:bg-[#a0522d] mt-4" 
+                className="w-fit bg-[#8b4513] rounded text-white hover:bg-[#a0522d] mt-4" 
                 onClick={handleOTPVerification}
               >
                 Verify OTP
               </Button>
             </div>
             )}
+
+            {!showOTP && 
             <div className="mt-6 text-center">
               <Link to="/auth/login" className="text-[#120a05] hover:underline">Already have an account? Sign In</Link>
             </div>
+            }
           </div>
         </motion.div>
         <Toaster position="top-right" />

@@ -65,7 +65,7 @@ const Login = () => {
         if (!response.ok) {
           const errorData = await response.json()
           console.log(errorData);
-          throw new Error(errorData.message || 'Login failed')
+          throw new Error(errorData.error || 'Login failed')
         }
         return response.json()
       }),
@@ -84,7 +84,7 @@ const Login = () => {
               navigate('/events/sports');
               break;
             case 'FACULTY':
-              navigate('/events/cultural');
+              navigate('/faculty-dashboard');
               break;
             case 'COUNCIL':
               navigate('/');
@@ -92,13 +92,14 @@ const Login = () => {
             default:
               navigate('/');
           }
+          console.log(data.user.user_type)
 
           
           return `${data.message}`
         },
         error: (err) => {
-          console.error('login error:', err)
-          return `Login failed: ${err.message}`
+          console.error( err.message)
+          return `${err.message}`
         }
       }
     )
@@ -115,8 +116,8 @@ const Login = () => {
           className="p-8 rounded w-full max-w-lg relative backdrop-blur-md border-amber-900 border-2 mx-2"
         >
           <div className='relative z-20'>
-            <h2 className="text-4xl font-bold mb-6 text-center text-[#291b11] font-serif">Aurora 2025</h2>
-            <h3 className="text-2xl font-semibold mb-6 text-center text-[#442914]">Athlete's Portal</h3>
+            <h2 className="text-2xl sm:text-4xl font-bold mb-6 text-center text-[#291b11] font-serif">Aurora 2025</h2>
+            <h3 className="text-lg font-semibold mb-6 text-center text-[#442914]">Athlete's Portal</h3>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 <FormField

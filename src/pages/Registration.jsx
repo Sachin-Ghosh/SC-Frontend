@@ -247,9 +247,9 @@ const Registration = () => {
         </>
       ) : (
         <>
-          <div className="flex flex-col min-h-screen items-center justify-center px-4 py-8 relative z-20 top-10">
+          <div className="flex flex-col min-h-screen items-center justify-center w-full max-w-2xl sm:max-w-full py-8 relative z-20 top-10">
             <motion.h2
-              className="text-4xl md:text-5xl font-serif text-center text-[#4a3728] cinzel uppercase"
+              className="text-2xl md:text-5xl font-serif pb-10 text-center text-[#4a3728] cinzel uppercase"
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
@@ -259,7 +259,7 @@ const Registration = () => {
             <div className='relative '>
               <motion.form
                 onSubmit={handleSubmit}
-                className="mx-auto sm:px-10 pt-3 rounded relative z-20 bg-center flex flex-col lg:flex-row flex-wrap max-w-4xl lg:gap-10"
+                className="mx-auto  sm:px-28 pt-3 rounded relative z-20 bg-center flex flex-col items-center w-full  lg:flex-row flex-wrap max-w-2xl sm:max-w-5xl lg:gap-8"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
@@ -278,7 +278,7 @@ const Registration = () => {
                   />
                 </div> */}
                 {event && event.participation_type === 'GROUP' && (
-                  <div className="">
+                  <div className=" sm:px-0 mb-6 sm:mb-0">
                     <label htmlFor="email" className="block text-[#4a3728] ">Team Name</label>
                     <Input
                       type="text"
@@ -287,16 +287,16 @@ const Registration = () => {
                       value={formData.team_name}
                       onChange={handleChange}
                       
-                      className="w-96 px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
+                      className="w-60 sm:w-96 px-3 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
                     />
                     {!formData.team_name && event.participation_type === 'GROUP' && <span>{warning.team_name}</span>  }
                   </div>
                 )}
 
-                <div className="mb-6">
+                <div className="mb-6 sm:mb-0">
                   <label htmlFor="department" className="block text-[#4a3728] ">Department</label>
                   <Select onValueChange={(value) => handleSelectChange('department', value)}>
-                    <SelectTrigger className="w-96 border-b">
+                    <SelectTrigger className="w-60 sm:w-96 border-b">
                       <SelectValue placeholder="Select Department" />
                     </SelectTrigger>
                     <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
@@ -308,10 +308,10 @@ const Registration = () => {
                   </Select>
                   {!formData.department&& <span>{warning.department}</span>  }
                 </div>
-                <div className="mb-6">
+                <div className="mb-6 sm:mb-0">
                   <label htmlFor="year" className="block text-[#4a3728] ">Year</label>
                   <Select onValueChange={(value) => handleSelectChange('year', value)}>
-                    <SelectTrigger className="w-96 border-b">
+                    <SelectTrigger className="w-60 sm:w-96 border-b">
                       <SelectValue placeholder="Select Year" />
                     </SelectTrigger>
                     <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
@@ -323,10 +323,10 @@ const Registration = () => {
                   </Select>
                   {!formData.year&& <span>{warning.year}</span>}
                 </div>
-                <div className="mb-6">
+                <div className="mb-6 sm:mb-0">
                   <label htmlFor="division" className="block text-[#4a3728] ">Division</label>
                   <Select onValueChange={(value) => handleSelectChange('division', value)}>
-                    <SelectTrigger className="w-96 border-b">
+                    <SelectTrigger className="w-60 sm:w-96 border-b">
                       <SelectValue placeholder="Select Division" />
                     </SelectTrigger>
                     <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
@@ -353,7 +353,7 @@ const Registration = () => {
                             type="text"
                             value={member ? member.full_name : ''}
                             readOnly
-                            className="w-full border-b"
+                            className="w-56 sm:w-96 border-b"
                           />
                           <Button
                             type="button"
@@ -374,13 +374,13 @@ const Registration = () => {
                           variant="outline"
                           role="combobox"
                           aria-expanded={open}
-                          className="w-full justify-between"
+                          className="w-fit sm:w-96 justify-between"
                         >
                           Select team member...
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
                       </PopoverTrigger>
-                      <PopoverContent className="w-full p-0 ">
+                      <PopoverContent className="sm:w-80 p-0 ">
                         <Command className="bg-[url('/event-background.jpg')] bg-center bg-cover rounded w-full max-h-32 ">
                           <CommandInput placeholder="Search team member..." />
                           <CommandList>
@@ -419,7 +419,7 @@ const Registration = () => {
 
                 <motion.button
                   type="submit"
-                  className="col-span-2 w-full bg-[#8b4513] text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
+                  className="col-span-2 sm:w-96 bg-[#8b4513] text-white py-2 px-12 sm:px-0 rounded hover:bg-[#a0522d] transition-colors duration-200"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

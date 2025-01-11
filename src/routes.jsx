@@ -22,6 +22,11 @@ import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import Score from './pages/Score';
 import MyGrievance from './pages/MyGrievance';
+import ScoresPage from './pages/Scores';
+import FacultyDashboard from './pages/FacultyDashboard';
+import Participants from './pages/Participants';
+import ViewHeats from './pages/ViewHeats';
+import LeaderboardPage from './pages/LeaderBoard';
 
 // import Registration from './pages/Registration';
 // import Events from './pages/Events';
@@ -44,6 +49,12 @@ const AppRoutes = () => (
     <Route path="/profile/update" element={<UpdateProfile />} />
     <Route path="/about" element={<About />} />
     <Route path="/score-board" element={<Score />} />
+    {/* faculty routes */}
+    <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
+    <Route path="/scores" element={<ScoresPage />} />
+    <Route path="/participants/:eventId" element={<Participants />} />
+    <Route path="/view-heats" element={<ViewHeats />} />
+    <Route path="/leaderboard" element={<LeaderboardPage />} />
   </Routes>
 );
 
