@@ -62,7 +62,7 @@ const Home = () => {
             className="sm:text-xl text-ambet-950"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
+            transition={{ duration: 1, delay: 0.8 }}
           >
             presents
           </motion.span>
@@ -76,9 +76,13 @@ const Home = () => {
           </motion.h2>
         </div>
 
-        <motion.div className="relative  h-72">
-          <h1 className="text-center text-amber-950 text-2xl mb-4">Time Remaining</h1>
-          <div className="grid grid-flow-col gap-5 text-center auto-cols-max">
+        <motion.div
+         initial={{ opacity: 0, y: -50 }}
+         animate={{ opacity: 1, y: 0 }}
+         transition={{ duration: 1, delay: 3.5 }}
+         className="relative  h-72 px-2">
+          <h1 className="text-center text-amber-950 text-2xl mb-4 ">Time Remaining</h1>
+          <div className="grid grid-flow-col gap-1 sm:gap-5 text-center auto-cols-max">
   <div className="flex flex-col p-2 bg-amber-800 rounded-box text-neutral-content">
     <span className="countdown font-mono text-5xl">
       <span style={{ "--value": timeLeft.days }}></span>

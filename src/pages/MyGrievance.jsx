@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { format } from "date-fns"
 import { Loader } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 const MyGrievance = () => {
   const [grievances, setGrievances] = useState([])
@@ -70,7 +71,7 @@ const MyGrievance = () => {
         <div className="hidden md:block px-12 relative z-20 ">
           <ScrollArea className="h-[calc(100vh-200px)] rounded-md border ">
             <Table className="bg-amber-100/50 backdrop-blur-sm">
-              <TableHeader className="sticky top-0 bg-amber-50/50">
+              <TableHeader className="sticky top-0 bg-white bg-opacity-70 backdrop-blur-lg">
                 <TableRow>
                   <TableHead className="sticky top-0 bg-background">ID</TableHead>
                   <TableHead className="sticky top-0 bg-background">Title</TableHead>
@@ -84,7 +85,7 @@ const MyGrievance = () => {
                 {grievances.map((grievance) => (
                   <TableRow key={grievance.id}>
                     <TableCell>{grievance.id}</TableCell>
-                    <TableCell className="font-medium">{grievance.title}</TableCell>
+                    <TableCell className="font-medium"><Link to={`/my-grievances/${grievance.id}`}>{grievance.title}</Link></TableCell>
                     <TableCell>{grievance.grievance_type}</TableCell>
                     <TableCell className="max-w-xs truncate">{grievance.description}</TableCell>
                     <TableCell>
@@ -104,7 +105,7 @@ const MyGrievance = () => {
               <Card key={grievance.id} className="border-2 backdrop-blur-sm border-amber-800 bg-white bg-opacity-45 shadow rounded-xl">
                 <CardHeader className="pb-2">
                   <div className="flex justify-between items-start">
-                    <CardTitle className="text-lg">#{grievance.id} {grievance.title}</CardTitle>
+                    <CardTitle className="text-lg"> <Link to={`/my-grievances/${grievance.id}`}>#{grievance.id} {grievance.title}</Link></CardTitle>
                     {getStatusBadge(grievance.status)}
                   </div>
                 </CardHeader>

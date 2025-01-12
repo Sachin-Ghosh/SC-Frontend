@@ -21,6 +21,7 @@ import { SubeventCombobox } from '@/components/SubeventsComboBox'
 import { toast, Toaster } from 'sonner'
 import { useNavigate } from 'react-router-dom'
 import { X } from 'lucide-react'
+import axios from 'axios'
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_FILE_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"];
@@ -36,7 +37,7 @@ const formSchema = z.object({
   description: z.string().min(1, {
     message: "Description must be at least 1 character.",
   }),
-  evidence: z
+  evidence_files: z
     .array(
       z.object({
         file: z
@@ -55,6 +56,7 @@ export default function Grievance() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [subevents, setSubevents] = useState([])
   const [previewUrls, setPreviewUrls] = useState([])
+  const [evidenceFiles, setEvidenceFiles] = useState([])
   const accessToken = localStorage.getItem('access-token')
   const user = JSON.parse(localStorage.getItem('user'))
   const navigate = useNavigate()
@@ -88,13 +90,13 @@ export default function Grievance() {
       title: "",
       event: undefined,
       description: "",
-      evidence: [],
+      evidence_files: [],
     },
   })
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files || []);
-    const updatedEvidence = form.getValues('evidence') || [];
+    const updatedEvidence = [];
     
     files.forEach((file) => {
       updatedEvidence.push({ file });
@@ -107,41 +109,42 @@ export default function Grievance() {
       }
     });
 
-    form.setValue('evidence', updatedEvidence);
+    form.setValue('evidence_files', updatedEvidence);
+    setEvidenceFiles((prev) => [...prev, ...files]);
   };
 
   const removeFile = (index) => {
-    const updatedEvidence = form.getValues('evidence').filter((_, i) => i !== index);
-    form.setValue('evidence', updatedEvidence);
+    const updatedEvidence = form.getValues('evidence_files').filter((_, i) => i !== index);
+    form.setValue('evidence_files', updatedEvidence);
     setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+    setEvidenceFiles((prev) => prev.filter((_, i) => i !== index));
   };
 
   async function onSubmit(values) {
     setIsSubmitting(true)
     const formData = new FormData()
     
+    // Append basic form fields
     formData.append('grievance_type', values.grievance_type)
     formData.append('title', values.title)
     formData.append('event', values.event.toString())
     formData.append('description', values.description)
     formData.append('submitted_by', user.id.toString())
     
-    values.evidence?.forEach((item, index) => {
-      formData.append(`evidence_files[${index}]`, item.file)
+    // Append files
+    evidenceFiles.forEach((file, index) => {
+      formData.append(`evidence_files`, file)
     })
-    
+
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/grievances/create/`, {
-        method: 'POST',
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/grievances/create/`, formData, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'multipart/form-data'
         },
-        body: formData,
       });
 
-      const data = await response.json();
-      
-      if (response.ok) {
+      if (response.status === 200 || response.status === 201) {
         console.log('Grievance submitted successfully');
         toast.success('Grievance submitted successfully');
         navigate('/my-grievances');
@@ -246,7 +249,7 @@ export default function Grievance() {
             />
             <FormField
               control={form.control}
-              name="evidence"
+              name="evidence_files"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Proof</FormLabel>

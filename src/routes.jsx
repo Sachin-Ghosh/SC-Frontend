@@ -4,29 +4,34 @@ import Home from './pages/Home';
 import Authpage from './pages/Login';
 // import Event from './pages/SportsEvent';
 // import Registration from './pages/Registration';
-import SportsEvent from './pages/SportsEvent';
+import SportsEvent from './pages/student/SportsEvent';
 // import CulturalEvents from './pages/CulturalEvents';
-import CulturalEvent from './pages/CulturalEvents';
-import Details from './pages/events/Details';
-import EventDetails from './pages/Details';
+import CulturalEvent from './pages/student/CulturalEvents';
+// import Details from './pages/events/Details';
+import EventDetails from './pages/student/Details';
 import Grievance from './pages/Grieviances';
 import Profile from './pages/Profile';
 import About from './pages/About';
 import SignUp from './pages/SignUp';
-import Registration from './pages/Registration';
+import Registration from './pages/student/Registration';
 // import RegisteredEvents from './pages/RegisteredEvents';
-import RegistrationDetails from './pages/RegistrationDetails';
+import RegistrationDetails from './pages/student/RegistrationDetails';
 import UpdateProfile from './pages/UpdateProfile';
-import RegisteredEvents from './pages/RegisteredEvents';
+import RegisteredEvents from './pages/student/RegisteredEvents';
 import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import Score from './pages/Score';
 import MyGrievance from './pages/MyGrievance';
-import ScoresPage from './pages/Scores';
-import FacultyDashboard from './pages/FacultyDashboard';
-import Participants from './pages/Participants';
-import ViewHeats from './pages/ViewHeats';
-import LeaderboardPage from './pages/LeaderBoard';
+import ScoresPage from './pages/faculty/Scores';
+import FacultyDashboard from './pages/faculty/FacultyDashboard';
+import Participants from './pages/faculty/Participants';
+import ViewHeats from './pages/faculty/ViewHeats';
+import LeaderboardPage from './pages/faculty/LeaderBoard';
+import CouncilEventsPage from './pages/council/Getassignedevents';
+import TeamSearch from './pages/council/Getregistration';
+import HeatsPage from './pages/council/HeatsPage';
+import GrievanceDetail from './pages/GrievanceDetail';
+import GrievanceDetailPage from './pages/GrievanceDetail';
 
 // import Registration from './pages/Registration';
 // import Events from './pages/Events';
@@ -43,6 +48,7 @@ const AppRoutes = () => (
     <Route path="/:event/details" element={<EventDetails />} />
     <Route path="/grievances" element={<Grievance />} />
     <Route path="/my-grievances" element={<MyGrievance />} />
+    <Route path="/my-grievances/:id" element={<GrievanceDetailPage />} />
     <Route path="/registered-events" element={<RegisteredEvents />} />
     <Route path="/registered-events/:event" element={<RegistrationDetails />} />
     <Route path="/profile" element={<Profile />} />
@@ -55,6 +61,10 @@ const AppRoutes = () => (
     <Route path="/participants/:eventId" element={<Participants />} />
     <Route path="/view-heats" element={<ViewHeats />} />
     <Route path="/leaderboard" element={<LeaderboardPage />} />
+    {/* council routes */}
+    <Route path="/search-teams" element={<TeamSearch/>} />
+    <Route path="/council-dashboard" element={<CouncilEventsPage/>} />
+    <Route path="/heats/:id" element={<HeatsPage />} />
   </Routes>
 );
 

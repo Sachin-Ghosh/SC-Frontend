@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
-import ScoreForm from '../components/ScoreForm';
-import ScoreModal from '../components/ScoreModal';
-import Loader from '../components/Loader';
+import ScoreForm from '../../components/ScoreForm';
+import ScoreModal from '../../components/ScoreModal';
+import Loader from '../../components/Loader';
 import { TbMoodEmpty } from "react-icons/tb";
 import Modal from '@/components/Modal';
 

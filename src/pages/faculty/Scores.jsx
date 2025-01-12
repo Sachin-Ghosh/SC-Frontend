@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { CustomCard } from '../components/ui/CustomCard';
+import { CustomCard } from '../../components/ui/CustomCard';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function ScoresPage() {

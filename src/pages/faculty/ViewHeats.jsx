@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { CustomModal } from '../components/ui/CustomModal';
-import ScoreForm from '../components/ScoreForm';
+import { CustomModal } from '../../components/ui/CustomModal';
+import ScoreForm from '../../components/ScoreForm';
 import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
 

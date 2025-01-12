@@ -86,6 +86,12 @@ const Header = () => {
               </>
             ) : (
               <>
+              {user?.user_type === 'COUNCIL' && (
+              <>
+                          <Link to='/council-dashboard' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Dashboard</a></Link>
+                          <Link to='/search-teams' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>All Registrations</a></Link>
+              </>
+            )}
                  <Accordion type="single" collapsible className="w-full border-b-amber-900" asChild>
               <AccordionItem value="events">
                 <AccordionTrigger className=""> Events</AccordionTrigger>
@@ -100,6 +106,7 @@ const Header = () => {
             <Link to='/grievances' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Report</a></Link>
             <Link to='/profile' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Profile</a></Link>
             <Link to='/registered-events' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Registered Events</a></Link>
+            
               </>
             )}
          
@@ -110,11 +117,11 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <nav className="navbar fixed top-0 left-0 right-0 flex justify-between bg-opacity-40 z-30 px-2 sm:px-32">
+      <nav className="navbar fixed top-0 left-0 right-0 flex justify-between bg-opacity-40 z-30 px-2 sm:px-4 md:px-10 lg:px-32">
         <div className='flex  bg-transparent'>
           {accessToken && (
 
-          <div className="flex-none lg:hidden">
+          <div className="flex-none sm:hidden">
             <label htmlFor="my-drawer-3" aria-label="open sidebar" className="btn btn-square btn-ghost">
               <Menu size={20}/>
             </label>
@@ -139,6 +146,12 @@ const Header = () => {
 
               ) : (
                 <>
+                 {user.user_type==='COUNCIL'&&(
+          <>
+           <Link to='/council-dashboard' className='text-foreground hover:text-[#8b4513]'><a>Council Dashboard</a></Link>
+           <Link to='/search-teams' className='text-foreground hover:text-[#8b4513]'><a>All Registrations</a></Link>
+          </>
+        )}
                    <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button 
@@ -164,7 +177,9 @@ const Header = () => {
         </DropdownMenu>
         
         <Link to='/registered-events' className='text-foreground hover:text-[#8b4513] '>Registered Events</Link>
-        <Link to='/score-board' className='hidden sm:block'><a>ScoreBoard</a></Link>
+        <Link to='/score-board' className='hidden sm:block text-foreground hover:text-[#8b4513]'><a>ScoreBoard</a></Link>
+       
+        
                 </>
               )}
             </>

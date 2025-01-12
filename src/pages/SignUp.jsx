@@ -180,6 +180,8 @@ const SignUp = () => {
       console.log('Registration successful:', responseData);
       setEmail(responseData.email);
       setRegistrationData(registrationPayload);
+      console.log('regi',registrationData)
+      console.log(registrationPayload)
       setShowOTP(true);
       toast.success(responseData.message);
     } catch (error) {
@@ -193,6 +195,8 @@ const SignUp = () => {
       toast.error('Please enter a valid 6-digit OTP')
       return
     }
+
+    // console.log(registrationData)
 
     // Ensure all required fields are included
     const verificationPayload = {

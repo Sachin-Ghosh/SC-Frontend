@@ -61,6 +61,8 @@ const SportsEvent = () => {
           <div className="p-2  relative z-30 bg-amber-900 bg-opacity-50 hover:bg-opacity-60 transition-all w-full duration-300">
             <h3 className="text-lg sm:text-2xl mb-2 text-amber-100">{event.name}</h3>
             <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Date: {formatDateTime(event.schedule)}</p>
+            <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Start: {formatDateTime(event.registration_start_time)}</p>
+            <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Deadline: {formatDateTime(event.registration_deadline)}</p>
             <p className="text-amber-100 py-4">{event.description}</p>
             <div className="flex gap-10 justify-between">
               <motion.button

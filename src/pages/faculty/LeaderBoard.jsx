@@ -1,9 +1,9 @@
 // src/app/leaderboard/page.jsx
 import React, { useState, useEffect } from 'react';
-import { CustomSelect } from '../components/ui/CustomSelect';
-import { CustomCard } from '../components/ui/CustomCard';
-import { LeaderboardTopCard } from '../components/LeaderboardTopCard';
-import { LeaderboardTable } from '../components/LeaderboardTable';
+import { CustomSelect } from '../../components/ui/CustomSelect';
+import { CustomCard } from '../../components/ui/CustomCard';
+import { LeaderboardTopCard } from '../../components/LeaderboardTopCard';
+import { LeaderboardTable } from '../../components/LeaderboardTable';
 
 export default function LeaderboardPage() {
   const [leaderboardData, setLeaderboardData] = useState(null);

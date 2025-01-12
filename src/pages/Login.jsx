@@ -87,7 +87,7 @@ const Login = () => {
               navigate('/faculty-dashboard');
               break;
             case 'COUNCIL':
-              navigate('/');
+              navigate('/council-dashboard');
               break;
             default:
               navigate('/');
