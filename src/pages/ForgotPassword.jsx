@@ -128,7 +128,7 @@ const ForgotPassword = () => {
 
   return (
     <>
-      <img src='/13.png' className='fixed h-full w-full object-cover z-0' alt="Background" />
+      <img src='/login.jpg' className='fixed h-full w-full object-cover z-0' alt="Background" />
       <div className="min-h-screen rounded flex items-center justify-center bg-amber-800 bg-opacity-40 relative z-10 bg-cover bg-center bg-blend-overlay">
         <motion.div 
           initial={{ opacity: 0, y: -50 }}

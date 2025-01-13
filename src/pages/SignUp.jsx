@@ -41,7 +41,7 @@ const formSchema = z.object({
 
 })
 
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const MAX_FILE_SIZE = 1 * 1024 * 1024;
 
 const isFileSizeValid = (file) => {
   return file && file.size <= MAX_FILE_SIZE;
