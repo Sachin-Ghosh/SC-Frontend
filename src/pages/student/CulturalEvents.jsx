@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { FaFootballBall } from 'react-icons/fa';
 import { formatDateTime } from '@/utils/util';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const events = [
   {
@@ -81,11 +82,11 @@ const CulturalEvent = () => {
   return (
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full' alt="Cultural background" />
-      <div className="relative z-20 top-20 px-10 flex flex-col justify-center items-center min-h-screen">
+      <div className="relative z-20 top-60 sm:top-20 px-10 flex flex-col justify-center items-center min-h-screen">
         <img src='/angel.png' alt='Cultural banner' className='fixed -z-10  bottom-0 -right-32 sm:-left-10' />
         <img src='/tunes.png' alt='Cultural decor' className='fixed sm:block hidden -z-10 bottom-0 right-0' />
         <motion.div 
-          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] fixed z-20 top-36"
+          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] fixed z-50 top-36"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -95,7 +96,7 @@ const CulturalEvent = () => {
         </motion.div>
         {subevents.length===0 ? (
           <>
-          <div className='flex flex-col sm:flex-row gap-6 w-full justify-center max-w-6xl'>
+          <div className='flex flex-col sm:flex-row gap-6 w-full justify-center max-w-6xl relative top-20'>
             <div className="flex w-full flex-row gap-4 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
               <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
               <div className='flex flex-col gap-2 w-full justify-center'>
@@ -117,6 +118,7 @@ const CulturalEvent = () => {
             </div>
           </>
         ):(
+          <ScrollArea className="h-[calc(110vh-300px)] w-full sticky top-40">
           <div className="grid sm:grid-cols-1 md:grid-cols-2 w-full sm:px-28 gap-8 relative">
           {subevents.map((event, index) => (
             <motion.div 
@@ -131,10 +133,12 @@ const CulturalEvent = () => {
               <div className="p-6 relative z-30 bg-amber-900 bg-opacity-50 hover:bg-opacity-60 transition-all duration-300">
                 <h3 className="text-2xl mb-2 text-amber-100">{event.name}</h3>
                 <p className="text-amber-100 ysabeau-sc">Date: {formatDateTime(event.schedule)}</p>
+                <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Start:{event?.registration_start_time ? formatDateTime(event?.registration_start_time):''}</p>
+                <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Deadline: {event.registration_deadline?formatDateTime(event.registration_deadline):''}</p>
                 <p className="text-amber-100 py-4">{event.description}</p>
                 <div className="flex justify-between">
                   <motion.button
-                    className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
+                    className="bg-[#8b4513] ysabeau-sc  text-xs sm:text-xl text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate(`/${event.id}/details`)}
@@ -142,7 +146,7 @@ const CulturalEvent = () => {
                     Learn More
                   </motion.button>
                   <motion.button
-                    className="bg-[#8b4513] ysabeau-sc text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
+                    className="bg-[#8b4513] ysabeau-sc text-xs sm:text-xl text-white py-2 px-4 rounded hover:bg-[#a0522d] transition-colors duration-200"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => navigate(`/${event.id}/registration`)}
@@ -154,6 +158,7 @@ const CulturalEvent = () => {
             </motion.div>
           ))}
         </div>
+        </ScrollArea>
         )}
        
       </div>

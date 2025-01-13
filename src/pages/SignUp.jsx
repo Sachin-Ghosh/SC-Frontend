@@ -21,7 +21,7 @@ import OTPInput from 'react-otp-input'
 const formSchema = z.object({
   first_name: z.string().min(2, { message: "First name must be at least 2 characters." }),
   last_name: z.string().min(2, { message: "Last name must be at least 2 characters." }),
-  email: z.string().email({ message: "Invalid email address." }).regex(/@universal\.edu\.in$/, "Email must belong to universal.edu.in domain"),
+  email: z.string().email({ message: "Invalid email address." }),
   phone: z.string().min(10, { message: "Phone number must be at least 10 digits." }),
   password: z.string().min(8, { message: "Password must be at least 8 characters." }),
   department: z.string().min(1, { message: "Please select a department." }),
@@ -47,7 +47,9 @@ const SignUp = () => {
   const [otp, setOtp] = useState('');
   const [photoIdFile, setPhotoIdFile] = useState(null);
   const [profilePicFile, setProfilePicFile] = useState(null);
+  
   const [showPassword, setShowPassword] = useState(false)
+
   const navigate = useNavigate()
 
   const form = useForm({
@@ -81,170 +83,56 @@ const SignUp = () => {
   })
 
   const onSubmit = async (data) => {
-    // First, verify the ID card
-    // if (!photoIdFile) {
-    //   toast.error('Please upload a photo ID');
-    //   return;
-    // }
+    const formData = new FormData();
+    Object.keys(data).forEach(key => {
+      if (key !== 'id_card_document' && key !== 'profile_picture') {
+        formData.append(key, data[key]);
+      }
+    });
+    formData.append('user_type', activeTab);
+    if (photoIdFile) formData.append('id_card_document', photoIdFile);
+    if (profilePicFile) formData.append('profile_picture', profilePicFile);
 
-    // const idCardFormData = new FormData();
-    // idCardFormData.append('id_card_document', photoIdFile);
-
-    try {
-      // const verificationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/users/verify-id-card`, {
-      //   method: 'POST',
-      //   body: idCardFormData
-      // });
-
-      // const verificationText = await verificationResponse.text();
-      // console.log('Verification response:', verificationText);
-
-      // let verificationData;
-      // try {
-      //   verificationData = JSON.parse(verificationText);
-      // } catch (e) {
-      //   console.error('Error parsing verification response:', e);
-      //   throw new Error('Invalid response from server during ID verification');
-      // }
-
-      // if (!verificationResponse.ok) {
-      //   throw new Error(verificationData.error || 'ID card verification failed');
-      // }
-
-      // If ID card verification is successful, proceed with the main form submission
-      // if(data.email.includes('@universal.edu.in')){
-      //   toast.error
-      // }
-      const formData = new FormData();
-      Object.keys(data).forEach(key => {
-        if (key !== 'id_card_document' && key !== 'profile_picture') {
-          formData.append(key, data[key]);
-        }
-      });
-      formData.append('user_type', activeTab);
-      if (photoIdFile) formData.append('id_card_document', photoIdFile);
-      if (profilePicFile) formData.append('profile_picture', profilePicFile);
-
-      // Store the complete form data
-      const registrationPayload = {
+    // Store the complete form data
+    const registrationPayload = {
+      ...data,
       user_type: activeTab,
-      email: registrationData.email,
-      bio: registrationData.bio,
-      gender: registrationData.gender,
+      // Convert File objects to null since they can't be serialized
       id_card_document: photoIdFile,
       profile_picture: profilePicFile,
-      first_name: registrationData.first_name,
-      last_name: registrationData.last_name,
-      phone: registrationData.phone,
-      password: registrationData.password,
-      department: registrationData.department,
-      // Include specific fields that might be required for STUDENTs
-      ...(activeTab === 'STUDENT' && {
-        year_of_study: registrationData.year_of_study || '',
-        division: registrationData.division || '',
-        roll_number: registrationData.roll_number || '',
-      }),
-      // Include specific fields for FACULTY
-      ...(activeTab === 'FACULTY' && {
-        designation: registrationData.designation || '',
-        subjects: registrationData.subjects || '',
-      }),
-      // Include specific fields for COUNCIL
-      ...(activeTab === 'COUNCIL' && {
-        position: registrationData.position || '',
-        term_start: registrationData.term_start || '',
-        term_end: registrationData.term_end || '',
-      }),
-      };
+    };
 
-      const registrationResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/users/register/`, {
+    toast.promise(
+      fetch('https://student-council-backend.onrender.com/api/users/register/', {
         method: 'POST',
         body: formData
-      });
-
-      const registrationText = await registrationResponse.text();
-      console.log('Registration response:', registrationText);
-
-      let responseData;
-      try {
-        responseData = JSON.parse(registrationText);
-      } catch (e) {
-        console.error('Error parsing registration response:', e);
-        throw new Error('Invalid response from server during registration');
+      }).then(async (response) => {
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.log(errorData);
+          throw new Error(errorData.error || 'Registration failed');
+        }
+        return response.json();
+      }),
+      {
+        loading: 'Registering...',
+        success: (data) => {
+          console.log('Registration successful:', data);
+          setEmail(data.email);
+          setRegistrationData(registrationPayload); // Store the complete payload
+          setShowOTP(true);
+          return `${data.message}`;
+        },
+        error: (err) => {
+          console.error('Registration error:', err);
+          return `Registration failed: ${err.message}`;
+        }
       }
-
-      if (!registrationResponse.ok) {
-        throw new Error(responseData.error || 'Registration failed');
-      }
-
-      console.log('Registration successful:', responseData);
-      setEmail(responseData.email);
-      setRegistrationData(registrationPayload);
-      console.log('regi',registrationData)
-      console.log(registrationPayload)
-      setShowOTP(true);
-      toast.success(responseData.message);
-    } catch (error) {
-      console.error('Error:', error);
-      toast.error(`Error: ${error.message}`);
-    }
+    );
   };
 
-  const handleOTPVerification = async () => {
-    if (otp.length !== 6) {
-      toast.error('Please enter a valid 6-digit OTP')
-      return
-    }
-
-    // console.log(registrationData)
-
-    // Ensure all required fields are included
-    const verificationPayload = {
-      otp,
-      // This now contains all the form fields
-      user_type: activeTab,
-      email: registrationData.email,
-      bio: registrationData.bio,
-      gender: registrationData.gender,
-      id_card_document: photoIdFile,
-      profile_picture: profilePicFile,
-      first_name: registrationData.first_name,
-      last_name: registrationData.last_name,
-      phone: registrationData.phone,
-      password: registrationData.password,
-      department: registrationData.department,
-      // Include specific fields that might be required for STUDENTs
-      ...(activeTab === 'STUDENT' && {
-        year_of_study: registrationData.year_of_study || '',
-        division: registrationData.division || '',
-        roll_number: registrationData.roll_number || '',
-      }),
-      // Include specific fields for FACULTY
-      ...(activeTab === 'FACULTY' && {
-        designation: registrationData.designation || '',
-        subjects: registrationData.subjects || '',
-      }),
-      // Include specific fields for COUNCIL
-      ...(activeTab === 'COUNCIL' && {
-        position: registrationData.position || '',
-        term_start: registrationData.term_start || '',
-        term_end: registrationData.term_end || '',
-      }),
-    }
-
-    console.log('Sending verification payload:', verificationPayload)
-
+  const Login=async()=>{
     try {
-      const verificationResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/register/verify/`, verificationPayload, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-  
-      console.log('OTP verification successful:', verificationResponse.data);
-      toast.success(verificationResponse.data.message);
-  
-      // Proceed with automatic login
       const loginResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/login/`, {
         email: registrationData.email,
         password: registrationData.password
@@ -263,6 +151,81 @@ const SignUp = () => {
       console.error('OTP verification or login error:', error);
       toast.error(`Error: ${error.response?.data?.message || error.message}`);
     }
+
+  }
+
+
+  const handleOTPVerification = async () => {
+    if (!otp || otp.length !== 6) {
+      toast.error('Please enter a valid 6-digit OTP')
+      return
+    }
+
+    // Ensure all required fields are included
+    const verificationPayload = {
+      otp,
+       // This now contains all the form fields
+      user_type: activeTab,
+      email: registrationData.email,
+      // division: registrationData.division,
+      bio: registrationData.bio,
+      gender: registrationData.gender,
+      id_card_document: photoIdFile,
+      profile_picture: profilePicFile,
+      first_name: registrationData.first_name,
+      last_name: registrationData.last_name,
+      phone: registrationData.phone,
+      password: registrationData.password,
+      department: registrationData.department,
+      // Include specific fields that might be required for STUDENTs
+      ...(activeTab === 'STUDENT' && {
+        year_of_study: registrationData.year_of_study || '',
+        division: registrationData.division || '',
+        roll_number: registrationData.roll_number || '',
+      }),
+      // Include specific fields for FACULTY
+      ...(activeTab === 'FACULTY' && {
+        designation: registrationData.designation || '',
+        subjects: registrationData.subjects || '',
+      }),
+      // Include specific fields for COUNCIL
+      ...(activeTab === 'COUNCIL' && {
+        position: registrationData.position || '',
+        term_start: registrationData.term_start || '',
+        term_end: registrationData.term_end || '',
+      }),
+    }
+
+    console.log('Sending verification division payload:', verificationPayload.division)
+    console.log('Sending verification year_of_study payload:', verificationPayload.year_of_study)
+    console.log('Sending verification profile_picture payload:', verificationPayload.profile_picture)
+    console.log('Sending verification id_card_document payload:', verificationPayload.id_card_document)
+
+    toast.promise(
+      axios.post('https://STUDENT-COUNCIL-backend.onrender.com/api/users/register/verify/', verificationPayload, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then((response) => {
+        console.log('OTP verification successful:', response.data)
+        navigate('/auth/login')
+        Login();
+        return response.data
+      }),
+      {
+        loading: 'Verifying OTP...',
+        success: (data) => {
+         
+         return `${data.message}`
+
+        },
+        
+        error: (err) => {
+          console.error('OTP verification error:', err)
+          return `OTP verification failed: ${err.response?.data?.message || err.message}`
+        }
+      }
+    )
   }
 
   const handleResendOtp=async()=>{
@@ -284,6 +247,7 @@ const SignUp = () => {
       
     }
   }
+  
 
 
 
@@ -296,23 +260,23 @@ const SignUp = () => {
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="px-3 py-4 sm:p-8 rounded w-full max-w-4xl relative top-20 backdrop-blur-md border-2 border-amber-900 mx-3 mb-2"
+          className="p-8 rounded w-full max-w-4xl relative top-20 backdrop-blur-md border-2 border-amber-900 mx-3 mb-2"
         >
           <div className='relative z-20'>
-            <h2 className="text-2xl sm:text-4xl font-bold mb-6 text-center text-[#291b11] font-serif">Aurora 2025</h2>
-            <h3 className="sm:text-2xl font-semibold mb-6 text-center text-[#442914]">Athlete's Registration</h3>
+            <h2 className="text-4xl font-bold mb-6 text-center text-[#291b11] font-serif">Aurora 2025</h2>
+            <h3 className="text-2xl font-semibold mb-6 text-center text-[#442914]">Athlete's Registration</h3>
             {!showOTP ? (
               <>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-6">
-                  <TabsList className="grid w-full grid-cols-3 gap-2 bg-amber-600 bg-opacity-20 rounded">
-                    <TabsTrigger value="STUDENT" className="data-[state=active]:bg-amber-900 rounded data-[state=active]:text-white text-sm">Student</TabsTrigger>
-                    <TabsTrigger value="FACULTY" className="data-[state=active]:bg-amber-900 rounded data-[state=active]:text-white text-sm">Faculty</TabsTrigger>
-                    <TabsTrigger value="COUNCIL" className="data-[state=active]:bg-amber-900 rounded data-[state=active]:text-white text-sm">Council</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="STUDENT" className="data-[state=active]:bg-amber-900 data-[state=active]:text-white">STUDENT</TabsTrigger>
+                    <TabsTrigger value="FACULTY" className="data-[state=active]:bg-amber-900 data-[state=active]:text-white">FACULTY</TabsTrigger>
+                    <TabsTrigger value="COUNCIL" className="data-[state=active]:bg-amber-900 data-[state=active]:text-white">COUNCIL</TabsTrigger>
                   </TabsList>
                 </Tabs>
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmit)} className="sm:space-y-4">
-                    <div className="flex flex-col sm:flex-row  gap-4">
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    <div className="flex gap-4">
                       <FormField
                         control={form.control}
                         name="first_name"
@@ -382,6 +346,7 @@ const SignUp = () => {
                     </FormItem>
                   )}
                 />
+
                     <FormField
                       control={form.control}
                       name="department"
@@ -394,7 +359,7 @@ const SignUp = () => {
                                 <SelectValue placeholder="Select Department" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
+                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
                               <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
                               <SelectItem value="IT">IT</SelectItem>
                               <SelectItem value="AIML">AI/ML</SelectItem>
@@ -417,7 +382,7 @@ const SignUp = () => {
                                 <SelectValue placeholder="Select Gender" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
+                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
                               <SelectItem value="MALE">Male</SelectItem>
                               <SelectItem value="FEMALE">Female</SelectItem>
                               <SelectItem value="OTHER">Other</SelectItem>
@@ -441,7 +406,7 @@ const SignUp = () => {
                                     <SelectValue placeholder="Select Year of Study" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
+                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
                                   <SelectItem value="FE">FE</SelectItem>
                                   <SelectItem value="SE">SE</SelectItem>
                                   <SelectItem value="TE">TE</SelectItem>
@@ -464,7 +429,7 @@ const SignUp = () => {
                                     <SelectValue placeholder="Select Division" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
+                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
                                   <SelectItem value="A">A</SelectItem>
                                   <SelectItem value="B">B</SelectItem>
                                   <SelectItem value="C">C</SelectItem>
@@ -627,7 +592,8 @@ const SignUp = () => {
             ) : (
               <div className='flex flex-col  sm:gap-4 items-center justify-center'>
               <h4 className="text-xl font-semibold text-center mb-2">Enter OTP</h4>
-              <OTPInput
+              <Input type="text" className="text-center" value={otp} onChange={e => setOtp(e.target.value)} />
+              {/* <OTPInput
                 value={otp}
                 onChange={setOtp}
                 numInputs={6}
@@ -645,7 +611,7 @@ const SignUp = () => {
                   border: '2px solid #a0522d',
                   outline: 'none'
                 }}
-              />
+              /> */}
 
               <Button variant="link" onClick={()=>{handleResendOtp()}}>Resend Otp</Button>
               <Button 
@@ -655,13 +621,11 @@ const SignUp = () => {
                 Verify OTP
               </Button>
             </div>
-            )}
 
-            {!showOTP && 
+            )}
             <div className="mt-6 text-center">
               <Link to="/auth/login" className="text-[#120a05] hover:underline">Already have an account? Sign In</Link>
             </div>
-            }
           </div>
         </motion.div>
         <Toaster position="top-right" />

@@ -88,13 +88,13 @@ const Header = () => {
               <>
               {user?.user_type === 'COUNCIL' && (
               <>
-                          <Link to='/council-dashboard' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>Dashboard</a></Link>
-                          <Link to='/search-teams' onClick={() => {document.getElementById('my-drawer-3').click()}} className='pb-6'><a>All Registrations</a></Link>
+                          <Link to='/council-dashboard' onClick={() => {document.getElementById('my-drawer-3').click()}} className=''><a>Dashboard</a></Link>
+                          <Link to='/search-teams' onClick={() => {document.getElementById('my-drawer-3').click()}} className=''><a>All Registrations</a></Link>
               </>
             )}
                  <Accordion type="single" collapsible className="w-full border-b-amber-900" asChild>
               <AccordionItem value="events">
-                <AccordionTrigger className=""> Events</AccordionTrigger>
+                <AccordionTrigger className=""><span className='font-semibold'>Events</span> </AccordionTrigger>
                 <AccordionContent>
                   <div className="flex flex-col space-y-4 pl-4">
                     <Link to='/events/sports' className="hover:text-[#8b4513] transition-colors"onClick={() => {document.getElementById('my-drawer-3').click()}}>Sports Events</Link>

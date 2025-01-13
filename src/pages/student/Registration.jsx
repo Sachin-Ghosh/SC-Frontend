@@ -419,7 +419,7 @@ const Registration = () => {
 
                 <motion.button
                   type="submit"
-                  className="col-span-2 sm:w-96 bg-[#8b4513] text-white py-2 px-12 sm:px-0 rounded hover:bg-[#a0522d] transition-colors duration-200"
+                  className="col-span-2 sm:w-full bg-[#8b4513] text-white py-2 px-12 sm:px-0 rounded hover:bg-[#a0522d] transition-colors duration-200"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
