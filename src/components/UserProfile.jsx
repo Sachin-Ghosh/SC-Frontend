@@ -28,7 +28,7 @@ setData(profile.profile)
               <img src='/profile-frame.png' className='absolute z-0 w-64 h-64' alt="Profile Frame"/>
               <div className='relative z-10'>
                 {profile.profile.profile_picture ? (
-                  <img className="relative z-10 rounded-full border-4 w-40 h-40 shadow-lg" src={`${import.meta.env.VITE_API_URL}${profile.profile.profile_picture}`} alt={profile.profile.username} />
+                  <img className="relative z-10 rounded-full border-4 w-40 h-40 shadow-lg" src={`${profile.profile.profile_picture}`} alt={profile.profile.username} />
                 ) : (
                   <GiKnightBanner size={70} className='text-amber-950'/>
                   )}

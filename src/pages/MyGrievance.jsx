@@ -13,6 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { format } from "date-fns"
 import { Loader } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { TbMoodEmpty } from 'react-icons/tb'
 
 const MyGrievance = () => {
   const [grievances, setGrievances] = useState([])
@@ -61,10 +62,28 @@ const MyGrievance = () => {
     )
   }
 
+  if ( grievances.length === 0) {
+    return (
+      <>
+       <img src='/vintage.jpg' className='fixed object-cover h-full w-full' alt="Event background" />
+        <img src='/royal-seal.png' className='z-10 fixed h-80 w-80 sm:h-96 sm:w-96 top-80 lg:top-52 lg:left-[36rem]'/>
+      <div className='flex flex-col  justify-center items-center relative top-40 sm:top-80'>
+      <h1 className="text-4xl sm:text-3xl font-bold mb-6 text-center cinzel-bold text-amber-700">My Grievances</h1>
+      <div className='flex items-center justify-center flex-col px-3 top-40 relative z-50'>
+                
+<span  className='text-amber-900'><TbMoodEmpty size={100}/></span>
+        <h1 className='relative z-50 text-2xl text-amber-900'>No Registered Events Yet</h1>
+      </div>
+        
+      </div>
+      </>
+    )
+  }
+
   return (
     <>
       <img src='/vintage.jpg' className='fixed object-cover h-full w-full' alt="Event background" />
-        <img src='/royal-seal.png' className='z-10 fixed h-80 w-80 sm:h-96 sm:w-96 top-80 lg:top-52 lg:left-[36rem]'/>
+        <img src='/royal-seal.png' className='z-10 fixed h-80 opacity-40 w-80 sm:h-96 sm:w-96 top-80 lg:top-52 lg:left-[36rem]'/>
       <div className="container mx-auto py-8 px-4 relative z-20 top-24">
         <h1 className="text-4xl sm:text-3xl font-bold mb-6 text-center cinzel-bold text-amber-700">My Grievances</h1>
         
@@ -82,6 +101,7 @@ const MyGrievance = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
+                
                 {grievances.map((grievance) => (
                   <TableRow key={grievance.id}>
                     <TableCell>{grievance.id}</TableCell>

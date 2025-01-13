@@ -91,12 +91,12 @@ const SportsEvent = () => {
   return (
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full' alt="Event background" />
-      <div className="relative z-20 top-32 lg:top-10 px-10 flex flex-col justify-center items-center min-h-screen">
+      <div className="sticky z-20  lg:top-10 px-10 flex flex-col justify-center items-center min-h-screen">
         <img src='/elephant.png' alt='banner' className='fixed sm:block hidden -z-10 -bottom-5 h-[30rem] -left-10' />
         <img src='/netaji.png' alt='banner' className='fixed -z-10 bottom-0 -right-20 sm:-right-32' />
 
         <motion.div 
-          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] fixed z-30 top-16 sm:top-12"
+          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] relative z-30 top-0 sm:top-12"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -124,9 +124,9 @@ const SportsEvent = () => {
             </div>
           </div>
         ) : (
-          <ScrollArea className="max-h-[40rem] w-full sticky top-40 sm:top-52">
-          <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full sm:px-20 relative">
-            <TabsList className="flex sm:fixed top-60 w-full gap-2 items-center right-0 left-0 justify-center py-10 px-1 sm:px-0">
+          <ScrollArea className="max-h-[40rem] w-full sticky top-20 sm:top-52">
+          <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full lg:px-20 relative">
+            <TabsList className="flex top-60 w-full gap-2 items-center right-0 left-0 justify-center py-10 px-1 sm:px-0">
               <TabsTrigger value="boys" className="text-lg ysabeau-sc data-[state=inactive]:border-2 data-[state=inactive]:border-amber-800  data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Boys</TabsTrigger>
               <TabsTrigger value="girls" className="text-lg ysabeau-sc data-[state=inactive]:border-2 data-[state=inactive]:border-amber-800  data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Girls</TabsTrigger>
             </TabsList>
@@ -136,7 +136,7 @@ const SportsEvent = () => {
               </ScrollArea>
             </TabsContent>
             <TabsContent value="girls">
-              <ScrollArea className="fixed h-[calc(100vh-300px)] w-full ">
+              <ScrollArea className=" h-[calc(100vh-300px)] w-full ">
                 {renderEvents(subevents)}
               </ScrollArea>
             </TabsContent>

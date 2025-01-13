@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const eventDate = new Date("2025-01-17T00:00:00").getTime();
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+  const user=JSON.parse(localStorage.getItem('user'))
+  const navigate = useNavigate()
 
   function calculateTimeLeft() {
     const now = new Date().getTime();
@@ -32,6 +35,17 @@ const Home = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if(user?.user_type==='STUDENT'||user?.user_type==='COUNCIL'){
+      navigate('/events/sports')
+    } else if(user?.user_type==='FACULTY') {
+      navigate('/faculty-dashboard')
+    } else{
+      navigate('/')
+    }
+
+  }, [user]);
 
   return (
     <>

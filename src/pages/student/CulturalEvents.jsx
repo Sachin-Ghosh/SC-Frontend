@@ -76,23 +76,24 @@ const CulturalEvent = () => {
     if(!accessToken){
       navigate('/')
     }
+  
   }, [accessToken])
   // console.log(subevents[20].name);
 
   return (
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full' alt="Cultural background" />
-      <div className="relative z-20 top-60 sm:top-20 px-10 flex flex-col justify-center items-center min-h-screen">
+      <div className=" sticky z-20  lg:top-10 px-10 flex flex-col justify-center items-center min-h-screen">
         <img src='/angel.png' alt='Cultural banner' className='fixed -z-10  bottom-0 -right-32 sm:-left-10' />
         <img src='/tunes.png' alt='Cultural decor' className='fixed sm:block hidden -z-10 bottom-0 right-0' />
         <motion.div 
-          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] fixed z-50 top-36"
+          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] relative z-30 top-0 sm:top-12"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <img src='/frame.png' className='absolute -top-[4.5rem] sm:-top-24 -z-10 w-full '/>
-          <h1 className='ysabeau-sc relative z-40'>Cultural Events</h1>
+          <img src='/frame.png' className='absolute top-5 sm:top-0 -z-10 w-full' />
+          <h1 className='ysabeau-sc relative z-40 top-24  text-nowrap'>Cultural Events</h1>
         </motion.div>
         {subevents.length===0 ? (
           <>
@@ -118,8 +119,8 @@ const CulturalEvent = () => {
             </div>
           </>
         ):(
-          <ScrollArea className="h-[calc(110vh-300px)] w-full sticky top-40">
-          <div className="grid sm:grid-cols-1 md:grid-cols-2 w-full sm:px-28 gap-8 relative">
+          <ScrollArea className="h-[calc(110vh-300px)] w-full sticky top-40 md:top-60">
+          <div className="grid sm:grid-cols-1 md:grid-cols-2 w-full md:px- lg:px-28 gap-8 relative">
           {subevents.map((event, index) => (
             <motion.div 
               key={event.id}
