@@ -36,11 +36,11 @@ const Home = () => {
   return (
     <>
       <img
-        src="/background.jpg"
+        src="/back.jpg"
         alt="Background"
         className="fixed inset-0 w-full h-full object-cover z-0"
       />
-      <div className="fixed inset-0 bg-amber-900 opacity-40 z-10"></div>
+      <div className="fixed inset-0 bg-amber-700 opacity-50 z-10"></div>
       <div className="relative z-20 flex flex-col justify-center items-center min-h-screen top-[10rem] sm:top-40">
         <div className="flex flex-col items-center">
           <motion.img
@@ -67,7 +67,7 @@ const Home = () => {
             presents
           </motion.span>
           <motion.h2
-            className="text-5xl text-nowrap md:text-9xl font-serif text-center mb-8 text-[#3d2b1e]"
+            className="text-5xl text-nowrap md:text-9xl font-serif text-center mb-8 text-amber-950"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.5 }}

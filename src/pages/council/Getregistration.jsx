@@ -100,7 +100,7 @@ const fetchTeamData = async (registrationNumber) => {
   }
 
   try {
-    const response = await fetch(`https://student-council-backend.onrender.com/api/events/registrations/get_by_registration_number/?registration_number=${registrationNumber}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/registrations/get_by_registration_number/?registration_number=${registrationNumber}`, {
       headers: {
         'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'

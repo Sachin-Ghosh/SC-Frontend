@@ -15,7 +15,7 @@ export default function LeaderboardPage() {
     const fetchLeaderboard = async () => {
       try {
         const accessToken = localStorage.getItem('access-token');
-        const response = await fetch('https://student-council-backend.onrender.com/api/events/scoreboard/complete_scoreboard/', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/scoreboard/complete_scoreboard/`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           }

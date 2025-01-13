@@ -21,7 +21,7 @@ const FacultyDashboard = () => {
     const fetchEvents = async () => {
       try {
         
-        const response = await fetch('https://student-council-backend.onrender.com/api/events/faculty/my_subevents/', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/faculty/my_subevents/`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           }

@@ -24,7 +24,7 @@ const Participants = () => {
           throw new Error('No access token found');
         }
 
-        const response = await fetch(`https://student-council-backend.onrender.com/api/events/registrations/sub_event_registrations/?sub_event_id=${eventId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/registrations/sub_event_registrations/?sub_event_id=${eventId}`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           }
@@ -151,7 +151,7 @@ const Participants = () => {
                         <div key={index} className="flex items-center space-x-2">
                           {member.profile_picture ? (
                             <img 
-                              src={`https://student-council-backend.onrender.com${member.profile_picture}`} 
+                              src={`${import.meta.env.VITE_API_URL}${member.profile_picture}`} 
                               alt={member.full_name}
                               className="w-8 h-8 rounded-full"
                             />

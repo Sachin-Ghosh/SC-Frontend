@@ -20,7 +20,7 @@ const ViewHeats = () => {
     const fetchSubEvents = async () => {
       try {
         const accessToken = localStorage.getItem('access-token');
-        const response = await fetch('https://student-council-backend.onrender.com/api/events/faculty/my_subevents/', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/faculty/my_subevents/`, {
           headers: {
             'Authorization': `Bearer ${accessToken}`,
           }
@@ -43,7 +43,7 @@ const ViewHeats = () => {
     try {
       setHeatLoading(true);
       const accessToken = localStorage.getItem('access-token');
-      const response = await fetch(`https://student-council-backend.onrender.com/api/events/sub-events/${subEventId}/get-heats/`, {
+      const response = await fetch(`${import.meta.env.vITE_API_URL}/api/events/sub-events/${subEventId}/get-heats/`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         }

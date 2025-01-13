@@ -22,7 +22,7 @@ export const useEventStore = zustand.create((set, get) => ({
         throw new Error('Authentication required');
       }
 
-      const baseUrl = 'https://student-council-backend.onrender.com';
+      const baseUrl = import.meta.env.VITE_API_URL;
       const subEventId = get().subEventId;
       
       const response = await fetch(`${baseUrl}/api/events/sub-events/${subEventId}/create-heat/`, {
@@ -65,7 +65,7 @@ export const useEventStore = zustand.create((set, get) => ({
         throw new Error('Authentication required');
       }
 
-      const baseUrl = 'https://student-council-backend.onrender.com';
+      const baseUrl = import.meta.env.VITE_API_URL;
       const subEventId = get().subEventId;
       
       const queryParams = new URLSearchParams();
@@ -101,7 +101,7 @@ export const useEventStore = zustand.create((set, get) => ({
         throw new Error('Authentication required');
       }
 
-      const baseUrl = 'https://student-council-backend.onrender.com';
+      const baseUrl = import.meta.env.VITE_API_URL;
       
       const response = await fetch(`${baseUrl}/api/events/heats/${heatId}/update_status/`, {
         method: 'POST',  // Changed from PUT to POST

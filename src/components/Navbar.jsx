@@ -30,39 +30,13 @@ const Header = () => {
   console.log(refreshToken);
 
   const handleLogout=async()=>{
-    // try {
-    //   const response = await fetch(`https://student-council-backend.onrender.com/api/users/logout/`, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Authorization': `Bearer ${accessToken}`,
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify({
-    //       refresh_token: refreshToken
-    //     }),
-    //   });
-
-    //   if (response.ok) {
-    //     console.log('Logged out successfully');
-    //     localStorage.removeItem('access-token');
-    //     localStorage.removeItem('refresh-token');
-    //     navigate('/login');
-    //   } else {
-    //     const errorData = await response.json();
-    //     console.error('Logout failed:', errorData);
-    //     // Show error message to user
-    //   }
-    // } catch (error) {
-    //   console.error('Error during logout:', error);
-    //   // Show error message to user
-    // }
       localStorage.removeItem('access-token');
       localStorage.removeItem('refresh-token');
       localStorage.removeItem('user');
       navigate('/');
   }
 
-  console.log(user?.user_type)
+  // console.log(user?.user_type)
 
   return (
     <div className="drawer">
@@ -128,7 +102,7 @@ const Header = () => {
           </div>
           )}
           <Link to={'/'} className=" bg-opacity-80 ">
-            <img src='/aurora.png' alt="UCOE Logo" className='h-10 relative z-20' />
+            <img src='/aurora.png' alt="UCOE Logo" className='h-16 relative z-20' />
           </Link>
         </div>
           {/* //mid nav */}
@@ -220,8 +194,8 @@ const Header = () => {
           </div>
           ):(
             <div className='flex gap-10 items-center'>
-              <Link to='/about' className='text-foreground hover:text-[#8b4513]'>About</Link>
-            <Link to={'/auth/login'} className='bg-amber-900 border border-black rounded  px-3 py-2'>Login</Link>
+              <Link to='/about' className='text-white hover:text-[#8b4513]'>About</Link>
+            <Link to={'/auth/login'} className='bg-amber-900 border border-black rounded text-white px-3 py-2'>Login</Link>
             </div>
           )}
           

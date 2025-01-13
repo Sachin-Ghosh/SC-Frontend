@@ -37,7 +37,15 @@ const formSchema = z.object({
   position: z.string().optional(),
   term_start: z.string().optional(),
   term_end: z.string().optional(),
+
+
 })
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+const isFileSizeValid = (file) => {
+  return file && file.size <= MAX_FILE_SIZE;
+};
 
 const SignUp = () => {
   const [activeTab, setActiveTab] = useState('STUDENT');
@@ -103,7 +111,7 @@ const SignUp = () => {
     };
 
     toast.promise(
-      fetch('https://student-council-backend.onrender.com/api/users/register/', {
+      fetch(`${import.meta.env.VITE_API_URL}/api/users/register/`, {
         method: 'POST',
         body: formData
       }).then(async (response) => {
@@ -202,7 +210,7 @@ const SignUp = () => {
     console.log('Sending verification id_card_document payload:', verificationPayload.id_card_document)
 
     toast.promise(
-      axios.post('https://STUDENT-COUNCIL-backend.onrender.com/api/users/register/verify/', verificationPayload, {
+      axios.post(`${import.meta.env.VITE_API_URL}/api/users/register/verify/`, verificationPayload, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -253,25 +261,25 @@ const SignUp = () => {
 
   return (
     <>
-      <img src='/register.jpg' className='fixed w-full h-full object-cover z-0' alt="Background" />
+      <img src='/home-background.jpg' className='fixed w-full h-full object-cover z-0' alt="Background" />
       <div className='fixed inset-0 bg-amber-900 opacity-40 z-10 backdrop-blur-sm bg-opacity-40'></div>
       <div className="min-h-screen rounded flex items-center justify-center relative z-10 bg-cover bg-center bg-blend-overlay">
         <motion.div 
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="p-8 rounded w-full max-w-4xl relative top-20 backdrop-blur-md border-2 border-amber-900 mx-3 mb-2"
+          className="p-3 md:p-8 rounded w-full max-w-4xl relative top-20 backdrop-blur-md border-2 border-amber-900 mx-3 mb-2"
         >
           <div className='relative z-20'>
-            <h2 className="text-4xl font-bold mb-6 text-center text-[#291b11] font-serif">Aurora 2025</h2>
-            <h3 className="text-2xl font-semibold mb-6 text-center text-[#442914]">Athlete's Registration</h3>
+            <h2 className="text-2xl sm:text-4xl font-bold mb-6 text-center text-[#291b11] font-serif">Aurora 2025</h2>
+            <h3 className="text-lg sm:text-2xl font-semibold mb-6 text-center text-[#442914]">Athlete's Registration</h3>
             {!showOTP ? (
               <>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mb-6">
-                  <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="STUDENT" className="data-[state=active]:bg-amber-900 data-[state=active]:text-white">STUDENT</TabsTrigger>
-                    <TabsTrigger value="FACULTY" className="data-[state=active]:bg-amber-900 data-[state=active]:text-white">FACULTY</TabsTrigger>
-                    <TabsTrigger value="COUNCIL" className="data-[state=active]:bg-amber-900 data-[state=active]:text-white">COUNCIL</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-3 bg-amber-800 rounded bg-opacity-40">
+                    <TabsTrigger value="STUDENT" className="data-[state=active]:bg-amber-900 rounded data-[state=active]:text-white">Student</TabsTrigger>
+                    <TabsTrigger value="FACULTY" className="data-[state=active]:bg-amber-900 rounded data-[state=active]:text-white">Faculty</TabsTrigger>
+                    <TabsTrigger value="COUNCIL" className="data-[state=active]:bg-amber-900 rounded data-[state=active]:text-white">Council</TabsTrigger>
                   </TabsList>
                 </Tabs>
                 <Form {...form}>
@@ -554,8 +562,16 @@ const SignUp = () => {
                               type="file" 
                               accept="image/*"
                               onChange={(e) => {
-                                field.onChange(e.target.files[0].name);
-                                setPhotoIdFile(e.target.files[0]);
+                                const file = e.target.files[0];
+                                if (isFileSizeValid(file)) {
+                                  field.onChange(file.name);
+                                  setPhotoIdFile(file);
+                                } else {
+                                  toast.error("Photo ID file size must be 5MB or less");
+                                  e.target.value = ""; // Reset the input
+                                }
+                                // field.onChange(e.target.files[0].name);
+                                // setPhotoIdFile(e.target.files[0]);
                               }}
                             />
                           </FormControl>
@@ -575,8 +591,19 @@ const SignUp = () => {
                               type="file" 
                               accept="image/*"
                               onChange={(e) => {
-                                field.onChange(e.target.files[0].name);
-                                setProfilePicFile(e.target.files[0]);
+                                // field.onChange(e.target.files[0].name);
+                                // setProfilePicFile(e.target.files[0]);
+                                const file = e.target.files[0];
+                                if (isFileSizeValid(file)) {
+                                  field.onChange(file.name);
+                                  setProfilePicFile(file);
+                                } else {
+                                  toast.error(
+                                    "Profile picture file size must be 5MB or less"
+                                  );
+                                  e.target.value = ""; // Reset the input
+                                }
+
                               }}
                             />
                           </FormControl>

@@ -219,7 +219,7 @@ const Registration = () => {
   const removeTeamMember = (memberId) => {
     setFormData(prev => ({
       ...prev,
-      teamMembers: prev.team_members.filter(id => id !== memberId),
+      team_members: prev.team_members.filter(id => id !== memberId),
     }));
   };
 

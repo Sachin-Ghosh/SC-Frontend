@@ -9,7 +9,7 @@ const getEvents = async () => {
     throw new Error('Authentication required');
   }
   
-  const baseUrl = 'https://student-council-backend.onrender.com';
+  const baseUrl = import.meta.env.VITE_API_URL;
   const response = await fetch(`${baseUrl}/api/events/sub-events/my_events/`, {
     headers: {
       'Content-Type': 'application/json',

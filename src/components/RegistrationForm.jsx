@@ -84,7 +84,7 @@ export default function RegistrationForm({ userType, onSuccess }) {
     };
   
     toast.promise(
-      fetch('https://student-council-backend.onrender.com/api/users/register/', {
+      fetch(`${import.meta.env.VITE_API_URL}/api/users/register/`, {
         method: 'POST',
         body: formData
       }).then(async (response) => {
