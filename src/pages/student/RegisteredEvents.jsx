@@ -15,6 +15,7 @@ import { format } from 'date-fns'
 import { Badge } from '@/components/ui/badge'
 import EventCard from '@/components/EventCard'
 import { TbMoodEmpty } from 'react-icons/tb'
+import { ScrollArea } from '@/components/ui/scroll-area'
 // import { access } from 'fs'
 
 const RegisteredEvents = () => {
@@ -164,7 +165,7 @@ const RegisteredEvents = () => {
     } else {
       return (
         <div className="fixed flex flex-col w-full left-0 justify-center items-center top-80 sm:top-32 px-2">
-          <div className='max-h-screen overflow-y-auto'>
+          <ScrollArea className="h-[calc(110vh-300px)] w-full sticky ">
             {events.map((event) => (
               <EventCard 
                 key={event.id} 
@@ -173,7 +174,7 @@ const RegisteredEvents = () => {
                 getStatusColor={getStatusColor} 
               />
             ))}
-          </div>
+          </ScrollArea>
         </div>
       )
     }
