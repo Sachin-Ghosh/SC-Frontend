@@ -376,7 +376,7 @@ id_card_document: photoIdFile,
                                 <SelectValue placeholder="Select Department" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
                               <SelectItem value="AS&H">AS&H</SelectItem>
                               <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
                               <SelectItem value="IT">IT</SelectItem>
@@ -401,7 +401,7 @@ id_card_document: photoIdFile,
                                 <SelectValue placeholder="Select Gender" />
                               </SelectTrigger>
                             </FormControl>
-                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                            <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
                               <SelectItem value="MALE">Male</SelectItem>
                               <SelectItem value="FEMALE">Female</SelectItem>
                               <SelectItem value="OTHER">Other</SelectItem>
@@ -425,7 +425,7 @@ id_card_document: photoIdFile,
                                     <SelectValue placeholder="Select Year of Study" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
                                   <SelectItem value="FE">FE</SelectItem>
                                   <SelectItem value="SE">SE</SelectItem>
                                   <SelectItem value="TE">TE</SelectItem>
@@ -448,7 +448,7 @@ id_card_document: photoIdFile,
                                     <SelectValue placeholder="Select Division" />
                                   </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center bg-cover">
                                   <SelectItem value="A">A</SelectItem>
                                   <SelectItem value="B">B</SelectItem>
                                   <SelectItem value="C">C</SelectItem>
@@ -628,7 +628,7 @@ id_card_document: photoIdFile,
                       name="id_card_document"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Photo ID</FormLabel>
+                          <FormLabel>Upload College ID photo</FormLabel>
                           <FormControl>
                             <Input 
                               type="file" 
@@ -647,7 +647,7 @@ id_card_document: photoIdFile,
                               }}
                             />
                           </FormControl>
-                          <FormDescription>Upload a photo of your ID card</FormDescription>
+                          <FormDescription>Upload a photo of college ID card</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}

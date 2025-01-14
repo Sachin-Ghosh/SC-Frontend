@@ -205,7 +205,8 @@ console.log(profile?.profile?.profile_picture)
                       <SelectValue placeholder="Select department" />
                     </SelectTrigger>
                     <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center">
-                      <SelectItem value="COMPUTER">Computer</SelectItem>
+                      <SelectItem value="AS&H">AS&H</SelectItem>
+                      <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
                       <SelectItem value="IT">IT</SelectItem>
                       <SelectItem value="AIML">AIML</SelectItem>
                       <SelectItem value="DATA">Data engineering</SelectItem>

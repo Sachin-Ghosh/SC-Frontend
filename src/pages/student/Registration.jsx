@@ -300,6 +300,7 @@ const Registration = () => {
                       <SelectValue placeholder="Select Department" />
                     </SelectTrigger>
                     <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center bg-no-repeat border-none rounded">
+                      <SelectItem value="AS&H">AS&H</SelectItem>
                       <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
                       <SelectItem value="IT">IT</SelectItem>
                       <SelectItem value="AIML">AI/ML</SelectItem>

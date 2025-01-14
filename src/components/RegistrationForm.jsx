@@ -194,6 +194,7 @@ export default function RegistrationForm({ userType, onSuccess }) {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                  <SelectItem value="AS&H">AS&H</SelectItem>
                   <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
                   <SelectItem value="IT">IT</SelectItem>
                   <SelectItem value="AIML">AI/ML</SelectItem>
