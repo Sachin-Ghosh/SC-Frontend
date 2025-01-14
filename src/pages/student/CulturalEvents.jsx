@@ -97,26 +97,10 @@ const CulturalEvent = () => {
         </motion.div>
         {subevents.length===0 ? (
           <>
-          <div className='flex flex-col sm:flex-row gap-6 w-full justify-center max-w-6xl relative top-20'>
-            <div className="flex w-full flex-row gap-4 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
-              <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
-              <div className='flex flex-col gap-2 w-full justify-center'>
-              <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
-              <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
-              <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
-
-              </div>
-            </div>
-            <div className="flex w-full gap-4 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
-              <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
-              <div className='flex flex-col gap-2 w-full justify-center'>
-              <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
-              <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
-              <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
-
-              </div>
-            </div>
-            </div>
+         <div className='flex justify-center items-center min-h-screen gap-5'>
+          <FaFootballBall className='animate-bounce text-amber-700' size={30}/>
+          <h1 className='relative z-50  ysabeau-sc'>Loading....</h1>
+        </div>
           </>
         ):(
           <ScrollArea className="h-[calc(110vh-300px)] w-full sticky top-40 md:top-60">

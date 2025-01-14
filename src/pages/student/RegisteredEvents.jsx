@@ -61,7 +61,7 @@ const RegisteredEvents = () => {
       const data = await response.json();
       setSubEventDetails(prev => ({
         ...prev,
-        [subEventId]: { name: data.name, slug: data.slug }
+        [subEventId]: { name: data.name, slug: data.slug, id:data.id }
       }))
     } catch (error) {
       console.error('Error fetching subevent details:', error)
@@ -128,15 +128,17 @@ const RegisteredEvents = () => {
             <TableBody>
               {events.map((event) => (
                 <TableRow key={event.id}>
-                  <TableCell className="font-medium" onClick={() => { navigate(`/registered-events/${event.id}`) }}>{event.registration_number}</TableCell>
+                  <TableCell className="font-medium text-blue-600 hover:underline" onClick={() => { navigate(`/registered-events/${event.id}`) }}>{event.registration_number}</TableCell>
                   <TableCell>
                     {subEventDetails[event.sub_event] ? (
+                      <>
                       <Link 
-                        to={`/registered-events/${subEventDetails[event.sub_event].slug}`} 
+                        to={`/${subEventDetails[event.sub_event].id}/details`} 
                         className="text-blue-600 hover:underline"
                       >
                         {subEventDetails[event.sub_event].name}
                       </Link>
+                      </>
                     ) : 'Loading...'}
                   </TableCell>
                   <TableCell>{event.team_name}</TableCell>
@@ -161,7 +163,7 @@ const RegisteredEvents = () => {
       )
     } else {
       return (
-        <div className="fixed flex flex-col w-full left-0 justify-center items-center top-80 sm:top-32">
+        <div className="fixed flex flex-col w-full left-0 justify-center items-center top-80 sm:top-32 px-2">
           <div className='max-h-screen overflow-y-auto'>
             {events.map((event) => (
               <EventCard 
@@ -181,7 +183,8 @@ const RegisteredEvents = () => {
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full' alt="Event background" />
       <div className="relative z-20 top-32 lg:top-10 px-4 sm:px-10 flex flex-col justify-center items-center min-h-screen">
-        <img src='/banner-1.png' alt='banner' className='fixed -z-10 -bottom-5 h-[30rem] -left-10' />
+      <img src='/royalty.png' className='fixed z-0 -bottom-10 left-0' alt="Event background" />
+
         <img src='/angel-2.png' alt='banner' className='sm:block hidden fixed -z-10 top-0 right-0' />
 
         <motion.div 

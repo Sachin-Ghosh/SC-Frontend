@@ -88,18 +88,18 @@ const GrievanceDetail = ({ grievance }) => {
               {grievance.evidence.map((file, index) => (
                 <div key={index} className="space-y-2">
                   {file.file_type === 'IMAGE' ? (
-                    <a 
-                      href={`${import.meta.env.VITE_API_URL}${file.file_url}`} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="block"
-                    >
+                    // <a 
+                    //   href={`${import.meta.env.VITE_API_URL}${file.file_url}`} 
+                    //   target="_blank" 
+                    //   rel="noopener noreferrer"
+                    //   className="block"
+                    // >
                       <img
-                        src={`${import.meta.env.VITE_API_URL}${file.file_url}`}
+                        src={`${file.file_url}`}
                         alt={`Evidence ${index + 1}`}
                         className="w-full h-32 object-cover rounded-lg border border-gray-200"
                       />
-                    </a>
+                    // </a>
                   ) : (
                     <a 
                       href={`${import.meta.env.VITE_API_URL}${file.file_url}`}

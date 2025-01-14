@@ -198,6 +198,7 @@ export default function RegistrationForm({ userType, onSuccess }) {
                   <SelectItem value="IT">IT</SelectItem>
                   <SelectItem value="AIML">AI/ML</SelectItem>
                   <SelectItem value="DATA">Data Engineering</SelectItem>
+                  <SelectItem value="CIVIL">Civil</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

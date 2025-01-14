@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { FaFootballBall } from 'react-icons/fa';
@@ -59,7 +59,7 @@ const SportsEvent = () => {
         >
           <img src={event.images[0]?.image} alt={event.name} className="w-full h-full object-cover absolute z-20" />
           <div className="p-2  relative z-30 bg-amber-900 h-full bg-opacity-50 hover:bg-opacity-60 transition-all w-full duration-300">
-            <h3 className="text-lg sm:text-2xl mb-2 text-amber-100">{event.name}</h3>
+            <h3 className="text-lg sm:text-2xl mb-2 text-amber-100"><Link to={`/${event.id}/details`}>{event.name}</Link></h3>
             <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Date:{event?.registration_schedule ? formatDateTime(event.schedule):''}</p>
             <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Start:{event?.registration_start_time ? formatDateTime(event?.registration_start_time):''}</p>
             <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Deadline: {event.registration_deadline?formatDateTime(event.registration_deadline):''}</p>
@@ -105,26 +105,12 @@ const SportsEvent = () => {
           <h1 className='ysabeau-sc relative z-40 top-20'>Sports Events</h1>
         </motion.div>
         {(subevents.length === 0) ? (
-          <div className='flex flex-col sm:flex-row gap-6 w-full justify-center max-w-6xl relative top-20 sm:top-0'>
-            <div className="flex w-full flex-row gap-2 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
-              <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
-              <div className='flex flex-col gap-2 w-full justify-center'>
-                <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
-                <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
-                <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
-              </div>
-            </div>
-            <div className="flex w-full gap-2 bg-amber-800 bg-opacity-40 px-5 rounded py-5">
-              <div className="skeleton h-32 w-full bg-amber-800 bg-opacity-60"></div>
-              <div className='flex flex-col gap-2 w-full justify-center'>
-                <div className="skeleton h-4 w-28 bg-amber-800 bg-opacity-60"></div>
-                <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
-                <div className="skeleton h-4 w-full bg-amber-800 bg-opacity-60"></div>
-              </div>
-            </div>
-          </div>
+          <div className='flex justify-center items-center min-h-screen gap-5'>
+          <FaFootballBall className='animate-bounce text-amber-700' size={30}/>
+          <h1 className='relative z-50  ysabeau-sc'>Loading....</h1>
+        </div>
         ) : (
-          <ScrollArea className="max-h-[40rem] w-full sticky top-20 sm:top-52">
+          <ScrollArea className="max-h-[70rem] w-full sticky top-20 sm:top-52">
           <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full lg:px-20 relative">
             <TabsList className="flex top-60 w-full gap-2 items-center right-0 left-0 justify-center py-10 px-1 sm:px-0">
               <TabsTrigger value="boys" className="text-lg ysabeau-sc data-[state=inactive]:border-2 data-[state=inactive]:border-amber-800  data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Boys</TabsTrigger>

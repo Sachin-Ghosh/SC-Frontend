@@ -83,6 +83,9 @@ const SignUp = () => {
         subjects: "",
       }),
       ...(activeTab === 'COUNCIL' && {
+        year_of_study: "",
+        division: "",
+        roll_number: "",
         position: "",
         term_start: "",
         term_end: "",
@@ -178,7 +181,8 @@ const SignUp = () => {
       // division: registrationData.division,
       bio: registrationData.bio,
       gender: registrationData.gender,
-      id_card_document: photoIdFile,
+      
+id_card_document: photoIdFile,
       profile_picture: profilePicFile,
       first_name: registrationData.first_name,
       last_name: registrationData.last_name,
@@ -198,12 +202,17 @@ const SignUp = () => {
       }),
       // Include specific fields for COUNCIL
       ...(activeTab === 'COUNCIL' && {
-        position: registrationData.position || '',
-        term_start: registrationData.term_start || '',
-        term_end: registrationData.term_end || '',
+        year_of_study: registrationData.year_of_study,
+        
+              division: registrationData.division,
+        
+        roll_number: registrationData.roll_number,
+        position: registrationData.position,
+        term_start: registrationData.term_start,
+        term_end: registrationData.term_end,
       }),
     }
-
+   console.log(verificationPayload)
     console.log('Sending verification division payload:', verificationPayload.division)
     console.log('Sending verification year_of_study payload:', verificationPayload.year_of_study)
     console.log('Sending verification profile_picture payload:', verificationPayload.profile_picture)
@@ -216,7 +225,7 @@ const SignUp = () => {
         }
       }).then((response) => {
         console.log('OTP verification successful:', response.data)
-        navigate('/auth/login')
+        // navigate('/auth/login')
         Login();
         return response.data
       }),
@@ -372,6 +381,7 @@ const SignUp = () => {
                               <SelectItem value="IT">IT</SelectItem>
                               <SelectItem value="AIML">AI/ML</SelectItem>
                               <SelectItem value="DATA">Data Engineering</SelectItem>
+                              <SelectItem value="CIVIL">Civil</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -497,6 +507,67 @@ const SignUp = () => {
                     )}
                     {activeTab === 'COUNCIL' && (
                       <>
+                       <FormField
+                          control={form.control}
+                          name="year_of_study"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Year of Study</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select Year of Study" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                                  <SelectItem value="FE">FE</SelectItem>
+                                  <SelectItem value="SE">SE</SelectItem>
+                                  <SelectItem value="TE">TE</SelectItem>
+                                  <SelectItem value="BE">BE</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="division"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Division</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select Division" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                                  <SelectItem value="A">A</SelectItem>
+                                  <SelectItem value="B">B</SelectItem>
+                                  <SelectItem value="C">C</SelectItem>
+                                  <SelectItem value="D">D</SelectItem>
+                                  <SelectItem value="E">E</SelectItem>
+                                  <SelectItem value="F">F</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="roll_number"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Roll Number</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Roll Number" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                         <FormField
                           control={form.control}
                           name="position"

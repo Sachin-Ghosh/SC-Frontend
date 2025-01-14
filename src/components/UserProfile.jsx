@@ -50,6 +50,8 @@ setData(profile.profile)
             </div>
             <div className="mt-6 flex items-center justify-center">
               <ProfileSection icon={<FaScroll className="text-[#8b4513]" />} title="About">
+              {profile.profile.user_type ==='STUDENT'&&(
+                <>
                 <TypeAnimation
                   sequence={[
                     `Email: ${profile.profile.email}\nDepartment: ${profile.profile.department || 'Not specified'}\nPhone: ${profile.profile.phone || 'Not provided'}\nYear of Study: ${profile.profile.year_of_study || 'Not specified'}\nGender: ${profile.profile.gender || 'Not specified'}\nBio: ${profile.profile.bio || 'No bio provided'}`,
@@ -61,6 +63,23 @@ setData(profile.profile)
                   repeat={0}
                   className="text-[#4a3728]"
                 />
+                </>
+              )}
+              {profile.profile.user_type ==='COUNCIL'&&(
+                <>
+                <TypeAnimation
+                  sequence={[
+                    `Email: ${profile.profile.email}\nDepartment: ${profile.profile.department || 'Not specified'}\nPhone: ${profile.profile.phone || 'Not provided'}\nYear of Study: ${profile.profile.year_of_study || 'Not specified'}\nGender: ${profile.profile.gender || 'Not specified'}\nBio: ${profile.profile.bio || 'No bio provided'}`,
+                    1000,
+                  ]}
+                  wrapper="p"
+                  speed={50}
+                  style={{ whiteSpace: 'pre-line', display: 'inline-block' }}
+                  repeat={0}
+                  className="text-[#4a3728]"
+                />
+                </>
+              )}
               </ProfileSection>
             </div>
           </div>

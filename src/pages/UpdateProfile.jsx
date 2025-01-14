@@ -169,10 +169,11 @@ const navigate=useNavigate()
                   <SelectValue placeholder="Select department" />
                 </SelectTrigger>
                 <SelectContent className="bg-[url('/event-background.jpg')] bg-cover bg-center">
-                  <SelectItem value="COMPUTER">COMPUTER</SelectItem>
+                  <SelectItem value="COMPUTER">Computer</SelectItem>
                   <SelectItem value="IT">IT</SelectItem>
                   <SelectItem value="AIML">AIML</SelectItem>
-                  <SelectItem value="DATA">DATA</SelectItem>
+                  <SelectItem value="DATA">Data engineering</SelectItem>
+                  <SelectItem value="CIVIL">Civil</SelectItem>
                 </SelectContent>
               </Select>
             </div>

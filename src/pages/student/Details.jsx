@@ -4,6 +4,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Users, Clock, Award, UserPlus, DollarSign } from 'lucide-react';
 import { Button } from "@/components/ui/button"
 import { FaFootballBall } from 'react-icons/fa';
+import DOMPurify from 'dompurify';
+
 
 const eventDetails = {
   cricket: {
@@ -120,7 +122,7 @@ const EventDetails = () => {
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full z-0' alt="Event background" />
       <div className="min-h-screen bg-cover bg-center text-amber-900">
-        <img src='/detail-banner.png' className='fixed -bottom-72 -right-20 w-[40rem] h-[40rem]'/>
+        <img src='/maharaj.png' className='fixed -bottom-60 -right-20 w-[40rem] h-[40rem]'/>
         <div className="container mx-auto px-4 py-8 relative top-12">
           <motion.h1 
             className="text-4xl md:text-5xl font-bold mb-6 text-center ysabeau-sc"
@@ -166,11 +168,12 @@ const EventDetails = () => {
                 <UserPlus className="mr-2" />
                 <p>Max Participants: {eventDetail.max_participants}</p>
               </div>
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <DollarSign className="mr-2" />
                 <p>Registration Fee: ₹{eventDetail.registration_fee}</p>
-              </div>
-              <p className="text-lg">{eventDetail.description}</p>
+              </div> */}
+              <p className="text-lg">{DOMPurify.sanitize(eventDetail.description, { ALLOWED_TAGS: [] })}</p>
+              {/* <p className="text-lg">{eventDetail.description}</p> */}
               <Button 
                 className="mt-4 bg-amber-900 text-white hover:bg-amber-800" 
                 onClick={() => navigate(`/${eventDetail.id}/registration`)}
@@ -187,7 +190,9 @@ const EventDetails = () => {
             className="mt-8"
           >
             <h2 className="text-2xl font-bold mb-4 ysabeau-sc">Rules</h2>
-            <p>{eventDetail.rules}</p>
+            <p className="">{DOMPurify.sanitize(eventDetail.rules, { ALLOWED_TAGS: [] })}</p>
+
+            {/* <p>{eventDetail.rules}</p> */}
           </motion.div>
           
           <motion.div
@@ -201,7 +206,7 @@ const EventDetails = () => {
               Prizes
             </h2>
             <p>{eventDetail.prize_pool_description}</p>
-            <p className="mt-2">Total Prize Pool: ₹{eventDetail.prize_pool}</p>
+            {/* <p className="mt-2">Total Prize Pool: ₹{eventDetail.prize_pool}</p> */}
           </motion.div>
           
           <motion.div
