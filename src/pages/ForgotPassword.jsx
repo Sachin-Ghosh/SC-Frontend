@@ -20,21 +20,23 @@ import { toast, Toaster } from 'sonner';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const formSchema = z.object({
-  email: z.string().email({
-    message: "Please enter a valid email address.",
-  }).refine((email) => {
-    // This regex allows for a wider range of valid email formats
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }, {
-    message: "Please enter a valid email address.",
-  }),
+  email: z.string()
+    .email({
+      message: "Please enter a valid email address.",
+    })
+    .refine((email) => email.endsWith("@universal.edu.in"), {
+      message: "Please use your Universal Education email address (@universal.edu.in)",
+    }),
 })
 
 const resetSchema = z.object({
-  email_id: z.string().min(1,{
-    message: "Please enter a valid email address.",
-  }),
+  // email: z.string()
+  //   .email({
+  //     message: "Please enter a valid email address.",
+  //   })
+  //   .refine((email) => email.endsWith("@universal.edu.in"), {
+  //     message: "Please use your Universal Education email address (@universal.edu.in)",
+  //   }),
   token: z.string().min(1, {
     message: "Please enter a valid token",
   }),
@@ -47,6 +49,7 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [messageSent, setMessageSent] = useState(false);
+  const [email, setEmail]=useState('')
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -58,7 +61,6 @@ const ForgotPassword = () => {
   const resetForm = useForm({
     resolver: zodResolver(resetSchema),
     defaultValues: {
-      email_id: "",
       token: "",
       new_password: "",
     },
@@ -66,6 +68,7 @@ const ForgotPassword = () => {
 
   function onSubmit(values) {
     console.log('Password reset requested for:', { email: values.email });
+    setEmail(values.email)
     toast.promise(
       fetch(`${import.meta.env.VITE_API_URL}/api/users/request-password-reset/`, {
         method: 'POST',
@@ -96,14 +99,16 @@ const ForgotPassword = () => {
   }
 
   const handlePasswordReset = (values) => {
-    console.log('Password reset attempted with:', { email: values.email_id, token: values.token, new_password: values.new_password });
+    // const  email=form.getValues('email');
+    console.log(email)
+    console.log('Password reset attempted with:', { email: email, token: values.token, new_password: values.new_password });
     toast.promise(
       fetch(`${import.meta.env.VITE_API_URL}/api/users/reset-password/`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email: values.email_id, token: values.token, new_password: values.new_password })
+        body: JSON.stringify({ email: email, token: values.token, new_password: values.new_password })
       }).then(async (response) => {
         const data = await response.json();
         if (!response.ok) {
@@ -166,12 +171,14 @@ const ForgotPassword = () => {
                 <form onSubmit={resetForm.handleSubmit(handlePasswordReset)} className="space-y-6">
                   <FormField
                     control={resetForm.control}
-                    name="email_id"
+                    name="email"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel className="text-white">Email</FormLabel>
                         <FormControl>
-                          <Input type="email" placeholder="Enter your email" {...field} className="border-[#d2b48c] focus:ring-2 focus:ring-[#8b4513]" />
+                          <Input
+                           value={form.getValues('email')}
+                           type="email" placeholder="Enter your email" {...field} className="border-[#d2b48c] focus:ring-2 focus:ring-[#8b4513]" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

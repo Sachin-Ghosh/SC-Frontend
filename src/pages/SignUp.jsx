@@ -610,6 +610,8 @@ id_card_document: photoIdFile,
                         />
                       </>
                     )}
+                    {!activeTab === 'FACULTY' && (
+
                     <FormField
                       control={form.control}
                       name="bio"
@@ -623,6 +625,7 @@ id_card_document: photoIdFile,
                         </FormItem>
                       )}
                     />
+                    )}
                     <FormField
                       control={form.control}
                       name="id_card_document"

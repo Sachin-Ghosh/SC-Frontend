@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Loader, Trash2, Check, ChevronsUpDown } from 'lucide-react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast, Toaster } from 'sonner';
 import { cn } from "@/lib/utils"
 import {
@@ -235,6 +235,8 @@ const Registration = () => {
     }
   }, [formData.team_members]);
 
+  console.log(event?.upload_link)
+
   return (
     <>
       <img src='/registration-back.jpg' className='fixed object-cover h-full w-full' alt="Background" />
@@ -415,8 +417,24 @@ const Registration = () => {
                         </Command>
                       </PopoverContent>
                     </Popover>
+
+
                   </div>
                 )}
+
+                {event.upload_link===true && (
+
+                <div className="mb-6 sm:mb-0">
+                  <label htmlFor="division" className="block text-[#4a3728] ">Upload your audio in the drive :
+
+                  </label>
+                  <Link to={'https://drive.google.com/drive/folders/1zs72ia9FmdXxieV9P0jo_g7Z7C8oAfJc'} target='_blank' className='underline text-blue-600'>Google Drive</Link>
+                 
+                </div>
+                )}
+
+
+
                 
 
                 <motion.button

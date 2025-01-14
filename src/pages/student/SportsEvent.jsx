@@ -96,12 +96,12 @@ const SportsEvent = () => {
         <img src='/netaji.png' alt='banner' className='fixed -z-10 bottom-0 -right-20 sm:-right-32' />
 
         <motion.div 
-          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] relative z-30 top-0 sm:top-12"
+          className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] relative z-30 top-0 sm:top-0"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <img src='/frame.png' className='absolute top-5 sm:top-0 -z-10 w-full' />
+          {/* <img src='/frame.png' className='absolute top-5 sm:top-0 -z-10 w-full' /> */}
           <h1 className='ysabeau-sc relative z-40 top-20'>Sports Events</h1>
         </motion.div>
         {(subevents.length === 0) ? (
@@ -110,7 +110,7 @@ const SportsEvent = () => {
           <h1 className='relative z-50  ysabeau-sc'>Loading....</h1>
         </div>
         ) : (
-          <ScrollArea className="max-h-[70rem] w-full sticky top-20 sm:top-52">
+          <ScrollArea className="max-h-[70rem] w-full sticky top-20 sm:top-20">
           <Tabs value={selectedTab} onValueChange={(value) => setSelectedTab(value)} className="w-full lg:px-20 relative">
             <TabsList className="flex top-60 w-full gap-2 items-center right-0 left-0 justify-center py-10 px-1 sm:px-0">
               <TabsTrigger value="boys" className="text-lg ysabeau-sc data-[state=inactive]:border-2 data-[state=inactive]:border-amber-800  data-[state=active]:bg-amber-900 data-[state=active]:text-white w-full lg:w-96 rounded-full text-white sm:text-black">Boys</TabsTrigger>
