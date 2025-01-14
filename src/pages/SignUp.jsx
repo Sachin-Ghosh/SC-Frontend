@@ -33,7 +33,7 @@ const formSchema = z.object({
   division: z.string().optional(),
   roll_number: z.string().optional(),
   designation: z.string().optional(),
-  subjects: z.string().optional(),
+  // subjects: z.string().optional(),
   position: z.string().optional(),
   term_start: z.string().optional(),
   term_end: z.string().optional(),
@@ -80,7 +80,7 @@ const SignUp = () => {
       }),
       ...(activeTab === 'FACULTY' && {
         designation: "",
-        subjects: "",
+        // subjects: "",
       }),
       ...(activeTab === 'COUNCIL' && {
         year_of_study: "",
@@ -198,7 +198,7 @@ id_card_document: photoIdFile,
       // Include specific fields for FACULTY
       ...(activeTab === 'FACULTY' && {
         designation: registrationData.designation || '',
-        subjects: registrationData.subjects || '',
+        // subjects: registrationData.subjects || '',
       }),
       // Include specific fields for COUNCIL
       ...(activeTab === 'COUNCIL' && {
@@ -377,6 +377,7 @@ id_card_document: photoIdFile,
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent className="bg-[url('/event-background.jpg')] bg-center">
+                              <SelectItem value="AS&H">AS&H</SelectItem>
                               <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
                               <SelectItem value="IT">IT</SelectItem>
                               <SelectItem value="AIML">AI/ML</SelectItem>
@@ -490,7 +491,7 @@ id_card_document: photoIdFile,
                             </FormItem>
                           )}
                         />
-                        <FormField
+                        {/* <FormField
                           control={form.control}
                           name="subjects"
                           render={({ field }) => (
@@ -502,7 +503,7 @@ id_card_document: photoIdFile,
                               <FormMessage />
                             </FormItem>
                           )}
-                        />
+                        /> */}
                       </>
                     )}
                     {activeTab === 'COUNCIL' && (
