@@ -14,14 +14,17 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { toast } from 'sonner'
+import { useNavigate } from 'react-router-dom'
 
 
 
 export function AddParticipantsModal({ heatId, subEventId, stage }) {
   const [participants, setParticipants] = useState([])
-  const [selectedParticipants, setSelectedParticipants] = useState([])
+  const [selectedParticipants, setSelectedParticipants] = useState([]);
+  const [open,setOpen]=useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const token = localStorage.getItem('access-token');
+  const navigate=useNavigate()
 
   console.log(heatId,subEventId,stage)
 //   const { toast } = useToast()
@@ -69,6 +72,8 @@ export function AddParticipantsModal({ heatId, subEventId, stage }) {
       if (!response.ok) throw new Error('Failed to assign participants')
 
       toast.success("Success")
+      
+      setOpen(false)
       setSelectedParticipants([])
     } catch (error) {
       toast.error("Error")
@@ -89,7 +94,7 @@ fetchParticipants();
 
   return (
     <>
-    <Dialog>
+    <Dialog open={open}>
       <DialogTrigger asChild>
         <Button 
           variant="outline" 
