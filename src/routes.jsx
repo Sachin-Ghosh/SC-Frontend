@@ -33,6 +33,7 @@ import HeatsPage from './pages/council/HeatsPage';
 import GrievanceDetail from './pages/GrievanceDetail';
 import GrievanceDetailPage from './pages/GrievanceDetail';
 import ScoresForm from './pages/faculty/ScoresForm';
+import FinalResults from './pages/faculty/FinalResults';
 
 // import Registration from './pages/Registration';
 // import Events from './pages/Events';
@@ -63,6 +64,7 @@ const AppRoutes = () => (
     <Route path="/score/:eventId" element={<ScoresForm />} />
     <Route path="/view-heats" element={<ViewHeats />} />
     <Route path="/leaderboard" element={<LeaderboardPage />} />
+    <Route path="/final-results" element={<FinalResults />} />
     {/* council routes */}
     <Route path="/search-teams" element={<TeamSearch/>} />
     <Route path="/council-dashboard" element={<CouncilEventsPage/>} />

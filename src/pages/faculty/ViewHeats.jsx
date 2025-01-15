@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+// import { useRouter } from 'next/router';
 import { Button } from '@/components/ui/button';
 import { CustomModal } from '../../components/ui/CustomModal';
-import ScoreForm from '../../components/ScoreForm';
 import { motion } from 'framer-motion';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useNavigate } from 'react-router-dom';
 
 const ViewHeats = () => {
   const [subEvents, setSubEvents] = useState([]);
@@ -15,6 +17,10 @@ const ViewHeats = () => {
   const [selectedHeat, setSelectedHeat] = useState(null);
   const [showScoreModal, setShowScoreModal] = useState(false);
   const [heatLoading, setHeatLoading] = useState(false);
+  const [facultyScores, setFacultyScores] = useState(null);
+
+  // const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSubEvents = async () => {
@@ -75,16 +81,53 @@ const ViewHeats = () => {
   };
 
   const handleViewHeats = (subEventId) => {
-    setError(null); // Reset error state
+    setError(null);
     setHeatLoading(true);
     fetchHeats(subEventId);
     setShowHeatModal(true);
   };
 
-  const handleHeatClick = (heat) => {
+  const handleHeatClick = async (heat) => {
     setSelectedHeat(heat);
     setShowHeatModal(false);
     setShowScoreModal(true);
+    setFacultyScores(null); // Reset faculty scores
+
+    try {
+      const accessToken = localStorage.getItem('access-token');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/heats/${heat.id}/view_faculty_scores/`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch faculty scores');
+      const data = await response.json();
+      setFacultyScores(data);
+    } catch (err) {
+      console.error('Error fetching faculty scores:', err.message);
+      setError(err.message);
+    }
+  };
+
+  const handleViewFinalResults = async (heatId) => {
+    try {
+      const accessToken = localStorage.getItem('access-token');
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/heats/${heatId}/view_final_results/`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        }
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch final results');
+      const data = await response.json();
+
+      // Navigate to the final results page with the data
+      navigate('/final-results', { state: { results: data } });
+    } catch (err) {
+      console.error('Error fetching final results:', err.message);
+      setError(err.message);
+    }
   };
 
   if (loading) {
@@ -194,10 +237,48 @@ const ViewHeats = () => {
             onClose={() => setShowScoreModal(false)}
           >
             {selectedHeat && (
-              <ScoreForm 
-                event={selectedHeat} 
-                onClose={() => setShowScoreModal(false)} 
-              />
+              <Card className="w-full max-w-4xl mx-auto">
+                <CardHeader>
+                  <CardTitle>Faculty Scores for Heat {selectedHeat.heat_name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {facultyScores ? (
+                    <ScrollArea className="h-[60vh]">
+                      <p className="text-gray-600 mb-4">Status: {facultyScores.status}</p>
+                      {Object.entries(facultyScores.scores_by_judge).map(([judge, scores]) => (
+                        <div key={judge} className="mb-6">
+                          <h3 className="text-xl font-semibold text-amber-900 mb-2">{judge}</h3>
+                          {scores.map((score, index) => (
+                            <Card key={index} className="mb-4">
+                              <CardContent className="pt-6">
+                                <p className="font-semibold">{score.participant_name}</p>
+                                <p className="text-gray-600">Registration ID: {score.registration_id}</p>
+                                <div className="mt-2">
+                                  {Object.entries(score.criteria_scores).map(([criterion, value]) => (
+                                    <p key={criterion}>{criterion}: {value}</p>
+                                  ))}
+                                </div>
+                                <p className="mt-2 font-semibold">Total Score: {score.total_score}</p>
+                                <p className="text-sm text-gray-500">Submitted at: {new Date(score.submitted_at).toLocaleString()}</p>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      ))}
+                    </ScrollArea>
+                  ) : (
+                    <div className="flex items-center justify-center h-64">
+                      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-900"></div>
+                    </div>
+                  )}
+                  <Button 
+                    className="mt-4 bg-amber-800 hover:bg-amber-700 text-white"
+                    onClick={() => handleViewFinalResults(selectedHeat.id)}
+                  >
+                    View Final Results
+                  </Button>
+                </CardContent>
+              </Card>
             )}
           </CustomModal>
         </div>
