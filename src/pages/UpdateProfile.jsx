@@ -306,7 +306,6 @@ console.log(profile?.profile?.profile_picture)
                   onChange={handleProfilePicChange}
                 />
               </div>
-              
 
 
               <div className="space-y-2 mb-4">
