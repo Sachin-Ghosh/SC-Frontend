@@ -61,19 +61,19 @@ const Home = () => {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 2.5 }}
-            src="/ucoe.png"
-            className="h-36 w-32"
+            src="/aurora.png"
+            className="h-52 sm:h-36  "
           />
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1 }}
-            className="text-sm md:text-3xl font-semibold text-center text-amber-950"
+            className="text-xl md:text-3xl font-semibold text-center text-white"
           >
             Universal College of Engineering
           </motion.h1>
           <motion.span
-            className="sm:text-xl text-ambet-950"
+            className="text-lg sm:text-xl text-white"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8 }}
@@ -81,7 +81,7 @@ const Home = () => {
             presents
           </motion.span>
           <motion.h2
-            className="text-5xl text-nowrap md:text-9xl font-serif text-center mb-8 text-amber-950"
+            className="text-5xl text-nowrap md:text-9xl font-serif text-center mb-8 text-white"
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 1.5 }}
@@ -95,7 +95,7 @@ const Home = () => {
          animate={{ opacity: 1, y: 0 }}
          transition={{ duration: 1, delay: 3.5 }}
          className="relative  h-72 px-2">
-          <h1 className="text-center text-amber-950 text-2xl mb-4 ">Time Remaining</h1>
+          <h1 className="text-center text-white text-2xl mb-4 ">Time Remaining</h1>
           <div className="grid grid-flow-col gap-1 sm:gap-5 text-center auto-cols-max">
   <div className="flex flex-col p-2 bg-amber-800 rounded-box text-neutral-content">
     <span className="countdown font-mono text-5xl">

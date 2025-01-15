@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import ScoreForm from '../../components/ScoreForm';
@@ -11,6 +11,8 @@ import Modal from '@/components/Modal';
 const FacultyDashboard = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [events, setEvents] = useState([]);
+
+  // const [evnt]=useState()
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const accessToken = localStorage.getItem('access-token');
@@ -40,6 +42,7 @@ const FacultyDashboard = () => {
         setLoading(false);
       }
     };
+
 
     fetchEvents();
 
@@ -126,7 +129,7 @@ const FacultyDashboard = () => {
                 }}
               >
                 <div className="p-4">
-                  <h3 className="text-xl font-semibold text-amber-900">{event.name}</h3>
+                  <h3 className="text-xl font-semibold text-amber-900"><Link to={`/${event.id}/details`}>{event.name}</Link></h3>
                   <p className="text-gray-600 mt-2">Main Event: {event.event.name}</p>
                   <p className="text-gray-600">Venue: {event.venue}</p>
                   <p className="text-gray-600">
@@ -137,20 +140,20 @@ const FacultyDashboard = () => {
                   <div className="flex gap-2">
                     <motion.button 
                       className="flex-1 bg-amber-800 text-white px-4 py-2 rounded hover:bg-amber-700 transition-colors"
-                      onClick={() => setSelectedEvent(event)}
+                      onClick={() => navigate(`/score/${event.id}`)}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      Manage Scores
+                     Manage Scores
                     </motion.button>
-                    <motion.button 
+                    {/* <motion.button 
                       className="flex-1 bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-500 transition-colors"
                       onClick={() => handleViewParticipants(event.id)}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
                       View Participants
-                    </motion.button>
+                    </motion.button> */}
                   </div>
                 </div>
               </motion.div>
@@ -158,14 +161,14 @@ const FacultyDashboard = () => {
           </motion.div>
         )}
         </div>
-        <ScoreModal isOpen={!!selectedEvent} onClose={() => setSelectedEvent(null)}>
+        {/* <ScoreModal isOpen={!!selectedEvent} onClose={() => setSelectedEvent(null)}>
           {selectedEvent && (
             <ScoreForm 
               event={selectedEvent} 
               onClose={() => setSelectedEvent(null)} 
             />
           )}
-        </ScoreModal>
+        </ScoreModal> */}
       </div>
     </motion.div>
   );

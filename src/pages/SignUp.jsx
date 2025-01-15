@@ -18,6 +18,7 @@ import axios from 'axios'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import OTPInput from 'react-otp-input'
 
+// Modified schema to make bio, photo ID, and profile picture optional for faculty
 const formSchema = z.object({
   first_name: z.string().min(2, { message: "First name must be at least 2 characters." }),
   last_name: z.string().min(2, { message: "Last name must be at least 2 characters." }),
@@ -27,18 +28,15 @@ const formSchema = z.object({
   department: z.string().min(1, { message: "Please select a department." }),
   gender: z.string().min(1, { message: "Please select a gender." }),
   bio: z.string().optional(),
-  id_card_document: z.string().min(1, { message: "Please upload a photo ID." }),
-  profile_picture: z.string(File).min(1, { message: "Please upload a profile picture." }),
+  id_card_document: z.string().optional(),
+  profile_picture: z.string().optional(),
   year_of_study: z.string().optional(),
   division: z.string().optional(),
   roll_number: z.string().optional(),
   designation: z.string().optional(),
-  // subjects: z.string().optional(),
   position: z.string().optional(),
   term_start: z.string().optional(),
   term_end: z.string().optional(),
-
-
 })
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
@@ -55,7 +53,6 @@ const SignUp = () => {
   const [otp, setOtp] = useState('');
   const [photoIdFile, setPhotoIdFile] = useState(null);
   const [profilePicFile, setProfilePicFile] = useState(null);
-  
   const [showPassword, setShowPassword] = useState(false)
 
   const navigate = useNavigate()
@@ -80,7 +77,6 @@ const SignUp = () => {
       }),
       ...(activeTab === 'FACULTY' && {
         designation: "",
-        // subjects: "",
       }),
       ...(activeTab === 'COUNCIL' && {
         year_of_study: "",
@@ -101,14 +97,18 @@ const SignUp = () => {
       }
     });
     formData.append('user_type', activeTab);
-    if (photoIdFile) formData.append('id_card_document', photoIdFile);
-    if (profilePicFile) formData.append('profile_picture', profilePicFile);
+    
+    // Only append files for non-faculty users or if files are provided for faculty
+    if (activeTab !== 'FACULTY' || photoIdFile) {
+      if (photoIdFile) formData.append('id_card_document', photoIdFile);
+    }
+    if (activeTab !== 'FACULTY' || profilePicFile) {
+      if (profilePicFile) formData.append('profile_picture', profilePicFile);
+    }
 
-    // Store the complete form data
     const registrationPayload = {
       ...data,
       user_type: activeTab,
-      // Convert File objects to null since they can't be serialized
       id_card_document: photoIdFile,
       profile_picture: profilePicFile,
     };
@@ -130,7 +130,7 @@ const SignUp = () => {
         success: (data) => {
           console.log('Registration successful:', data);
           setEmail(data.email);
-          setRegistrationData(registrationPayload); // Store the complete payload
+          setRegistrationData(registrationPayload);
           setShowOTP(true);
           return `${data.message}`;
         },
@@ -142,13 +142,13 @@ const SignUp = () => {
     );
   };
 
-  const Login=async()=>{
+  const Login = async () => {
     try {
       const loginResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/login/`, {
         email: registrationData.email,
         password: registrationData.password
       });
-  
+
       if (loginResponse.data) {
         localStorage.setItem('access-token', loginResponse.data.tokens.access);
         localStorage.setItem('refresh-token', loginResponse.data.tokens.refresh);
@@ -162,9 +162,7 @@ const SignUp = () => {
       console.error('OTP verification or login error:', error);
       toast.error(`Error: ${error.response?.data?.message || error.message}`);
     }
-
   }
-
 
   const handleOTPVerification = async () => {
     if (!otp || otp.length !== 6) {
@@ -172,51 +170,36 @@ const SignUp = () => {
       return
     }
 
-    // Ensure all required fields are included
     const verificationPayload = {
       otp,
-       // This now contains all the form fields
       user_type: activeTab,
       email: registrationData.email,
-      // division: registrationData.division,
       bio: registrationData.bio,
       gender: registrationData.gender,
-      
-id_card_document: photoIdFile,
+      id_card_document: photoIdFile,
       profile_picture: profilePicFile,
       first_name: registrationData.first_name,
       last_name: registrationData.last_name,
       phone: registrationData.phone,
       password: registrationData.password,
       department: registrationData.department,
-      // Include specific fields that might be required for STUDENTs
       ...(activeTab === 'STUDENT' && {
         year_of_study: registrationData.year_of_study || '',
         division: registrationData.division || '',
         roll_number: registrationData.roll_number || '',
       }),
-      // Include specific fields for FACULTY
       ...(activeTab === 'FACULTY' && {
         designation: registrationData.designation || '',
-        // subjects: registrationData.subjects || '',
       }),
-      // Include specific fields for COUNCIL
       ...(activeTab === 'COUNCIL' && {
         year_of_study: registrationData.year_of_study,
-        
-              division: registrationData.division,
-        
+        division: registrationData.division,
         roll_number: registrationData.roll_number,
         position: registrationData.position,
         term_start: registrationData.term_start,
         term_end: registrationData.term_end,
       }),
     }
-   console.log(verificationPayload)
-    console.log('Sending verification division payload:', verificationPayload.division)
-    console.log('Sending verification year_of_study payload:', verificationPayload.year_of_study)
-    console.log('Sending verification profile_picture payload:', verificationPayload.profile_picture)
-    console.log('Sending verification id_card_document payload:', verificationPayload.id_card_document)
 
     toast.promise(
       axios.post(`${import.meta.env.VITE_API_URL}/api/users/register/verify/`, verificationPayload, {
@@ -225,55 +208,36 @@ id_card_document: photoIdFile,
         }
       }).then((response) => {
         console.log('OTP verification successful:', response.data)
-        // navigate('/auth/login')
         Login();
         return response.data
       }),
       {
         loading: 'Verifying OTP...',
-        success: (data) => {
-         
-         return `${data.message}`
-
-        },
-        
-        error: (err) => {
-          console.error('OTP verification error:', err)
-          return `OTP verification failed: ${err.response?.data?.message || err.message}`
-        }
+        success: (data) => `${data.message}`,
+        error: (err) => `OTP verification failed: ${err.response?.data?.message || err.message}`
       }
     )
   }
 
-  const handleResendOtp=async()=>{
+  const handleResendOtp = async () => {
     try {
-      const payload={
+      const payload = {
         email: registrationData.email
       }
-      const response=await axios.post(`${import.meta.env.VITE_API_URL}/api/users/resend-otp/`,payload);
-      const data=await response.data
-      console.log(await response.data);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/resend-otp/`, payload);
+      const data = await response.data
       toast.success(`${data.message}`)
-      // if(!response.ok){
-      // }else{
-      //   toast.error(`${data.message}`)
-      // }
     } catch (error) {
-
       console.log(error)
-      
     }
   }
-  
-
-
 
   return (
     <>
       <img src='/home-background.jpg' className='fixed w-full h-full object-cover z-0' alt="Background" />
       <div className='fixed inset-0 bg-amber-900 opacity-40 z-10 backdrop-blur-sm bg-opacity-40'></div>
       <div className="min-h-screen rounded flex items-center justify-center relative z-10 bg-cover bg-center bg-blend-overlay">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
@@ -348,21 +312,21 @@ id_card_document: photoIdFile,
                       )}
                     />
                     <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="">Password</FormLabel>
-                      <FormControl>
-                        <div className='flex gap-2 border border-black focus:ring-2 focus:ring-[#8b4513] '>
-                        <Input type={showPassword ? 'text':'password'} placeholder="Enter your password" {...field} className="border-none" />
-                        <button type='button' className='px-2' onClick={()=>{setShowPassword(!showPassword)}}>{showPassword ? <FaEyeSlash size={20}/>:<FaEye size={20}/>}</button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="">Password</FormLabel>
+                          <FormControl>
+                            <div className='flex gap-2 border border-black focus:ring-2 focus:ring-[#8b4513] '>
+                              <Input type={showPassword ? 'text' : 'password'} placeholder="Enter your password" {...field} className="border-none" />
+                              <button type='button' className='px-2' onClick={() => { setShowPassword(!showPassword) }}>{showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}</button>
+                            </div>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
                     <FormField
                       control={form.control}
@@ -477,38 +441,23 @@ id_card_document: photoIdFile,
                       </>
                     )}
                     {activeTab === 'FACULTY' && (
-                      <>
-                        <FormField
-                          control={form.control}
-                          name="designation"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Designation</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Designation" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        {/* <FormField
-                          control={form.control}
-                          name="subjects"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Subjects</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Subjects" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        /> */}
-                      </>
+                      <FormField
+                        control={form.control}
+                        name="designation"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Designation</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Designation" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     )}
                     {activeTab === 'COUNCIL' && (
                       <>
-                       <FormField
+                        <FormField
                           control={form.control}
                           name="year_of_study"
                           render={({ field }) => (
@@ -610,120 +559,94 @@ id_card_document: photoIdFile,
                         />
                       </>
                     )}
-                    {!activeTab === 'FACULTY' && (
+                    {activeTab !== 'FACULTY' && (
+                      <>
+                        <FormField
+                          control={form.control}
+                          name="bio"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Bio</FormLabel>
+                              <FormControl>
+                                <Textarea placeholder="Tell us about yourself" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
 
-                    <FormField
-                      control={form.control}
-                      name="bio"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Bio</FormLabel>
-                          <FormControl>
-                            <Textarea placeholder="Tell us about yourself" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                        <FormField
+                          control={form.control}
+                          name="id_card_document"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Upload College ID photo</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (isFileSizeValid(file)) {
+                                      field.onChange(file.name);
+                                      setPhotoIdFile(file);
+                                    } else {
+                                      toast.error("Photo ID file size must be 1MB or less");
+                                      e.target.value = "";
+                                    }
+                                  }}
+                                />
+                              </FormControl>
+                              <FormDescription>Upload a photo of college ID card</FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={form.control}
+                          name="profile_picture"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Profile Picture</FormLabel>
+                              <FormControl>
+                                <Input
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(e) => {
+                                    const file = e.target.files[0];
+                                    if (isFileSizeValid(file)) {
+                                      field.onChange(file.name);
+                                      setProfilePicFile(file);
+                                    } else {
+                                      toast.error("Profile picture file size must be 1MB or less");
+                                      e.target.value = "";
+                                    }
+                                  }}
+                                />
+                              </FormControl>
+                              <FormDescription>Upload a profile picture</FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </>
                     )}
-                    <FormField
-                      control={form.control}
-                      name="id_card_document"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Upload College ID photo</FormLabel>
-                          <FormControl>
-                            <Input 
-                              type="file" 
-                              accept="image/*"
-                              onChange={(e) => {
-                                const file = e.target.files[0];
-                                if (isFileSizeValid(file)) {
-                                  field.onChange(file.name);
-                                  setPhotoIdFile(file);
-                                } else {
-                                  toast.error("Photo ID file size must be 5MB or less");
-                                  e.target.value = ""; // Reset the input
-                                }
-                                // field.onChange(e.target.files[0].name);
-                                // setPhotoIdFile(e.target.files[0]);
-                              }}
-                            />
-                          </FormControl>
-                          <FormDescription>Upload a photo of college ID card</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="profile_picture"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Profile Picture</FormLabel>
-                          <FormControl>
-                            <Input 
-                              type="file" 
-                              accept="image/*"
-                              onChange={(e) => {
-                                // field.onChange(e.target.files[0].name);
-                                // setProfilePicFile(e.target.files[0]);
-                                const file = e.target.files[0];
-                                if (isFileSizeValid(file)) {
-                                  field.onChange(file.name);
-                                  setProfilePicFile(file);
-                                } else {
-                                  toast.error(
-                                    "Profile picture file size must be 5MB or less"
-                                  );
-                                  e.target.value = ""; // Reset the input
-                                }
-
-                              }}
-                            />
-                          </FormControl>
-                          <FormDescription>Upload a profile picture</FormDescription>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                     <Button type="submit" className="w-full bg-[#8b4513] text-white hover:bg-[#a0522d]">Sign Up</Button>
                   </form>
                 </Form>
               </>
             ) : (
-              <div className='flex flex-col  sm:gap-4 items-center justify-center'>
-              <h4 className="text-xl font-semibold text-center mb-2">Enter OTP</h4>
-              <Input type="text" className="text-center" value={otp} onChange={e => setOtp(e.target.value)} />
-              {/* <OTPInput
-                value={otp}
-                onChange={setOtp}
-                numInputs={6}
-                renderSeparator={<span className=""></span>}
-                renderInput={(props) => <input {...props} />}
-                inputStyle={{
-                  width: '40px',
-                  height: '40px',
-                  margin: '0 4px',
-                  fontSize: '1.5rem',
-                  borderRadius: '4px',
-                  border: '1px solid #8b4513',
-                }}
-                focusStyle={{
-                  border: '2px solid #a0522d',
-                  outline: 'none'
-                }}
-              /> */}
-
-              <Button variant="link" onClick={()=>{handleResendOtp()}}>Resend Otp</Button>
-              <Button 
-                className="w-fit bg-[#8b4513] rounded text-white hover:bg-[#a0522d] mt-4" 
-                onClick={handleOTPVerification}
-              >
-                Verify OTP
-              </Button>
-            </div>
-
+              <div className='flex flex-col sm:gap-4 items-center justify-center'>
+                <h4 className="text-xl font-semibold text-center mb-2">Enter OTP</h4>
+                <Input type="text" className="text-center" value={otp} onChange={e => setOtp(e.target.value)} />
+                <Button variant="link" onClick={handleResendOtp}>Resend Otp</Button>
+                <Button
+                  className="w-fit bg-[#8b4513] rounded text-white hover:bg-[#a0522d] mt-4"
+                  onClick={handleOTPVerification}
+                >
+                  Verify OTP
+                </Button>
+              </div>
             )}
             <div className="mt-6 text-center">
               <Link to="/auth/login" className="text-[#120a05] hover:underline">Already have an account? Sign In</Link>

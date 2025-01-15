@@ -91,7 +91,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <nav className="navbar fixed top-0 left-0 right-0 flex justify-between bg-opacity-40 z-30 px-2 sm:px-4 md:px-10 lg:px-32">
+      <nav className="navbar fixed top-0 left-0 right-0 flex justify-between bg-opacity-40 z-30 px-5 py-2 sm:px-4 md:px-10 lg:px-32">
         <div className='flex  bg-transparent'>
           {accessToken && (
 
@@ -102,7 +102,7 @@ const Header = () => {
           </div>
           )}
           <Link to={'/'} className=" bg-opacity-80 ">
-            <img src='/aurora.png' alt="UCOE Logo" className='h-16 relative z-20' />
+            <img src='/universal-2.png' alt="UCOE Logo" className='h-12 relative z-20' />
           </Link>
         </div>
           {/* //mid nav */}

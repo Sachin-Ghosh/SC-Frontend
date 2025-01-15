@@ -5,6 +5,7 @@ import { Calendar, MapPin, Users, Clock, Award, UserPlus, DollarSign } from 'luc
 import { Button } from "@/components/ui/button"
 import { FaFootballBall } from 'react-icons/fa';
 import DOMPurify from 'dompurify';
+import { GiAura } from "react-icons/gi";
 
 
 const eventDetails = {
@@ -122,7 +123,7 @@ const EventDetails = () => {
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full z-0' alt="Event background" />
       <div className="min-h-screen bg-cover bg-center text-amber-900">
-        <img src='/maharaj.png' className='fixed -bottom-60 -right-20 w-[40rem] h-[40rem]'/>
+        <img src='/chanakya.png' className='fixed  bottom-0 left-0 opacity-40 '/>
         <div className="container mx-auto px-4 py-8 relative top-12">
           <motion.h1 
             className="text-4xl md:text-5xl font-bold mb-6 text-center ysabeau-sc"
@@ -203,9 +204,14 @@ const EventDetails = () => {
           >
             <h2 className="text-2xl font-bold mb-4 flex items-center ysabeau-sc">
               <Award className="mr-2" />
-              Prizes
+              Points
             </h2>
-            <p>{eventDetail.prize_pool_description}</p>
+            {event?.aura_points_winner && event?.aura_points_runner && (
+              <>
+            <span className="text-lg flex items-center sm:text-md text-amber-900 ysabeau-sc">Winner:  +{eventDetail?.aura_points_winner}<GiAura/></span>
+            <span className="text-lg flex items-center sm:text-md text-amber-900 ysabeau-sc">1st Runner Up:  +{eventDetail?.aura_points_runner}<GiAura/> </span>
+              </>
+            )}
             {/* <p className="mt-2">Total Prize Pool: ₹{eventDetail.prize_pool}</p> */}
           </motion.div>
           

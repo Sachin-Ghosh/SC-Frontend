@@ -16,25 +16,25 @@ const Score = () => {
   const [scoreData, setScoreData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getScore = async () => {
-    try {
-      const accessToken = localStorage.getItem('access-token')
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/scoreboard/complete_scoreboard/`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      })
-      const data = await response.json();
-      setScoreData(data)
-    } catch (error) {
-      console.error("Failed to fetch score data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  // const getScore = async () => {
+  //   try {
+  //     const accessToken = localStorage.getItem('access-token')
+  //     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/scoreboard/complete_scoreboard/`, {
+  //       headers: {
+  //         'Authorization': `Bearer ${accessToken}`
+  //       }
+  //     })
+  //     const data = await response.json();
+  //     setScoreData(data)
+  //   } catch (error) {
+  //     console.error("Failed to fetch score data:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }
 
   useEffect(() => {
-    getScore();
+    // getScore();
   }, [])
 
   if (isLoading) return (

@@ -14,7 +14,7 @@ const ViewHeats = () => {
   const [showHeatModal, setShowHeatModal] = useState(false);
   const [selectedHeat, setSelectedHeat] = useState(null);
   const [showScoreModal, setShowScoreModal] = useState(false);
-  const [heatloading, setHeatLoading] = useState(false); // Added state for heat loading
+  const [heatLoading, setHeatLoading] = useState(false);
 
   useEffect(() => {
     const fetchSubEvents = async () => {
@@ -31,6 +31,7 @@ const ViewHeats = () => {
         setSubEvents(data);
         setLoading(false);
       } catch (err) {
+        console.error(err.message)
         setError(err.message);
         setLoading(false);
       }
@@ -43,27 +44,39 @@ const ViewHeats = () => {
     try {
       setHeatLoading(true);
       const accessToken = localStorage.getItem('access-token');
-      const response = await fetch(`${import.meta.env.vITE_API_URL}/api/events/sub-events/${subEventId}/get-heats/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/${subEventId}/get-heats/`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         }
       });
 
-      if (!response.ok) throw new Error('Failed to fetch heats');
+      if (!response.ok) {
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.indexOf("application/json") !== -1) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to fetch heats');
+        } else {
+          const textError = await response.text();
+          console.error('Non-JSON error response:', textError);
+          throw new Error('Server error occurred. Please try again later.');
+        }
+      }
+
       const data = await response.json();
+      console.log(data);
       setHeats(data);
       setSelectedSubEvent(subEventId);
-      // setLoading(false);
-      setHeatLoading(false); // Update heatloading state after fetching heats
     } catch (err) {
+      console.error('Error fetching heats:', err.message);
       setError(err.message);
-      // setLoading(false);
-      setHeatLoading(false); // Update heatloading state after error
+    } finally {
+      setHeatLoading(false);
     }
   };
 
   const handleViewHeats = (subEventId) => {
-    setHeatLoading(true); //Added to set heatloading to true before fetching heats
+    setError(null); // Reset error state
+    setHeatLoading(true);
     fetchHeats(subEventId);
     setShowHeatModal(true);
   };
@@ -82,14 +95,6 @@ const ViewHeats = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-900"></div>
         </div>
       </>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-red-600">Error: {error}</div>
-      </div>
     );
   }
 
@@ -143,32 +148,43 @@ const ViewHeats = () => {
           >
             <ScrollArea className="p-6 w-full max-h-96">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Heats</h2>
-              {heatloading ? (
+              {heatLoading ? (
                 <div className="flex items-center justify-center h-64">
                   <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-900"></div>
                 </div>
+              ) : error ? (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <p className="text-red-800 text-center">{error}</p>
+                  <Button 
+                    className="mt-4 bg-amber-800 hover:bg-amber-700 text-white mx-auto block" 
+                    onClick={() => {
+                      setError(null);
+                      fetchHeats(selectedSubEvent);
+                    }}
+                  >
+                    Try Again
+                  </Button>
+                </div>
+              ) : heats.length === 0 ? (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <p className="text-amber-800 text-center">No heats found for this sub-event.</p>
+                </div>
               ) : (
-                heats.length === 0 ? (
-                  <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                    <p className="text-amber-800 text-center">No heats found for this sub-event.</p>
-                  </div>
-                ) : (
-                  <div className="flex w-full flex-col gap-4">
-                    {heats.map((heat) => (
-                      <div 
-                        key={heat.id} 
-                        className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
-                        onClick={() => handleHeatClick(heat)}
-                      >
-                        <h3 className="text-xl font-semibold text-amber-900">{heat.heat_name}</h3>
-                        <p className="text-gray-600">Stage: {heat.stage}</p>
-                        <p className="text-gray-600">Round: {heat.round_number}</p>
-                        <p className="text-gray-600">Status: {heat.status}</p>
-                        <p className="text-gray-600">Participants: {heat.participant_count}/{heat.max_participants}</p>
-                      </div>
-                    ))}
-                  </div>
-                )
+                <div className="flex w-full flex-col gap-4">
+                  {heats.map((heat) => (
+                    <div 
+                      key={heat.id} 
+                      className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow"
+                      onClick={() => handleHeatClick(heat)}
+                    >
+                      <h3 className="text-xl font-semibold text-amber-900">{heat.heat_name}</h3>
+                      <p className="text-gray-600">Stage: {heat.stage}</p>
+                      <p className="text-gray-600">Round: {heat.round_number}</p>
+                      <p className="text-gray-600">Status: {heat.status}</p>
+                      <p className="text-gray-600">Participants: {heat.participant_count}/{heat.max_participants}</p>
+                    </div>
+                  ))}
+                </div>
               )}
             </ScrollArea>
           </CustomModal>

@@ -84,7 +84,7 @@ const CulturalEvent = () => {
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full' alt="Cultural background" />
       <div className=" sticky z-20  lg:top-10 px-10 flex flex-col justify-center items-center min-h-screen">
-        <img src='/maharaj-2.png' alt='Cultural banner' className='fixed -z-10  bottom-0 -left-32 h-[28rem] w-[32rem] sm:-left-40' />
+        <img src='/gandhi.png' alt='Cultural banner' className='fixed -z-10  -bottom-20  h-[28rem] w-[32rem] sm:-left-40' />
         <img src='/tunes.png' alt='Cultural decor' className='fixed sm:block hidden -z-10 bottom-0 right-0' />
         <motion.div 
           className="text-4xl md:text-5xl ysabeau-sc text-center mb-8 text-[#966742] relative z-30 -top-10 sm:top-0 "
@@ -117,9 +117,17 @@ const CulturalEvent = () => {
               <img src={event.images[0]?.image} alt={event.name} className="w-full h-full object-cover absolute z-20" />
               <div className="p-6 relative z-30 bg-amber-900 w-full h-full bg-opacity-50 hover:bg-opacity-60 transition-all duration-300">
                 <h3 className="text-2xl mb-2 text-amber-100">{event.name}</h3>
-                <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Date:{event?.registration_schedule ? formatDateTime(event.schedule):''}</p>
-            <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Start:{event?.registration_start_time ? formatDateTime(event?.registration_start_time):''}</p>
+                <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Date:{event?.schedule ? formatDateTime(event.schedule):''}</p>
+            <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Start:{event?.registration_start_time
+ ? formatDateTime(event?.registration_start_time
+ ):''}</p>
             <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Deadline: {event.registration_deadline?formatDateTime(event.registration_deadline):''}</p>
+            {event?.aura_points_winner && event?.aura_points_runner && (
+            <>
+            <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Aura Points: 1st {event?.aura_points_winner}</p>
+            <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">2nd {event?.aura_points_runner}</p>
+            </>
+            )}
                 <p className="text-amber-100 py-4">{event.short_description}</p>
                 <div className="flex justify-between">
                   <motion.button

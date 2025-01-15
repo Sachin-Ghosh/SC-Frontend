@@ -147,20 +147,20 @@ const Registration = () => {
     }
     if (
       event.participation_type === 'GROUP' &&
-      formData.team_members.length < event.participants_per_group - 1
+      formData.team_members.length < event.min_team_size- 1
     ) {
       setWarning((prev) => ({
         ...prev,
         team_members: `You need to add at least ${
-          event.participants_per_group - 1
+          event.min_team_size - 1
         } team members.`,
       }));
       hasError = true;
     }
 
-    if (event.participation_type === 'GROUP' && formData.team_members.length < event.participants_per_group - 1) {
-      console.log(`You need to add at least ${event.participants_per_group - 1} team members.`)
-      toast.error(`You need to add at least ${event.participants_per_group - 1} team members.`);
+    if (event.participation_type === 'GROUP' && formData.team_members.length < event.min_team_size- 1) {
+      console.log(`You need to add at least ${event.min_team_size- 1} team members.`)
+      toast.error(`You need to add at least ${event.min_team_size- 1} team members.`);
       return;
     }
   
@@ -205,14 +205,14 @@ const Registration = () => {
   };
   
   const addTeamMember = (memberId) => {
-    if (formData.team_members.length < event.participants_per_group - 1) {
+    if (formData.team_members.length < event.max_team_size- 1) {
       setFormData(prev => ({
         ...prev,
         team_members: [...prev.team_members, memberId],
       }));
       setOpen(false); // Close the Popover after selection
     } else {
-      toast.error(`You can't add more than ${event.participants_per_group - 1} team members.`);
+      toast.error(`You can't add more than ${event.max_team_size - 1} team members.`);
     }
   };
 
@@ -348,7 +348,7 @@ const Registration = () => {
 
                 {event && event.participation_type === 'GROUP' && (
                   <div className="col-span-2 mb-6 flex flex-col gap-2 w-full">
-                    <label className="block text-[#4a3728]">Team Members ({formData.team_members.length}/{event.participants_per_group - 1})</label>
+                    <label className="block text-[#4a3728]">Team Members ({formData.team_members.length}/{event.max_team_size - 1})</label>
                     {formData.team_members.map((memberId) => {
                       const member = teamMembers.find(tm => tm.id === memberId);
                       return (
@@ -423,14 +423,16 @@ const Registration = () => {
                 )}
 
                 {event.upload_link===true && (
-
-                <div className="mb-6 sm:mb-0">
-                  <label htmlFor="division" className="block text-[#4a3728] ">Upload your audio in the drive :
-
-                  </label>
-                  <Link to={'https://drive.google.com/drive/folders/1zs72ia9FmdXxieV9P0jo_g7Z7C8oAfJc'} target='_blank' className='underline text-blue-600'>Google Drive</Link>
-                 
-                </div>
+                  <div className="w-full mb-6 sm:mb-0 col-span-full flex flex-col items-center sm:items-start justify-start mt-6">
+                    <label htmlFor="division" className="block text-[#4a3728] mb-2">Upload your audio in the form:</label>
+                    <Link 
+                      to={'https://docs.google.com/forms/d/e/1FAIpQLSfUfEOjsgWw0fETqEUrxZ0lttcVRof6zYln3X1t3tH0PONvdw/viewform?usp=header'} 
+                      target='_blank' 
+                      className='rounded bg-amber-800 px-4 py-2 hover:bg-amber-700 text-white transition-colors'
+                    >
+                      Google Form
+                    </Link>
+                  </div>
                 )}
 
 
@@ -439,7 +441,7 @@ const Registration = () => {
 
                 <motion.button
                   type="submit"
-                  className="col-span-2 sm:w-full bg-[#8b4513] text-white py-2 px-12 sm:px-0 rounded hover:bg-[#a0522d] transition-colors duration-200"
+                  className={`col-span-2 sm:w-full bg-[#8b4513] text-white py-2 px-12 sm:px-0 rounded relative hover:bg-[#a0522d] transition-colors duration-200`}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >

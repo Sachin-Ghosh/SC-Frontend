@@ -60,7 +60,7 @@ const SportsEvent = () => {
           <img src={event.images[0]?.image} alt={event.name} className="w-full h-full object-cover absolute z-20" />
           <div className="p-2  relative z-30 bg-amber-900 h-full bg-opacity-50 hover:bg-opacity-60 transition-all w-full duration-300">
             <h3 className="text-lg sm:text-2xl mb-2 text-amber-100"><Link to={`/${event.id}/details`}>{event.name}</Link></h3>
-            <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Date:{event?.registration_schedule ? formatDateTime(event.schedule):''}</p>
+            <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Date:{event?.schedule ? formatDateTime(event.schedule):''}</p>
             <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Start:{event?.registration_start_time ? formatDateTime(event?.registration_start_time):''}</p>
             <p className="text-sm sm:text-md text-amber-100 ysabeau-sc">Deadline: {event.registration_deadline?formatDateTime(event.registration_deadline):''}</p>
             <p className="text-amber-100 py-4">{event.short_description}</p>
