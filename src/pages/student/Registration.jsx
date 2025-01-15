@@ -306,7 +306,7 @@ const Registration = () => {
                       <SelectItem value="COMPUTER">Computer Engineering</SelectItem>
                       <SelectItem value="IT">IT</SelectItem>
                       <SelectItem value="AIML">AI/ML</SelectItem>
-                      <SelectItem value="DATA">Data Engineering</SelectItem>
+                      <SelectItem value="DE">Data Engineering</SelectItem>
                       <SelectItem value="CIVIL">Civil</SelectItem>
                     </SelectContent>
                   </Select>
