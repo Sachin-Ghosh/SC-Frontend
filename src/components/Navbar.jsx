@@ -55,7 +55,7 @@ const Header = () => {
               <Link to='/faculty-dashboard' onClick={() => {document.getElementById('my-drawer-3').click()}}>Dashboard</Link>
                 <Link to='/view-heats' onClick={() => {document.getElementById('my-drawer-3').click()}}>View Heats</Link>
                 <Link to='/leaderboard' onClick={() => {document.getElementById('my-drawer-3').click()}}>Leaderboard</Link>
-                <Link to='/scores' onClick={() => {document.getElementById('my-drawer-3').click()}}>Scores</Link>
+                {/* <Link to='/scores' onClick={() => {document.getElementById('my-drawer-3').click()}}>Scores</Link> */}
                 
               </>
             ) : (
@@ -114,7 +114,7 @@ const Header = () => {
                 <Link to='/faculty-dashboard' className='text-foreground hover:text-[#8b4513]'>Dashboard</Link>
                   <Link to='/view-heats' className='text-foreground hover:text-[#8b4513]'>View Heats</Link>
                   <Link to='/leaderboard' className='text-foreground hover:text-[#8b4513]'>Leaderboard</Link>
-                  <Link to='/scores' className='text-foreground hover:text-[#8b4513]'>Scores</Link>
+                  {/* <Link to='/scores' className='text-foreground hover:text-[#8b4513]'>Scores</Link> */}
                   
                 </>
 
