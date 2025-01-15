@@ -110,6 +110,11 @@ const SignUp = () => {
       return;
 
     }
+    if(!data.designation && activeTab==='FACULTY' ){
+      toast.error('Please enter your department')
+      return;
+
+    }
     const formData = new FormData();
     Object.keys(data).forEach(key => {
       if (key !== 'id_card_document' && key !== 'profile_picture') {
