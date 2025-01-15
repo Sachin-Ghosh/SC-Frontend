@@ -95,6 +95,16 @@ const SignUp = () => {
       toast.error('Upload Your Photo Id')
       return;
     }
+    if(!data.year_of_study && activeTab==='STUDENT' ){
+      toast.error('Please Select Year of study')
+      return;
+
+    }
+    if(!data.division && activeTab==='STUDENT' ){
+      toast.error('Please Select Division')
+      return;
+
+    }
     const formData = new FormData();
     Object.keys(data).forEach(key => {
       if (key !== 'id_card_document' && key !== 'profile_picture') {
@@ -172,7 +182,7 @@ const SignUp = () => {
   const handleOTPVerification = async () => {
     if (!otp || otp.length !== 6) {
       toast.error('Please enter a valid 6-digit OTP')
-      return
+      return;
     }
 
     const verificationPayload = {
@@ -340,7 +350,7 @@ const SignUp = () => {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Department</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <Select onValueChange={field.onChange}  defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select Department" />
@@ -389,7 +399,7 @@ const SignUp = () => {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Year of Study</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select onValueChange={field.onChange} required={activeTab==='STUDENT'} defaultValue={field.value}>
                                 <FormControl>
                                   <SelectTrigger>
                                     <SelectValue placeholder="Select Year of Study" />
@@ -412,7 +422,7 @@ const SignUp = () => {
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Division</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <Select onValueChange={field.onChange} required={activeTab==='STUDENT'} defaultValue={field.value}>
                                 <FormControl>
                                   <SelectTrigger>
                                     <SelectValue placeholder="Select Division" />
