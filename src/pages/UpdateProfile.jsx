@@ -81,7 +81,7 @@ const UpdateProfile = () => {
         // Handle ID card upload separately
         if (idCard) {
           const idCardFormData = new FormData();
-          idCardFormData.append('id_card', idCard);
+          idCardFormData.append('id_card_document', idCard);
           
           const idCardResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/users/profile/upload-id-card/`, {
             method: 'POST',
@@ -90,7 +90,7 @@ const UpdateProfile = () => {
             },
             body: idCardFormData
           });
-
+          console.log(await idCardResponse.json());
           if (!idCardResponse.ok) {
             toast.error('Failed to upload ID card');
           } else {
@@ -98,7 +98,7 @@ const UpdateProfile = () => {
           }
         }
 
-        navigate('/events/sports');
+        // navigate('/events/sports');
       }
     } catch (error) {
       console.log(error);
@@ -329,7 +329,7 @@ console.log(profile?.profile?.profile_picture)
           </Card>
         </form>
       </div>
-      <Toaster position='top-right'/>
+      <Toaster richColors position='top-right'/>
     </>
   )
 }
