@@ -58,7 +58,7 @@ const UpdateProfile = () => {
       Object.keys(formData).forEach(key => formDataToSend.append(key, formData[key]));
       
       if (profilePic) {
-        formDataToSend.append('profile_pic', profilePic);
+        formDataToSend.append('profile_picture', profilePic);
       }
 
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/profile/update/`, {
@@ -98,7 +98,7 @@ const UpdateProfile = () => {
           }
         }
 
-        // navigate('/events/sports');
+        navigate('/profile');
       }
     } catch (error) {
       console.log(error);
@@ -306,6 +306,8 @@ console.log(profile?.profile?.profile_picture)
                   onChange={handleProfilePicChange}
                 />
               </div>
+              
+
 
               <div className="space-y-2 mb-4">
                 <Label htmlFor="id_card">ID Card</Label>
