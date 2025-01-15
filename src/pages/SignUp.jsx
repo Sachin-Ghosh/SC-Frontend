@@ -105,6 +105,11 @@ const SignUp = () => {
       return;
 
     }
+    if(!data.roll_number && activeTab==='STUDENT' ){
+      toast.error('Please Fill your roll no.')
+      return;
+
+    }
     const formData = new FormData();
     Object.keys(data).forEach(key => {
       if (key !== 'id_card_document' && key !== 'profile_picture') {
@@ -528,7 +533,7 @@ const SignUp = () => {
                             <FormItem>
                               <FormLabel>Roll Number</FormLabel>
                               <FormControl>
-                                <Input placeholder="Roll Number" {...field} />
+                                <Input placeholder="Roll Number" required {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
