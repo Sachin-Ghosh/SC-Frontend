@@ -294,6 +294,7 @@ const SignUp = () => {
                           <FormControl>
                             <Input type="email" placeholder="Email" {...field} />
                           </FormControl>
+                          <FormDescription>Enter Your college email id</FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
