@@ -158,7 +158,7 @@ const Registration = () => {
       hasError = true;
     }
 
-    if (event.participation_type === 'GROUP' && formData.team_members.length <= event.min_team_size-1) {
+    if (event.participation_type === 'GROUP' && formData.team_members.length < event.min_team_size-1) {
       console.log(`You need to add at least ${event.min_team_size-1} team members.`)
       toast.error(`You need to add at least ${event.min_team_size-1} team members.`);
       return;
