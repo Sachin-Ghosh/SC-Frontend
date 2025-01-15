@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { toast, Toaster } from 'sonner';
+import { Loader } from 'lucide-react';
 // import { useToast } from "@/components/ui/use-toast"
 
 const ScoresForm = () => {
@@ -110,14 +111,25 @@ const ScoresForm = () => {
     }
   };
 
-  if (!eventDetail || eventDetail.category !== 'CULTURAL') {
-    return <div>Loading or not a cultural event...</div>;
+  if (!eventDetail) {
+    return (
+      <>
+      <img src='/registration-back.jpg' className='fixed object-cover h-full w-full' alt="Background" />
+      
+      <span className='text-black flex justify-center items-center min-h-screen gap-5'>
+      <Loader className='animate-spin' size={30} />
+      <h1 className='relative z-50'>Loading....</h1>
+    </span>
+    </>
+  );
   }
 
   return (
     <>
       <img src='/registration-back.jpg' className='fixed object-cover h-full w-full' alt="Background" />
-      <Card className="relative z-20 max-w-2xl mx-auto mt-10 mb-10">
+      {eventDetail.category === 'CULTURAL'?(
+        <>
+        <Card className="relative z-20 max-w-5xl w-full bg-white bg-opacity-35 top-5 sm:top-0 mx-auto mt-10 mb-10">
         <CardHeader>
           <CardTitle>Scores Form</CardTitle>
         </CardHeader>
@@ -136,7 +148,7 @@ const ScoresForm = () => {
                           <SelectValue placeholder="Select Heat" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent>
+                      <SelectContent className="bg-[url('/vintage.jpg')] bg-cover bg-center">
                         {eventDetail.recent_heats?.map((heat) => (
                           <SelectItem 
                             key={heat.id} 
@@ -158,13 +170,13 @@ const ScoresForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Participant</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select onValueChange={field.onChange} disabled={!selectedHeat} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select Participant" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="bg-[url('/vintage.jpg')] bg-cover bg-center">
                           {heatDetails?.participants?.map((participant) => (
                             <SelectItem 
                               key={participant.registration_id} 
@@ -235,6 +247,13 @@ const ScoresForm = () => {
           </Form>
         </CardContent>
       </Card>
+        </>
+      ):(
+        <>
+        </>
+
+      )}
+      
       <Toaster position='top-right'/>
     </>
   );

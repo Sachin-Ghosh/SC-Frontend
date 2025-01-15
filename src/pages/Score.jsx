@@ -37,16 +37,16 @@ const Score = () => {
     // getScore();
   }, [])
 
-  if (isLoading) return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="animate-spin rounded-full h-16 w-16 md:h-32 md:w-32 border-t-2 border-b-2 border-amber-500"></div>
-    </div>
-  )
+  // if (isLoading) return (
+  //   <div className="flex justify-center items-center h-screen">
+  //     <div className="animate-spin rounded-full h-16 w-16 md:h-32 md:w-32 border-t-2 border-b-2 border-amber-500"></div>
+  //   </div>
+  // )
 
-  if (!scoreData) return <div className="text-center text-red-500">Failed to load score data.</div>
+  // if (!scoreData) return <div className="text-center text-red-500">Failed to load score data.</div>
 
   const allDepartments = ['FE-A','FE-B','FE-C','FE-D','FE-E','FE-F' ,'SE-COM-A','SE-COM-B','SE-AI-C','SE-AI-D','SE-IT', 'SE-DE','TE-COM-A','TE-COM-B','TE-AI-C','TE-AI-D','TE-IT','TE-DE','BE-COM-A','BE-COM-B','BE-AI-C','BE-AI-D','BE-IT','BE-DE'];
-  const allFetchedDepartments= [...new Set([...scoreData.class_totals.map(ct => ct.department), 'AIML', 'DE', 'IT'])];
+  // const allFetchedDepartments= [...new Set([...scoreData?.class_totals?.map(ct => ct?.department), 'AIML', 'DE', 'IT'])];
   return (
     <>
       <img src='/event-background.jpg' className='fixed object-cover h-full w-full' alt="Cultural background" />
@@ -84,7 +84,7 @@ const Score = () => {
                           {eventName}
                         </TableCell>
                         {allDepartments.map(department => {
-                          const subEvent = scoreData.sub_event_scores.find(
+                          const subEvent = scoreData?.sub_event_scores.find(
                             se => se.name.toLowerCase() === eventName.toLowerCase()
                           );
                           const score = subEvent?.scores[department]?.score;
@@ -104,7 +104,7 @@ const Score = () => {
                         Total Score
                       </TableCell>
                       {allDepartments.map(department => {
-                        const totalScore = scoreData.class_totals.find(ct => ct.department === department)?.total_score;
+                        const totalScore = scoreData?.class_totals?.find(ct => ct.department === department)?.total_score;
                         return (
                           <TableCell 
                             key={`total-${department}`}
@@ -131,7 +131,7 @@ const Score = () => {
                   </TableHeader>
                   <TableBody>
                     {allDepartments.map(department => {
-                      const ranking = scoreData.department_rankings.find(r => r.department === department);
+                      const ranking = scoreData?.department_rankings?.find(r => r.department === department);
                       return (
                         <TableRow key={department}>
                           <TableCell className="text-center font-semibold bg-amber-50/50">{ranking?.rank || '--'}</TableCell>
