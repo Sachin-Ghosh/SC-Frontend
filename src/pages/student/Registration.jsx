@@ -196,7 +196,7 @@ const Registration = () => {
         toast.success('Registration submitted successfully!');
         navigate('/registered-events');
       } else {
-        toast.error(`${data.error}`);
+        toast.error(`${data.message}`);
       }
     } catch (error) {
       console.error(error);

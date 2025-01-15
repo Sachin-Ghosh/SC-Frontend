@@ -111,7 +111,7 @@ const SignUp = () => {
 
     }
     if(!data.designation && activeTab==='FACULTY' ){
-      toast.error('Please enter your department')
+      toast.error('Please enter your designation')
       return;
 
     }
