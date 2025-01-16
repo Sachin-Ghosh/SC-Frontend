@@ -16,27 +16,27 @@ const Score = () => {
   const [scoreData, setScoreData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getScore = async () => {
-    try {
-      const accessToken = localStorage.getItem('access-token')
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/overall-standings`, {
-        headers: {
-          'Authorization': `Bearer ${accessToken}`
-        }
-      })
-      const data = await response.json();
-      console.log(data)
-      setScoreData(data)
-    } catch (error) {
-      console.error("Failed to fetch score data:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+  // const getScore = async () => {
+  //   try {
+  //     const accessToken = localStorage.getItem('access-token')
+  //     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/overall-standings`, {
+  //       headers: {
+  //         'Authorization': `Bearer ${accessToken}`
+  //       }
+  //     })
+  //     const data = await response.json();
+  //     console.log(data)
+  //     setScoreData(data)
+  //   } catch (error) {
+  //     console.error("Failed to fetch score data:", error);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }
 
-  useEffect(() => {
-    getScore();
-  }, [])
+  // useEffect(() => {
+  //   getScore();
+  // }, [])
 
   // if (isLoading) return (
   //   <div className="flex justify-center items-center h-screen">
