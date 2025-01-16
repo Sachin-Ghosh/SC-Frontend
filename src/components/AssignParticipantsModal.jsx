@@ -69,14 +69,17 @@ export function AddParticipantsModal({ heatId, subEventId, stage }) {
 
       console.log(await response.json())
 
-      if (!response.ok) throw new Error('Failed to assign participants')
+      if (!response.ok) {
+        toast('Failed to assign participants')
+      }
 
-      toast.success("Success")
+      toast.success("Assigned Success fully")
       
-      setOpen(false)
+      // setOpen(false)
       setSelectedParticipants([])
     } catch (error) {
-      toast.error("Error")
+      // toast.error("Error")
+      console.log(error.message)
     }
   }
 
@@ -94,7 +97,7 @@ fetchParticipants();
 
   return (
     <>
-    <Dialog >
+    <Dialog className="">
       <DialogTrigger asChild>
         <Button 
           variant="outline" 
@@ -104,7 +107,7 @@ fetchParticipants();
           Add Participants
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl bg-white bg-opacity-90">
+      <DialogContent className="max-w-3xl bg-white bg-opacity-90 bg-[url('/vintage.jpg')] bg-center bg-cover">
         <DialogHeader>
           <DialogTitle>Add Participants to Heat</DialogTitle>
         </DialogHeader>
@@ -136,7 +139,7 @@ fetchParticipants();
                   <div className="flex-1">
                     <p className="font-medium">{participant.team_members[0]?.full_name}</p>
                     <p className="text-sm text-gray-500">
-                      {participant.registration_number} • {participant.team_members[0]?.department} • {participant.team_members[0]?.year_of_study}
+                      {participant.registration_number}
                     </p>
                   </div>
                 </div>

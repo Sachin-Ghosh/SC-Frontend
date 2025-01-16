@@ -231,23 +231,15 @@ const ScoresForm = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Participant</FormLabel>
-                      <Select onValueChange={field.onChange} disabled={!selectedHeat} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Participant" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent className="bg-[url('/vintage.jpg')] bg-cover bg-center">
-                          {heatDetails?.participants?.map((participant) => (
-                            <SelectItem 
-                              key={participant?.registration_id} 
-                              value={participant?.registration_id?.toString()}
-                            >
-                              {participant?.participant_name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                      {/* <Select onValueChange={field.onChange} disabled={!selectedHeat} defaultValue={field.value}> */}
+                      <Combobox
+                          disabled={!selectedHeat}
+                            options={heatDetails?.participants?.map(p => ({
+                              value: p.registration_id.toString(),
+                              label: p.participant_name ? p.participant_name : p.team_name
+                            })) || []}
+                            {...field}
+                          />
                     </FormItem>
                   )}
                 />

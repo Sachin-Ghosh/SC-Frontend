@@ -122,13 +122,13 @@ const ViewHeats = () => {
           'Authorization': `Bearer ${accessToken}`,
         }
       });
-
-      if (!response.ok) throw new Error('Final Results not yet decided');
+      // if (!response.ok) throw new Error('Final Results not yet decided');
       const data = await response.json();
       console.log('final scores',data)
+      navigate(`/final-results/${heatId}`, { state: { results: data } });
 
       // Navigate to the final results page with the data
-      navigate(`/final-results/${heatId}`, { state: { results: data } });
+      
     } catch (err) {
       console.error('Error fetching final results:', err.message);
       setError(err.message);
@@ -176,7 +176,7 @@ const ViewHeats = () => {
                   animate={{ opacity: 1, y: 0 }}
                   whileHover={{scale: 1.05}}
                   transition={{ delay: index * 0.3, duration: 0.5 }}
-                  className="bg-white rounded place-self-center bg-opacity-40 shadow-md p-5 w-72 sm:w-full hover:shadow-lg transition-shadow"
+                  className="bg-white rounded place-self-center bg-opacity-80 backdrop-blur-sm shadow-md p-5 w-72 sm:w-full hover:shadow-lg transition-shadow"
                 >
                   <h3 className="text-xl font-semibold text-amber-900">{subEvent.name}</h3>
                   <p className="text-gray-600 mt-2">Event: {subEvent.event.name}</p>

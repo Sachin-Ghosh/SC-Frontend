@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { TbError404, TbPlayerRecord } from 'react-icons/tb';
+import { MdError } from 'react-icons/md';
 
 const FinalResults = () => {
   const navigate = useNavigate();
@@ -37,7 +39,13 @@ const FinalResults = () => {
   if (!results) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-amber-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-900"></div>
+        <img src='/vintage.jpg' className='fixed object-cover h-full w-full' alt="Event background" />
+        <div className='flex flex-col gap-2 items-center'>
+
+        {/* <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-900"></div> */}
+        <MdError className='relative z-10 text-red-500' size={40}/>
+        <span className='relative font-semibold text-xl'>{error}</span>
+        </div>
       </div>
     );
   }
