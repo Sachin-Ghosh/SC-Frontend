@@ -256,7 +256,7 @@ const ScoresForm = () => {
               {scoringCriteria && (
                 <div className="space-y-4">
                   <h3 className="font-medium text-lg">Scoring Criteria</h3>
-                  <ScrollArea className="h-[300px] rounded-md border p-4">
+                  <ScrollArea className="h-[370px] rounded bg-white bg-opacity-40 border p-4">
                     <div className="space-y-4">
                       {Object.entries(scoringCriteria?.criteria).map(([criterion, details]) => (
                         <FormField
@@ -301,12 +301,54 @@ const ScoresForm = () => {
                           )}
                         />
                       ))}
+
+                    <FormField
+                      key="Negative Marking"
+                      control={form.control}
+                      name="scores.Negative Marking"
+                      rules={{
+                        required: "Negative Marking score is required",
+                        min: {
+                          value: 0,
+                          message: "Negative Marking score must be at least 0"
+                        },
+                        max: {
+                          value: 10,
+                          message: "Negative Marking score must not exceed 10"
+                        }
+                      }}
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="flex items-center justify-between">
+                            <FormLabel>Negative Marking</FormLabel>
+                            <span className="text-sm text-muted-foreground">
+                              Default: 0
+                            </span>
+                          </div>
+                          <FormControl>
+                            <div className='flex gap-2 items-center'>
+                              <Input
+                                {...field}
+                                type="number"
+                                className=""
+                                step="0.1"
+                                min="0"
+                                max={10}
+                                placeholder="Enter Negative Marking (max: 10)"
+                                defaultValue="0"
+                              />
+                              <span>/10</span>
+                            </div>
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
                     </div>
                   </ScrollArea>
                 </div>
               )}
 
-              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+              <Button type="submit" className="w-full bg-amber-950 rounded text-white" disabled={form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? "Submitting..." : "Submit Scores"}
               </Button>
             </form>

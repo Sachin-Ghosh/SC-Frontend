@@ -123,12 +123,12 @@ const ViewHeats = () => {
         }
       });
 
-      if (!response.ok) throw new Error('Failed to fetch final results');
+      if (!response.ok) throw new Error('Final Results not yet decided');
       const data = await response.json();
       console.log('final scores',data)
 
       // Navigate to the final results page with the data
-      navigate('/final-results', { state: { results: data } });
+      navigate(`/final-results/${heatId}`, { state: { results: data } });
     } catch (err) {
       console.error('Error fetching final results:', err.message);
       setError(err.message);
@@ -233,7 +233,7 @@ const ViewHeats = () => {
                       <p className="text-gray-600">Stage: {heat.stage}</p>
                       <p className="text-gray-600">Round: {heat.round_number}</p>
                       <p className="text-gray-600">Status: {heat.status}</p>
-                      <p className="text-gray-600">Participants: {heat.participant_count}/{heat.max_participants}</p>
+                      {/* <p className="text-gray-600">Participants: {heat.participant_count}/{heat.max_participants}</p> */}
                      <Button 
                      className="mt-4 bg-amber-800 hover:bg-amber-700 text-white"
                      onClick={() => handleViewFinalResults(heat.id)}
