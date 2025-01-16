@@ -193,9 +193,13 @@ const Header = () => {
             </ul>
           </div>
           ):(
-            <div className='flex gap-10 items-center'>
-              <Link to='/about' className='text-white hover:text-[#8b4513]'>About</Link>
+            <div className='flex sm:gap-10 items-center'>
+              <Link to='/about' className='text-white hidden sm:flex hover:text-[#8b4513]'>About</Link>
+              <div className='flex gap-x-5'>
+
             <Link to={'/auth/login'} className='bg-amber-900 border border-black rounded text-white px-3 py-2'>Login</Link>
+            <Link to={'/auth/register'} className='bg-yellow-900 border border-black rounded text-white px-3 py-2'>Register</Link>
+              </div>
             </div>
           )}
           

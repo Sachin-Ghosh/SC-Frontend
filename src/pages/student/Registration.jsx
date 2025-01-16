@@ -77,7 +77,7 @@ const Registration = () => {
     };
     const getTeamMembers = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/filter/?department=${formData.department}&year=${formData.year}&division=${formData.division}&user_type=STUDENT`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/filter/?department=${encodeURIComponent(formData.department)}&year=${formData.year}&division=${formData.division}&user_type=STUDENT`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,

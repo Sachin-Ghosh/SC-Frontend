@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom'
 export function AddParticipantsModal({ heatId, subEventId, stage }) {
   const [participants, setParticipants] = useState([])
   const [selectedParticipants, setSelectedParticipants] = useState([]);
-  const [open,setOpen]=useState(false)
+  // const [open,setOpen]=useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const token = localStorage.getItem('access-token');
   const navigate=useNavigate()
@@ -94,7 +94,7 @@ fetchParticipants();
 
   return (
     <>
-    <Dialog open={open}>
+    <Dialog >
       <DialogTrigger asChild>
         <Button 
           variant="outline" 

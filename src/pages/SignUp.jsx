@@ -91,7 +91,7 @@ const SignUp = () => {
 
   const onSubmit = async (data) => {
 
-    if(!photoIdFile||!profilePicFile){
+    if((!photoIdFile||!profilePicFile)&&(activeTab==='STUDENT'||activeTab==='COUNCIL')){
       toast.error('Upload Your Photo Id')
       return;
     }
@@ -166,7 +166,7 @@ const SignUp = () => {
       }
     );
   };
-
+// console.log(first)
   const Login = async () => {
     try {
       const loginResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/login/`, {
