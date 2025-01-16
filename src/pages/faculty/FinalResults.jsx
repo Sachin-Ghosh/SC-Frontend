@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { TbError404, TbPlayerRecord } from 'react-icons/tb';
 import { MdError } from 'react-icons/md';
+import { Trophy } from 'lucide-react';
 
 const FinalResults = () => {
   const navigate = useNavigate();
@@ -98,7 +99,9 @@ const FinalResults = () => {
                 {/* Participants Results */}
                 {results.results.map((result, index) => (
                   <div key={index} className="mt-6">
-                    <h3 className="text-lg font-semibold mb-2">{index + 1}.{result.participant_name} </h3>
+                    <h3 className="text-lg font-semibold flex flex-col items-center mb-2">
+                    <span className='flex flex-col items-center text-yellow-400'>{result.position}<Trophy/></span>  
+                    <span className='text-amber-800'>{result.participant_name ? result.participant_name:result.team_name} </span></h3>
                     <Table>
                       <TableHeader>
                         {/* <TableRow>
@@ -109,7 +112,7 @@ const FinalResults = () => {
                       <TableBody>
                         <TableRow>
                           <TableCell className="font-medium">Participant Name</TableCell>
-                          <TableCell>{result.participant_name}</TableCell>
+                          <TableCell>{result.participant_name ? result.participant_name:result.team_name}</TableCell>
                         </TableRow>
                         <TableRow>
                           <TableCell className="font-medium">Position</TableCell>
