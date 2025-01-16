@@ -672,6 +672,7 @@ const SignUp = () => {
                 >
                   Verify OTP
                 </Button>
+                <span>The Otp has been sent  to your universal email</span>
               </div>
             )}
             <div className="mt-6 text-center">

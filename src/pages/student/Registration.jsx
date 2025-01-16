@@ -279,7 +279,7 @@ const Registration = () => {
                     className=" px-3 w-96 border-b bg-transparent border-[#d2b48c] rounded focus:outline-none focus:border-[#8b4513]"
                   />
                 </div> */}
-                {event && event.participation_type === 'GROUP' && (
+                {event && event.participation_type === 'GROUP'||event.participation_type === 'DUO' && (
                   <div className=" sm:px-0 mb-6 sm:mb-0">
                     <label htmlFor="email" className="block text-[#4a3728] ">Team Name</label>
                     <Input
