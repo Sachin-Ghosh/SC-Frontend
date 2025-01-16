@@ -131,20 +131,20 @@ const Registration = () => {
       }));
       hasError = true;
     }
-    if (!formData.division) {
-      setWarning((prev) => ({
-        ...prev,
-        division: "Please select your division",
-      }));
-      hasError = true;
-    }
-    if (!formData.year) {
-      setWarning((prev) => ({
-        ...prev,
-        year: "Please select your year of study",
-      }));
-      hasError = true;
-    }
+    // if (!formData.division) {
+    //   setWarning((prev) => ({
+    //     ...prev,
+    //     division: "Please select your division",
+    //   }));
+    //   hasError = true;
+    // }
+    // if (!formData.year) {
+    //   setWarning((prev) => ({
+    //     ...prev,
+    //     year: "Please select your year of study",
+    //   }));
+    //   hasError = true;
+    // }
     if (
       event.participation_type === 'GROUP' &&
       formData.team_members.length < event.min_team_size- 1
@@ -310,7 +310,7 @@ const Registration = () => {
                       <SelectItem value="CIVIL">Civil</SelectItem>
                     </SelectContent>
                   </Select>
-                  {!formData.department&& <span>{warning.department}</span>  }
+                  {/* {!formData.department&& <span>{warning.department}</span>  } */}
                 </div>
                 {(event?.allow_mixed_year===false) && (
                   <>
@@ -328,7 +328,7 @@ const Registration = () => {
                       <SelectItem value="BE">BE</SelectItem>
                     </SelectContent>
                   </Select>
-                  {!formData.year&& <span>{warning.year}</span>}
+                  {/* {!formData.year&& <span>{warning.year}</span>} */}
                 </div>
                 </>
                 )}

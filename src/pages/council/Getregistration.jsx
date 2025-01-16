@@ -117,7 +117,8 @@ const fetchTeamData = async (registrationNumber) => {
       throw new Error(`Error: ${response.status}`)
     }
 
-    const data = await response.json()
+    const data = await response.json();
+    console.log(data)
     console.log('API Response:', data)
 
     if (!data) {

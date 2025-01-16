@@ -151,7 +151,7 @@ const Header = () => {
         </DropdownMenu>
         
         <Link to='/registered-events' className='text-foreground hover:text-[#8b4513] '>Registered Events</Link>
-        <Link to='/score-board' className='hidden sm:block text-foreground hover:text-[#8b4513]'><a>ScoreBoard</a></Link>
+        {/* <Link to='/score-board' className='hidden sm:block text-foreground hover:text-[#8b4513]'><a>ScoreBoard</a></Link> */}
        
         
                 </>

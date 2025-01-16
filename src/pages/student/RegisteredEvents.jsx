@@ -198,7 +198,7 @@ const RegisteredEvents = () => {
           <h1 className='ysabeau-sc relative z-40 top-[6.5rem]'>Registered Events</h1>
         </motion.div>
 
-        <div className='fixed top-32 sm:top-12'>
+        <div className='fixed top-0 sm:top-12'>
           {renderContent()}
         </div>
       </div>
