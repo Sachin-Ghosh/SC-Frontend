@@ -50,7 +50,7 @@ const ScoresForm = () => {
             'Authorization': `Bearer ${accessToken}`,
           },
         });
-        console.log('event detail', response.data)
+        // console.log('event detail', response.data)
         setEventDetail(response.data);
         
         // Fetch scoring criteria
@@ -62,7 +62,7 @@ const ScoresForm = () => {
             },
           }
         );
-        console.log('Criteria',criteriaResponse.data);
+        // console.log('Criteria',criteriaResponse.data);
         setScoringCriteria(criteriaResponse.data);
       } catch (error) {
         console.error('Error fetching event details:', error);
@@ -82,7 +82,7 @@ const ScoresForm = () => {
               'Authorization': `Bearer ${accessToken}`,
             },
           });
-          console.log(response.data);
+          // console.log(response.data);
           setHeatDetails(response.data);
         } catch (error) {
           console.error('Error fetching heat details:', error);

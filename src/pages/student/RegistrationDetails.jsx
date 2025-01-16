@@ -22,7 +22,7 @@ const RegistrationDetails = () => {
           },
         });
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         console.log(data.sub_event)
         setEventDetail(data);
         if(data)

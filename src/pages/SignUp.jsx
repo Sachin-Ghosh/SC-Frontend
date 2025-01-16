@@ -232,7 +232,7 @@ const SignUp = () => {
           'Content-Type': 'multipart/form-data'
         }
       }).then((response) => {
-        console.log('OTP verification successful:', response.data)
+        // console.log('OTP verification successful:', response.data)
         Login();
         return response.data
       }),

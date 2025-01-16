@@ -26,7 +26,7 @@ const SportsEvent = () => {
         },
       });
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       if(response.ok){
         setSubevents(data);
         setLoading(false)

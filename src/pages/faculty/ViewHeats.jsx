@@ -124,7 +124,7 @@ const ViewHeats = () => {
       });
       // if (!response.ok) throw new Error('Final Results not yet decided');
       const data = await response.json();
-      console.log('final scores',data)
+      // console.log('final scores',data)
       navigate(`/final-results/${heatId}`, { state: { results: data } });
 
       // Navigate to the final results page with the data
