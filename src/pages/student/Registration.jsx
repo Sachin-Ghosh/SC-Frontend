@@ -77,7 +77,7 @@ const Registration = () => {
     };
     const getTeamMembers = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/filter/?department=${encodeURIComponent(formData.department)}&year=${formData.year}&division=${formData.division}&user_type=COUNCIL&page=1&page_size=10000`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/filter/?department=${encodeURIComponent(formData.department)}&year=${formData.year}&division=${formData.division}&page=1&page_size=10000`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${accessToken}`,
@@ -173,7 +173,7 @@ const Registration = () => {
     //   return;
     // }
   
-    console.log('Form submitted:', formData);
+    // console.log('Form submitted:', formData);
   
     // Prepare payload
     const payload = {
