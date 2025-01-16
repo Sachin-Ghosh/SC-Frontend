@@ -235,7 +235,7 @@ const Registration = () => {
     }
   }, [formData.team_members]);
 
-  console.log(event?.upload_link)
+  // console.log('mix',event?.allow_mixed_department)
 
   return (
     <>
@@ -312,6 +312,9 @@ const Registration = () => {
                   </Select>
                   {!formData.department&& <span>{warning.department}</span>  }
                 </div>
+                {(event?.allow_mixed_year===false) && (
+                  <>
+
                 <div className="mb-6 sm:mb-0">
                   <label htmlFor="year" className="block text-[#4a3728] ">Year</label>
                   <Select onValueChange={(value) => handleSelectChange('year', value)}>
@@ -327,6 +330,11 @@ const Registration = () => {
                   </Select>
                   {!formData.year&& <span>{warning.year}</span>}
                 </div>
+                </>
+                )}
+
+                {(event?.allow_mixed_division===false) && (
+                  <>
                 <div className="mb-6 sm:mb-0">
                   <label htmlFor="division" className="block text-[#4a3728] ">Division</label>
                   <Select onValueChange={(value) => handleSelectChange('division', value)}>
@@ -345,6 +353,8 @@ const Registration = () => {
                   </Select>
                   {!formData.division&& <span>{warning.division}</span>}
                 </div>
+                </>
+                )}
 
                 {event && (event.participation_type === 'GROUP' || event.participation_type === "DUO") && (
                   <div className="col-span-2 mb-6 flex flex-col gap-2 w-full">

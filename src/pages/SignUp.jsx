@@ -373,6 +373,7 @@ const SignUp = () => {
                               <SelectItem value="AIML">AI/ML</SelectItem>
                               <SelectItem value="DE">Data Engineering</SelectItem>
                               <SelectItem value="CIVIL">Civil</SelectItem>
+                              {activeTab==='FACULTY' &&  <SelectItem value="OTHERS">Non-Teaching Staff</SelectItem>}
                             </SelectContent>
                           </Select>
                           <FormMessage />
