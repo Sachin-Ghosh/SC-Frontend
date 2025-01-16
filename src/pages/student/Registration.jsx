@@ -114,7 +114,7 @@ const Registration = () => {
       team_members: '',
     });
   
-    let hasError = false;
+    // let hasError = false;
   
     // Validation checks
     if (!formData.team_name && event.participation_type === 'GROUP') {
@@ -122,14 +122,16 @@ const Registration = () => {
         ...prev,
         team_name: "Please enter a team name",
       }));
-      hasError = true;
+      return;
+      // hasError = true;
     }
     if (!formData.department) {
       setWarning((prev) => ({
         ...prev,
         department: "Please select a department",
       }));
-      hasError = true;
+      return;
+      // hasError = true;
     }
     // if (!formData.division) {
     //   setWarning((prev) => ({
@@ -155,7 +157,8 @@ const Registration = () => {
           event.min_team_size - 1
         } team members.`,
       }));
-      hasError = true;
+      // hasError = true;
+      return;
     }
 
     if (event.participation_type === 'GROUP' && formData.team_members.length < event.min_team_size-1) {
@@ -165,10 +168,10 @@ const Registration = () => {
     }
   
     // Stop submission if there are errors
-    if (hasError) {
-      toast.error('Please fix the errors before submitting.');
-      return;
-    }
+    // if (hasError) {
+    //   toast.error('Please fix the errors before submitting.');
+    //   return;
+    // }
   
     console.log('Form submitted:', formData);
   
