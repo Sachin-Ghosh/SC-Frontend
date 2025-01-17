@@ -39,12 +39,12 @@ const CreateHeatModal = () => {
       setOpen(false);
       setFormData({  // Reset form
         heat_name: '',
-        stage: 'PRELIMS',
-        round_number: 1,
-        schedule: '',
-        venue: '',
-        max_participants: 6,
-        status: 'PENDING'
+          stage: 'PRELIMS',
+          round_number: 1,
+          schedule: '',
+          venue: '',
+          max_participants: 6,
+        // status: 'PENDING'
       });
 
     } catch (error) {

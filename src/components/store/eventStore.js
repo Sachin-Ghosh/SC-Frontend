@@ -17,6 +17,7 @@ export const useEventStore = zustand.create((set, get) => ({
     set({ isLoading: true, error: null });
     
     try {
+      console.log(heatData)
       const token = localStorage.getItem('access-token');
       if (!token) {
         throw new Error('Authentication required');
@@ -41,6 +42,7 @@ export const useEventStore = zustand.create((set, get) => ({
         if (response.status === 500) {
           toast.error('Please select a unique name or try a different schedule');
         } else {
+          console.log(data)
           toast.error(data.message || 'Failed to create heat');
         }
         throw new Error('Failed to create heat');

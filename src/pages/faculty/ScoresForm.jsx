@@ -286,7 +286,7 @@ const ScoresForm = () => {
                                   max={details?.max_score}
                                   placeholder={`Enter score (max: ${details?.max_score})`}
                                 />
-                                <span>/10</span>
+                                <span>/{details?.max_score}</span>
                                 </div>
                               </FormControl>
                             </FormItem>
