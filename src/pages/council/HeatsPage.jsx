@@ -11,22 +11,25 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { format } from 'date-fns';
 import CreateHeatModal from '@/components/CreateHeatModal';
 import UpdateHeatModal from '@/components/UpdateHeatModal';
-import { Toaster } from 'sonner';
+import { toast, Toaster } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { GiStagHead } from 'react-icons/gi';
 import { AddParticipantsModal } from '@/components/AssignParticipantsModal';
 import { useParams } from 'react-router-dom';
-// import { AddParticipantsModal } from '@/components/AddParticipantsModal';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const HeatsPage = () => {
-  const params=useParams();
-  //console.log(params)
+  const params = useParams();
   const { heats, isLoading, error, fetchHeats } = useEventStore();
   const [filters, setFilters] = useState({
     status: 'ALL',
     stage: 'ALL',
     round: 'ALL'
   });
+  const [participants, setParticipants] = useState([]);
+  const [showParticipants, setShowParticipants] = useState(false);
 
   useEffect(() => {
     fetchHeats();
@@ -34,6 +37,23 @@ const HeatsPage = () => {
       useEventStore.getState().clearHeats();
     };
   }, []);
+
+  const fetchAllParticipants = async (heatId) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/heats/${heatId}/`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access-token')}`,
+        }
+      });
+      const data = await response.json();
+      setParticipants(data.participants);
+      setShowParticipants(true);
+    } catch (error) {
+      console.error('Error fetching participants:', error);
+      toast.error("Failed to fetch participants");
+    }
+  };
 
   const handleFilterChange = (key, value) => {
     const newFilters = { ...filters, [key]: value };
@@ -164,6 +184,38 @@ const HeatsPage = () => {
                 </div>
                 <UpdateHeatModal heat={heat} />
                 <AddParticipantsModal heatId={heat.id} subEventId={params.id} stage={heat.stage}/>
+                
+                <Dialog open={showParticipants} onOpenChange={setShowParticipants}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      className="w-full bg-amber-800 hover:bg-amber-600 text-white"
+                      onClick={() => fetchAllParticipants(heat.id)}
+                    >
+                      View Participants
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-white max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle>Participants List</DialogTitle>
+                    </DialogHeader>
+                    <ScrollArea className="h-[80vh]">
+                    <div className="space-y-4">
+                      {participants?.length > 0 ? participants.map((participant) => (
+                        <div key={participant.id} className="p-4 border rounded">
+                          <p className="font-medium">{participant.participant_name}</p>
+                          <p className="text-sm text-gray-600">Department: {participant.department}</p>
+                          <p className="text-sm text-gray-600">Registration: {participant.registration}</p>
+                          {participant.position && (
+                            <p className="text-sm text-gray-600">Position: {participant.position}</p>
+                          )}
+                        </div>
+                          )) : (
+                        <p className="text-center text-gray-500">No participants found.</p>
+                      )}
+                    </div>
+                    </ScrollArea>
+                  </DialogContent>
+                </Dialog>
               </CardContent>
             </Card>
           ))}
@@ -173,10 +225,9 @@ const HeatsPage = () => {
           <p className="text-center text-gray-500">No heats found.</p>
         )}
       </div>
-      <Toaster position='top-right'/>
+      <Toaster richColors position='top-right'/>
     </>
   );
 };
 
 export default HeatsPage;
-
