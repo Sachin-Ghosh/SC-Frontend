@@ -72,7 +72,7 @@ const Login = () => {
       {
         loading: 'Loading...',
         success: (data) => {
-          console.log('Login successful:', data)
+          // console.log('Login successful:', data)
           setToken(data.tokens);
           localStorage.setItem('access-token', data.tokens.access);
           localStorage.setItem('refresh-token', data.tokens.refresh);
