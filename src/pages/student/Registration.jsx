@@ -152,23 +152,30 @@ const Registration = () => {
     // }
     if (
       event.participation_type === 'GROUP' &&
-      formData.team_members.length < event.min_team_size- 1
+      formData.team_members.length < event.min_team_size
     ) {
       setWarning((prev) => ({
         ...prev,
         team_members: `You need to add at least ${
-          event.min_team_size - 1
+          event.min_team_size
         } team members.`,
       }));
+
       // hasError = true;
+      if (event.participation_type === 'GROUP' && formData.team_members.length < event.min_team_size-1) {
+        //console.log(`You need to add at least ${event.min_team_size-1} team members.`)
+        toast.error(`You need to add at least ${event.min_team_size} team members.`);
+      }
+      setRegisterLoading(false)
       return;
     }
 
-    if (event.participation_type === 'GROUP' && formData.team_members.length < event.min_team_size-1) {
-      //console.log(`You need to add at least ${event.min_team_size-1} team members.`)
-      toast.error(`You need to add at least ${event.min_team_size-1} team members.`);
-      return;
-    }
+    // if (event.participation_type === 'GROUP' && formData.team_members.length < event.min_team_size-1) {
+    //   //console.log(`You need to add at least ${event.min_team_size-1} team members.`)
+    //   setRegisterLoading(false)
+    //   toast.error(`You need to add at least ${event.min_team_size-1} team members.`);
+    //   return;
+    // }
   
     // Stop submission if there are errors
     // if (hasError) {
@@ -318,7 +325,7 @@ const Registration = () => {
                       <SelectItem value="CIVIL">Civil</SelectItem>
                     </SelectContent>
                   </Select>
-                  {/* {!formData.department&& <span>{warning.department}</span>  } */}
+                  {!formData.department&& <span>{warning.department}</span>  }
                 </div>
                 {(event?.allow_mixed_year===false) && (
                   <>
