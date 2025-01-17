@@ -34,7 +34,7 @@ const UserDetailsDialog = ({ user, isOpen, setIsOpen, title }) => {
     { icon: <Book className="w-4 h-4" />, label: "Department", value: user.department },
     { icon: <School className="w-4 h-4" />, label: "Year & Division", value: `${user.yearOfStudy} Year - ${user.division}` },
     { icon: <Hash className="w-4 h-4" />, label: "Roll Number", value: user.rollNumber },
-    { icon: <Users2 className="w-4 h-4" />, label: "Gender", value: user.gender === 'M' ? 'Male' : 'Female' }
+    { icon: <Users2 className="w-4 h-4" />, label: "Gender", value: user.gender === 'MALE' ? 'Male' : 'Female' }
   ];
 
   return (
@@ -44,7 +44,7 @@ const UserDetailsDialog = ({ user, isOpen, setIsOpen, title }) => {
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
         
-        <div className="mt-4">
+        <div className="mt-4 max-h-[600px] sm:max-h-full overflow-y-auto">
           <div className="flex items-center space-x-6">
             <div className="relative">
               <img 
@@ -63,7 +63,7 @@ const UserDetailsDialog = ({ user, isOpen, setIsOpen, title }) => {
             </div>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4  max-w-md">
             {infoItems.map((item, index) => (
               <div key={index} className="flex items-center p-3 bg-gray-50 rounded-lg">
                 <div className="flex-shrink-0 text-gray-500">
@@ -71,7 +71,7 @@ const UserDetailsDialog = ({ user, isOpen, setIsOpen, title }) => {
                 </div>
                 <div className="ml-3">
                   <p className="text-xs font-medium text-gray-500">{item.label}</p>
-                  <p className="text-sm font-medium text-gray-900">{item.value}</p>
+                  <p className="text-[20px] font-medium text-gray-900 ">{item.value}</p>
                 </div>
               </div>
             ))}
@@ -83,7 +83,7 @@ const UserDetailsDialog = ({ user, isOpen, setIsOpen, title }) => {
               <img 
                 src={user.idCardDocument} 
                 alt="ID Card"
-                className="w-full h-48 object-cover rounded-lg"
+                className="w-full h-48 object-contain rounded-lg"
               />
             </div>
           )}
@@ -119,7 +119,7 @@ const fetchTeamData = async (registrationNumber) => {
 
     const data = await response.json();
     console.log(data)
-    console.log('API Response:', data)
+    //console.log('API Response:', data)
 
     if (!data) {
       throw new Error('No data received from API')
@@ -173,7 +173,7 @@ const fetchTeamData = async (registrationNumber) => {
         'Date not available'
     }
 
-    console.log('Formatted Data:', formattedData)
+    //console.log('Formatted Data:', formattedData)
     return formattedData
 
   } catch (error) {
@@ -400,9 +400,9 @@ navigate('/');
                         className="h-8 w-8 rounded-full mr-3"
                       />
                     )}
-                    <div>
+                    <div className='overflow-hidden max-w-[200px]'>
                       <p className="font-medium">{member.name}</p>
-                      <p className="text-gray-500">{member.email}</p>
+                      <p className="text-gray-500 ">{member.email}</p>
                     </div>
                   </div>
                 </li>

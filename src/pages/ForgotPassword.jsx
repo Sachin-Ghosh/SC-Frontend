@@ -67,7 +67,7 @@ const ForgotPassword = () => {
   })
 
   function onSubmit(values) {
-    console.log('Password reset requested for:', { email: values.email });
+    //console.log('Password reset requested for:', { email: values.email });
     setEmail(values.email)
     toast.promise(
       fetch(`${import.meta.env.VITE_API_URL}/api/users/request-password-reset/`, {
@@ -86,7 +86,7 @@ const ForgotPassword = () => {
       {
         loading: 'Sending reset email...',
         success: (data) => {
-          console.log('Password reset email sent:', data);
+          //console.log('Password reset email sent:', data);
           setMessageSent(true);
           return `${data.message}`;
         },
@@ -100,8 +100,8 @@ const ForgotPassword = () => {
 
   const handlePasswordReset = (values) => {
     // const  email=form.getValues('email');
-    console.log(email)
-    console.log('Password reset attempted with:', { email: email, token: values.token, new_password: values.new_password });
+    //console.log(email)
+    //console.log('Password reset attempted with:', { email: email, token: values.token, new_password: values.new_password });
     toast.promise(
       fetch(`${import.meta.env.VITE_API_URL}/api/users/reset-password/`, {
         method: 'POST',
@@ -119,7 +119,7 @@ const ForgotPassword = () => {
       {
         loading: 'Resetting password...',
         success: (data) => {
-          console.log('Password reset successful', data);
+          //console.log('Password reset successful', data);
           navigate('/auth/login');
           return `${data.message}`;
         },

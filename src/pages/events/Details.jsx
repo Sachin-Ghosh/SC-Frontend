@@ -5,7 +5,7 @@ import { Typewriter } from 'react-simple-typewriter';
 import { TbTargetArrow } from "react-icons/tb";
 const Details = () => {
     const { subevent } = useParams();
-    console.log(subevent);
+    //console.log(subevent);
 
   return (
     <div className="py-8 flex flex-col min-h-screen px-10 w-full">

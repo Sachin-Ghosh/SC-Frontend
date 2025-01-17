@@ -11,7 +11,7 @@ export const GenerateHeatForm = ({ onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Generating heat:', heatData);
+    //console.log('Generating heat:', heatData);
     alert('Heat generated successfully!');
     onClose();
   };

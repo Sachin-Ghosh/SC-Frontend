@@ -26,8 +26,8 @@ const Header = () => {
   const accessToken=localStorage.getItem('access-token');
   const refreshToken=localStorage.getItem('refresh-token');
   const user=JSON.parse(localStorage.getItem('user'));
-  console.log(accessToken);
-  console.log(refreshToken);
+  //console.log(accessToken);
+  //console.log(refreshToken);
 
   const handleLogout=async()=>{
       localStorage.removeItem('access-token');
@@ -36,7 +36,7 @@ const Header = () => {
       navigate('/');
   }
 
-  // console.log(user?.user_type)
+  // //console.log(user?.user_type)
 
   return (
     <div className="drawer">

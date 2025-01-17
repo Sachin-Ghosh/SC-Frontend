@@ -26,7 +26,7 @@ const Profile = () => {
       }
 
       const data = await response.json();
-      console.log(data)
+      //console.log(data)
       setProfile(data);
     } catch (error) {
       console.error('Error fetching profile:', error);

@@ -19,7 +19,7 @@ import {
 export function teamCombobox({ teams, onSelect, value }) {
   const [open, setOpen] = useState(false)
 
-  console.log(value)
+  //console.log(value)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

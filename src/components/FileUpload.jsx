@@ -40,7 +40,7 @@ export default function FileUploadForm({ grievanceId }) {
       description: "",
     },
   })
-console.log(grievanceId)
+//console.log(grievanceId)
   const calculateFileSize = (file) => {
     // Convert file size to MB and round to 2 decimal places
     return (file.size / (1024 * 1024)).toFixed(0)
@@ -69,14 +69,14 @@ console.log(grievanceId)
       })
 
       if (response.ok) {
-        console.log('Proof uploaded successfully')
+        //console.log('Proof uploaded successfully')
        
         toast.success('Proof uploaded successfully')
         navigate('/events/sports') ;
         // Adjust this route as needed
       } else {
         console.error('Failed to upload proof')
-        console.log(await response.json())
+        //console.log(await response.json())
         toast.error('Failed to upload proof')
       }
     } catch (error) {

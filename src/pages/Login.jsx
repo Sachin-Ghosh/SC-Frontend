@@ -53,7 +53,7 @@ const Login = () => {
   })
 
   function onSubmit(values) {
-    // console.log('Login attempted with:', { email: values.email, password: values.password });
+    // //console.log('Login attempted with:', { email: values.email, password: values.password });
     toast.promise(
       fetch(`${import.meta.env.VITE_API_URL}/api/users/login/`, {
         method: 'POST',
@@ -64,7 +64,7 @@ const Login = () => {
       }).then(async (response) => {
         if (!response.ok) {
           const errorData = await response.json()
-          // console.log(errorData);
+          // //console.log(errorData);
           throw new Error(errorData.error || 'Login failed')
         }
         return response.json()
@@ -72,7 +72,7 @@ const Login = () => {
       {
         loading: 'Loading...',
         success: (data) => {
-          // console.log('Login successful:', data)
+          // //console.log('Login successful:', data)
           setToken(data.tokens);
           localStorage.setItem('access-token', data.tokens.access);
           localStorage.setItem('refresh-token', data.tokens.refresh);
@@ -92,7 +92,7 @@ const Login = () => {
             default:
               navigate('/');
           }
-          // console.log(data.user.user_type)
+          // //console.log(data.user.user_type)
 
           
           return `${data.message}`

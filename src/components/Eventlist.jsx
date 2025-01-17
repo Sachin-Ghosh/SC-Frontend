@@ -33,7 +33,7 @@ const EventList = () => {
     const fetchEvents = async () => {
       try {
         const data = await getEvents();
-        console.log('Fetched events:', data.results);
+        //console.log('Fetched events:', data.results);
         setEvents(data.results || []);
         
         // Store the sub-event ID if events exist

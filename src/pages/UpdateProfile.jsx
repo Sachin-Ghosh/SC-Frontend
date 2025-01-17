@@ -75,7 +75,7 @@ const UpdateProfile = () => {
         throw new Error('Failed to update profile');
       } else {
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         toast.success(`${data.message}`);
         
         // Handle ID card upload separately
@@ -90,7 +90,7 @@ const UpdateProfile = () => {
             },
             body: idCardFormData
           });
-          console.log(await idCardResponse.json());
+          //console.log(await idCardResponse.json());
           if (!idCardResponse.ok) {
             toast.error('Failed to upload ID card');
           } else {
@@ -101,7 +101,7 @@ const UpdateProfile = () => {
         navigate('/profile');
       }
     } catch (error) {
-      console.log(error);
+      //console.log(error);
       toast.error(`${error.message}`);
     } finally {
       setIsLoading(false);
@@ -127,7 +127,7 @@ const UpdateProfile = () => {
       }
 
       const data = await response.json();
-      console.log(data);
+      //console.log(data);
       setProfile(data);
       setFormData({
         first_name: user.first_name,
@@ -154,7 +154,7 @@ const UpdateProfile = () => {
       navigate('/')
     }
   }, [accessToken])
-console.log(profile?.profile?.profile_picture)
+//console.log(profile?.profile?.profile_picture)
   return (
     <>
       <img src='/registration-back.jpg' className='fixed object-cover h-full w-full' alt="Background" />

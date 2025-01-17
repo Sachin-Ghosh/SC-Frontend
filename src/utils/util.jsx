@@ -32,5 +32,5 @@ export function formatDateTime(dateString) {
   
 //   // Example usage
 //   const dateString = "2024-03-01T15:30:00+05:30";
-//   console.log(formatDateTime(dateString));
+//   //console.log(formatDateTime(dateString));
   

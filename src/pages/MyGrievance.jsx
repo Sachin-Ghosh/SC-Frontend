@@ -28,7 +28,7 @@ const MyGrievance = () => {
         }
       })
       const data = await response.json()
-      console.log(data)
+      //console.log(data)
       setGrievances(data)
     } catch (error) {
       console.error('Error fetching grievances:', error)

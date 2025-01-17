@@ -16,7 +16,7 @@ const SignupForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle signup logic here
-    console.log('Signup:', name, email, password);
+    //console.log('Signup:', name, email, password);
   };
 
   return (

@@ -26,12 +26,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { set } from 'date-fns';
 // import { CommandList } from 'cmdk';
 
 const Registration = () => {
   const eventName = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [registerloading, setRegisterLoading] = useState(false);
   const user = localStorage.getItem('user');
   const storedUser = JSON.parse(user);
   const navigate = useNavigate();
@@ -67,7 +69,7 @@ const Registration = () => {
           },
         });
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         setEvent(data);
         setLoading(false);
       } catch (error) {
@@ -84,7 +86,7 @@ const Registration = () => {
           }
         })
         const data = await response.json();
-        console.log('teammembers', data);
+        //console.log('teammembers', data);
         setTeamMembers(data.results)
       } catch (error) {
         console.error('Error fetching team members:', error);
@@ -104,6 +106,7 @@ const Registration = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setRegisterLoading(true);
   
     // Reset warnings
     setWarning({
@@ -162,7 +165,7 @@ const Registration = () => {
     }
 
     if (event.participation_type === 'GROUP' && formData.team_members.length < event.min_team_size-1) {
-      console.log(`You need to add at least ${event.min_team_size-1} team members.`)
+      //console.log(`You need to add at least ${event.min_team_size-1} team members.`)
       toast.error(`You need to add at least ${event.min_team_size-1} team members.`);
       return;
     }
@@ -173,7 +176,7 @@ const Registration = () => {
     //   return;
     // }
   
-    // console.log('Form submitted:', formData);
+    // //console.log('Form submitted:', formData);
   
     // Prepare payload
     const payload = {
@@ -197,8 +200,10 @@ const Registration = () => {
   
       if (response.ok) {
         toast.success('Registration submitted successfully!');
+        setLoading(false)
         navigate('/registered-events');
       } else {
+        setLoading(false)
         toast.error(`${data.message}`);
       }
     } catch (error) {
@@ -238,7 +243,7 @@ const Registration = () => {
     }
   }, [formData.team_members]);
 
-  // console.log('mix',event?.allow_mixed_department)
+  // //console.log('mix',event?.allow_mixed_department)
 
   return (
     <>
@@ -454,11 +459,12 @@ const Registration = () => {
 
                 <motion.button
                   type="submit"
-                  className={`col-span-2 sm:w-full bg-[#8b4513] text-white py-2 px-12 sm:px-0 rounded relative hover:bg-[#a0522d] transition-colors duration-200`}
+                  className={`col-span-2 sm:w-full bg-[#8b4513] flex items-center justify-center text-white py-2 px-12 sm:px-0 rounded relative ${registerloading ? 'cursor-not-allowed ' : 'cursor-pointer'} hover:bg-[#a0522d] transition-colors duration-200`}
                   whileHover={{ scale: 1.05 }}
+                  disabled={registerloading}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Register
+                  {registerloading ? <Loader className='animate-spin' size={20} /> : 'Register'}
                 </motion.button>
               </motion.form>
             </div>

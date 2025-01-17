@@ -71,7 +71,7 @@ export default function Grievance() {
       });
       const data = await response.json();
       if(response.ok){
-        console.log(data)
+        //console.log(data)
         setSubevents(data);
       }
     } catch (error) {
@@ -145,7 +145,7 @@ export default function Grievance() {
       });
 
       if (response.status === 200 || response.status === 201) {
-        console.log('Grievance submitted successfully');
+        //console.log('Grievance submitted successfully');
         toast.success('Grievance submitted successfully');
         navigate('/my-grievances');
       } else {

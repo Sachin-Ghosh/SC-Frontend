@@ -37,7 +37,7 @@ const RegisteredEvents = () => {
       })
 
       const data = await response.json();
-      console.log(data)
+      //console.log(data)
       setEvents(data)
 
       // Fetch subevent details for each registration

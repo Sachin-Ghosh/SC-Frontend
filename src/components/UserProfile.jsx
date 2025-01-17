@@ -11,7 +11,7 @@ const UserProfile = ({ profile }) => {
   useEffect(()=>{
 setData(profile.profile)
   },[profile])
- console.log('profile:',profile.profile)
+ //console.log('profile:',profile.profile)
   return (
     <>
       <img src='/registration-back.jpg' className='fixed object-cover h-full w-full' alt="Background" />

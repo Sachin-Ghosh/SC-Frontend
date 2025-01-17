@@ -62,9 +62,9 @@ const CulturalEvent = () => {
         },
       });
       const data = await response.json();
-      // console.log(data);
+      // //console.log(data);
       setSubevents(data);
-      // console.log(subevents)
+      // //console.log(subevents)
     } catch (error) {
       console.error('Error fetching events:', error);
     }
@@ -78,7 +78,7 @@ const CulturalEvent = () => {
     }
   
   }, [accessToken])
-  // console.log(subevents[20].name);
+  // //console.log(subevents[20].name);
 
   return (
     <>

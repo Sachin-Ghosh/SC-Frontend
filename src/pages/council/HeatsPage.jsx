@@ -20,7 +20,7 @@ import { useParams } from 'react-router-dom';
 
 const HeatsPage = () => {
   const params=useParams();
-  console.log(params)
+  //console.log(params)
   const { heats, isLoading, error, fetchHeats } = useEventStore();
   const [filters, setFilters] = useState({
     status: 'ALL',

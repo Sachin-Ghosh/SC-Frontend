@@ -26,7 +26,7 @@ export function AddParticipantsModal({ heatId, subEventId, stage }) {
   const token = localStorage.getItem('access-token');
   const navigate=useNavigate()
 
-  console.log(heatId,subEventId,stage)
+  // //console.log(heatId,subEventId,stage)
 //   const { toast } = useToast()
 
   const fetchParticipants = async () => {
@@ -40,7 +40,7 @@ export function AddParticipantsModal({ heatId, subEventId, stage }) {
         }
       })
       const data = await response.json();
-      console.log(data)
+      //console.log(data)
       setParticipants(data)
     } catch (error) {
       toast({
@@ -67,7 +67,7 @@ export function AddParticipantsModal({ heatId, subEventId, stage }) {
         }),
       })
 
-      console.log(await response.json())
+      //console.log(await response.json())
 
       if (!response.ok) {
         toast('Failed to assign participants')
@@ -79,7 +79,7 @@ export function AddParticipantsModal({ heatId, subEventId, stage }) {
       setSelectedParticipants([])
     } catch (error) {
       // toast.error("Error")
-      console.log(error.message)
+      //console.log(error.message)
     }
   }
 

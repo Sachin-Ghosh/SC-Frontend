@@ -5,9 +5,9 @@ import { format } from 'date-fns'
 import { Link, useNavigate } from 'react-router-dom'
 
 const EventCard = ({ event, subEventDetails, getStatusColor }) => {
-    console.log(event.id)
+    //console.log(event.id)
     const navigate=useNavigate();
-    // console.log('subevnt',subEventDetails[event.sub_event]?.id)
+    // //console.log('subevnt',subEventDetails[event.sub_event]?.id)
   return (
     <Card className="mb-4 bg-white bg-opacity-70 rounded-xl" >
       <CardHeader>

@@ -145,7 +145,7 @@ const SignUp = () => {
       }).then(async (response) => {
         if (!response.ok) {
           const errorData = await response.json();
-          console.log(errorData);
+          //console.log(errorData);
           throw new Error(errorData.error || 'Registration failed');
         }
         return response.json();
@@ -153,7 +153,7 @@ const SignUp = () => {
       {
         loading: 'Registering...',
         success: (data) => {
-          console.log('Registration successful:', data);
+          //console.log('Registration successful:', data);
           setEmail(data.email);
           setRegistrationData(registrationPayload);
           setShowOTP(true);
@@ -166,7 +166,7 @@ const SignUp = () => {
       }
     );
   };
-// console.log(first)
+// //console.log(first)
   const Login = async () => {
     try {
       const loginResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/users/login/`, {
@@ -232,7 +232,7 @@ const SignUp = () => {
           'Content-Type': 'multipart/form-data'
         }
       }).then((response) => {
-        // console.log('OTP verification successful:', response.data)
+        // //console.log('OTP verification successful:', response.data)
         Login();
         return response.data
       }),
@@ -253,7 +253,7 @@ const SignUp = () => {
       const data = await response.data
       toast.success(`${data.message}`)
     } catch (error) {
-      console.log(error)
+      //console.log(error)
     }
   }
 

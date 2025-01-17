@@ -36,7 +36,7 @@ const Register = () => {
   })
 
   function onSubmit(values) {
-    console.log(values)
+    //console.log(values)
     // Here you would typically send the data to your backend
   }
 

@@ -14,7 +14,7 @@ export default function AssignedEventCard({ event }) {
     setSubEventId(event.id);
     navigate(`/heats/${event.id}`);
   };
-  console.log('event',event)
+  // //console.log('event',event)
 
   return (
     <Card className="overflow-hidden group hover:shadow-lg transition-all duration-300 bg-white border-gray-200 rounded">

@@ -90,7 +90,7 @@ export default function RegistrationForm({ userType, onSuccess }) {
       }).then(async (response) => {
         if (!response.ok) {
           const errorData = await response.json();
-          console.log(errorData);
+          //console.log(errorData);
           throw new Error(errorData.error || 'Registration failed');
         }
         return response.json();
@@ -98,7 +98,7 @@ export default function RegistrationForm({ userType, onSuccess }) {
       {
         loading: 'Registering...',
         success: (data) => {
-          console.log('Registration successful:', data);
+          //console.log('Registration successful:', data);
           onSuccess(data.email, payload);
           return `${data.message}`;
         },

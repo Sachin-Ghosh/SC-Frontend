@@ -25,7 +25,7 @@ const Score = () => {
   //       }
   //     })
   //     const data = await response.json();
-  //     console.log(data)
+  //     //console.log(data)
   //     setScoreData(data)
   //   } catch (error) {
   //     console.error("Failed to fetch score data:", error);
