@@ -22,6 +22,7 @@ const ScoresForm = () => {
   const [heatDetails, setHeatDetails] = useState(null);
   const [scoringCriteria, setScoringCriteria] = useState(null);
   const accessToken = localStorage.getItem('access-token');
+  const [heats, setHeats] = useState([]);
   const form = useForm();
   const sportsForm = useForm({
     defaultValues: {
@@ -52,6 +53,7 @@ const ScoresForm = () => {
         });
         // //console.log('event detail', response.data)
         setEventDetail(response.data);
+        // console.log(eventDetail.recent_heats)
         
         // Fetch scoring criteria
         const criteriaResponse = await axios.get(
@@ -68,8 +70,25 @@ const ScoresForm = () => {
         console.error('Error fetching event details:', error);
       }
     };
+    const getHeats = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/events/sub-events/${eventId}/get-heats/`, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+          },
+        });
+        // //console.log('event detail', response.data)
+        setHeats(response.data);
+        console.log(response.data)
+        // //console.log('Criteria',criteriaResponse.data);
+        // setScoringCriteria(criteriaResponse.data);
+      } catch (error) {
+        console.error('Error fetching event details:', error);
+      }
+    };
 
     getEventDetails();
+    getHeats();
   }, [eventId, accessToken]);
 
   useEffect(() => {
@@ -210,7 +229,7 @@ const ScoresForm = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent className="bg-[url('/vintage.jpg')] bg-cover bg-center">
-                        {eventDetail.recent_heats?.map((heat) => (
+                        {heats?.map((heat) => (
                           <SelectItem 
                             key={heat.id} 
                             value={heat.id.toString()}
@@ -368,8 +387,8 @@ const ScoresForm = () => {
                           <SelectValue placeholder="Select Heat" />
                         </SelectTrigger>
                       </FormControl>
-                      <SelectContent className="bg-[url('/vintage.jpg')] bg-cover bg-center">
-                        {eventDetail?.recent_heats?.map((heat) => (
+                      <SelectContent className="bg-[url('/vintage.jpg')] bg-cover bg-center max-h-40">
+                        {heats?.map((heat) => (
                           <SelectItem 
                             key={heat.id} 
                             value={heat.id.toString()}
