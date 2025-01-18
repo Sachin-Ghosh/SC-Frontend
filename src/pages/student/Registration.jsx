@@ -133,6 +133,7 @@ const Registration = () => {
         ...prev,
         department: "Please select a department",
       }));
+      setRegisterLoading(false)
       return;
       // hasError = true;
     }
@@ -152,20 +153,20 @@ const Registration = () => {
     // }
     if (
       event.participation_type === 'GROUP' &&
-      formData.team_members.length < event.min_team_size
+      formData.team_members.length < event.min_team_size-1
     ) {
       setWarning((prev) => ({
         ...prev,
         team_members: `You need to add at least ${
-          event.min_team_size
+          event.min_team_size-1
         } team members.`,
       }));
 
       // hasError = true;
-      if (event.participation_type === 'GROUP' && formData.team_members.length < event.min_team_size-1) {
+      // if (event.participation_type === 'GROUP' && formData.team_members.length < event.min_team_size-1) {
         //console.log(`You need to add at least ${event.min_team_size-1} team members.`)
-        toast.error(`You need to add at least ${event.min_team_size} team members.`);
-      }
+        toast.error(`You need to add at least ${event.min_team_size-1} team members.`);
+      // }
       setRegisterLoading(false)
       return;
     }
