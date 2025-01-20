@@ -36,7 +36,7 @@ export const useEventStore = zustand.create((set, get) => ({
       });
 
       const data = await response.json();
-      //console.log(data);
+      console.log(data);
 
       if (!response.ok) {
         if (response.status === 500) {

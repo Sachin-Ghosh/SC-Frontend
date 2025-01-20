@@ -125,7 +125,7 @@ const ScoresForm = () => {
         }]
       };
 
-      //console.log(formattedData)
+      console.log(formattedData)
 
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/events/scores/submit_cultural_scores/`,
@@ -137,7 +137,6 @@ const ScoresForm = () => {
           },
         }
       );
-
       if (response.status === 200 || response.status === 201) {
         toast.success("Scores submitted successfully");
         navigate('/faculty-dashboard')

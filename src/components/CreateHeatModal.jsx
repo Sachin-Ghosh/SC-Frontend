@@ -33,7 +33,7 @@ const CreateHeatModal = () => {
       };
 
       // Log the formatted data for debugging
-      //console.log('Submitting heat data:', formattedData);
+      console.log('Submitting heat data:', formattedData);
 
       await createHeat(formattedData);
       setOpen(false);

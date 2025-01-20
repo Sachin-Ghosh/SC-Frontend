@@ -98,7 +98,7 @@ const ViewHeats = () => {
 
     try {
       const accessToken = localStorage.getItem('access-token');
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/heats/${heat.id}/view_faculty_scores/`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/events/sub-events/${selectedSubEvent}/get-scores/`, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
         }
@@ -106,9 +106,16 @@ const ViewHeats = () => {
 
       if (!response.ok) throw new Error('Failed to fetch faculty scores');
       const data = await response.json();
-      console.log('faculty scores',data)
-      setFacultyScores(data);
-    } catch (err) {
+      // console.log('faculty scores',data)
+      
+      const user = JSON.parse(localStorage.getItem('user'));
+      const userName=user.first_name + " " + user.last_name;
+
+      const filteredScores = data.filter(score => score.judge_name === userName);
+      // console.log('filtered scores',filteredScores)
+      
+      setFacultyScores(filteredScores);
+    } catch (err) { 
       console.error('Error fetching faculty scores:', err.message);
       setError(err.message);
     }
@@ -236,12 +243,12 @@ const ViewHeats = () => {
                       {/* <p className="text-gray-600">Participants: {heat.participant_count}/{heat.max_participants}</p> */}
                       <div>
                       </div>
-                     <Button 
+                     {/* <Button 
                      className="mt-4 bg-amber-800 hover:bg-amber-700 text-white"
                      onClick={() => handleViewFinalResults(heat.id)}
                    >
                      View Final Results
-                   </Button>
+                   </Button> */}
                         
                      <Button 
                      className="mt-4 bg-amber-800 hover:bg-amber-700 text-white"
@@ -273,31 +280,27 @@ const ViewHeats = () => {
                 <CardContent>
                   {facultyScores ? (
                     <ScrollArea className="h-[60vh]">
-                      <p className="text-gray-600 mb-4">Status: {facultyScores.status}</p>
-                      {Object.entries(facultyScores.scores_by_judge).map(([judge, scores]) => (
-                        <div key={judge} className="mb-6">
-                          <h3 className="text-xl font-semibold text-amber-900 mb-2">{judge}</h3>
-                          {scores.map((score, index) => (
-                            <Card key={index} className="mb-4">
-                              <CardContent className="pt-6">
-                                <p className="font-semibold">{score.participant_name}</p>
-                                <p className="text-gray-600">Registration ID: {score.registration_id}</p>
-                                <div className="mt-2">
-                                  {Object.entries(score.criteria_scores).map(([criterion, value]) => (
-                                    <p key={criterion}>{criterion}: {value}</p>
-                                  ))}
-                                </div>
-                                <p className="mt-2 font-semibold">Total Score: {score.total_score}</p>
-                                <p className="text-sm text-gray-500">Submitted at: {new Date(score.submitted_at).toLocaleString()}</p>
-                              </CardContent>
-                            </Card>
-                          ))}
-                        </div>
+                      {facultyScores.map((score, index) => (
+                        <Card key={index} className="mb-4">
+                          <CardContent className="pt-6">
+                            <p className="font-semibold">{score.participant_name}</p>
+                            <p className="text-gray-600">Registration ID: {score.event_registration}</p>
+                            <div className="mt-2">
+                              {Object.entries(score.criteria_scores).map(([criterion, value]) => (
+                                <p key={criterion}>{criterion}: {value}</p>
+                              ))}
+                            </div>
+                            <p className="mt-2 font-semibold">Total Score: {score.total_score}</p>
+                            <p className="text-sm text-gray-500">Negative Marks: {score.negative_marks}</p>
+                          </CardContent>
+                        </Card>
                       ))}
                     </ScrollArea>
                   ) : (
-                    <div className="flex items-center justify-center h-64">
+                    <div className="flex items-center justify-center gap-3 h-64">
                       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-900"></div>
+                      {facultyScores?.length === 0 ? (<p className='text-gray-600'>No Scores yet</p>) : (<p className='text-gray-600'>Loading Scores...</p>) }
+                      {/* <p className='text-gray-600'>Loading Scores...</p> */}
                     </div>
                   )}
                  
