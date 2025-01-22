@@ -182,11 +182,7 @@ const ScoresForm = () => {
       }
     } catch (error) {
       console.error('Error submitting sports results:', error);
-      toast({
-        title: "Error submitting sports results",
-        description: error.response?.data?.message || "An unexpected error occurred.",
-        status: "error",
-      });
+      toast.error(`${error.response?.data?.message}`);
     }
   };
 

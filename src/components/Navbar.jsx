@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,9 +23,11 @@ import { MdErrorOutline } from "react-icons/md";
 
 const Header = () => {
   const navigate = useNavigate();
+  const [visible,setVisible]=useState(false);
   const accessToken=localStorage.getItem('access-token');
   const refreshToken=localStorage.getItem('refresh-token');
   const user=JSON.parse(localStorage.getItem('user'));
+  const pathname=useLocation().pathname;
   //console.log(accessToken);
   //console.log(refreshToken);
 
@@ -35,6 +37,12 @@ const Header = () => {
       localStorage.removeItem('user');
       navigate('/');
   }
+
+  useEffect(()=>{
+    if(pathname==='/score'){
+      document.getElementById('my-drawer-3').click();
+    }
+  },[pathname])
 
   // //console.log(user?.user_type)
 
@@ -91,7 +99,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <nav className="navbar fixed top-0 left-0 right-0 flex justify-between bg-opacity-40 z-30 px-5 py-2 sm:px-4 md:px-10 lg:px-32">
+      <nav className={`navbar fixed top-0 left-0 right-0 flex justify-between bg-opacity-40 z-30 px-5 py-2 sm:px-4 md:px-10 lg:px-32 ${visible ? 'visible' : 'hidden'}`}>
         <div className='flex  bg-transparent'>
           {accessToken && (
 

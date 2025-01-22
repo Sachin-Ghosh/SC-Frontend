@@ -106,13 +106,13 @@ const ViewHeats = () => {
 
       if (!response.ok) throw new Error('Failed to fetch faculty scores');
       const data = await response.json();
-      // console.log('faculty scores',data)
+      console.log('faculty scores',data)
       
       const user = JSON.parse(localStorage.getItem('user'));
       const userName=user.first_name + " " + user.last_name;
 
       const filteredScores = data.filter(score => score.judge_name === userName);
-      // console.log('filtered scores',filteredScores)
+      console.log('filtered scores',filteredScores)
       
       setFacultyScores(filteredScores);
     } catch (err) { 
@@ -132,7 +132,7 @@ const ViewHeats = () => {
       // if (!response.ok) throw new Error('Final Results not yet decided');
       const data = await response.json();
       // console.log('final scores',data)
-      navigate(`/final-results/${heatId}`, { state: { results: data } });
+      // navigate(`/final-results/${heatId}`, { state: { results: data } });
 
       // Navigate to the final results page with the data
       
