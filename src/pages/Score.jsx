@@ -71,7 +71,7 @@ const Score = () => {
               <h2 className="cinzel font-semibold w-full mb-2 md:mb-4 text-center text-amber-900 text-xl sm:text-3xl md:text-5xl">
                 Score Board
               </h2>
-              <div className="relative overflow-x-auto rounded-xl max-h-[64rem] bg-amber-50/50">
+              <div className="relative overflow-x-auto rounded-xl bg-amber-50/50">
                 <Table className="w-full">
                   <TableHeader className="bg-amber-100/50 sticky top-0 z-30">
                     <TableRow>
