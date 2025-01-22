@@ -71,9 +71,9 @@ const Score = () => {
               <h2 className="cinzel font-semibold w-full mb-2 md:mb-4 text-center text-amber-900 text-xl sm:text-3xl md:text-5xl">
                 Score Board
               </h2>
-              <div className="overflow-x-auto bg-amber-50/50">
+              <div className="relative overflow-x-auto rounded-xl max-h-[64rem] bg-amber-50/50">
                 <Table className="w-full">
-                  <TableHeader>
+                  <TableHeader className="bg-amber-100/50 sticky top-0 z-30">
                     <TableRow>
                       <TableHead className="font-bold text-xl bg-amber-100/50 sticky left-0 z-10">Events\Department</TableHead>
                       {departments.map((dept) => (
@@ -86,9 +86,9 @@ const Score = () => {
                       ))}
                     </TableRow>
                   </TableHeader>
-                  <TableBody>
+                  <TableBody className="relative">
                     {scoreData.map((row, index) => (
-                      <TableRow key={index}>
+                      <TableRow key={index} className={`${index%2===0 ? 'bg-amber-50/50' : 'bg-amber-100/50'} ${index===scoreData.length-1 ? 'sticky bottom-0 z-30 bg-amber-200' : ''} `}>
                         <TableCell className="text-xl bg-amber-50/50 sticky left-0 z-10">
                           {row["Sports Events"]}
                         </TableCell>

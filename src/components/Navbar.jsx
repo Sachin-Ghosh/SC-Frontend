@@ -23,7 +23,7 @@ import { MdErrorOutline } from "react-icons/md";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [visible,setVisible]=useState(false);
+  const [visible,setVisible]=useState(true);
   const accessToken=localStorage.getItem('access-token');
   const refreshToken=localStorage.getItem('refresh-token');
   const user=JSON.parse(localStorage.getItem('user'));
@@ -39,8 +39,8 @@ const Header = () => {
   }
 
   useEffect(()=>{
-    if(pathname==='/score'){
-      document.getElementById('my-drawer-3').click();
+    if(pathname==='/score-board'){
+      setVisible(false);
     }
   },[pathname])
 
