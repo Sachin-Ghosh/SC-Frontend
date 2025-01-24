@@ -39,7 +39,7 @@ const Header = () => {
   }
 
   useEffect(()=>{
-    if(pathname==='/score-board'){
+    if(pathname==='/score-board'||pathname==='/department-rankings'){
       setVisible(false);
     }
   },[pathname])

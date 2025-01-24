@@ -35,6 +35,7 @@ import GrievanceDetailPage from './pages/GrievanceDetail';
 import ScoresForm from './pages/faculty/ScoresForm';
 import FinalResults from './pages/faculty/FinalResults';
 import ViewRegistrations from './pages/faculty/ViewRegistrations';
+import CulturalScoreBoard from './pages/CulturalScoreBoard';
 
 // import Registration from './pages/Registration';
 // import Events from './pages/Events';
@@ -58,6 +59,7 @@ const AppRoutes = () => (
     <Route path="/profile/update" element={<UpdateProfile />} />
     <Route path="/about" element={<About />} />
     <Route path="/score-board" element={<Score />} />
+    <Route path="/department-rankings" element={<CulturalScoreBoard/>} />
     {/* faculty routes */}
     <Route path="/faculty-dashboard" element={<FacultyDashboard />} />
     <Route path="/scores" element={<ScoresPage />} />
